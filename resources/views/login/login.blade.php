@@ -77,6 +77,8 @@
 
     /* ── CARD ── */
     .login-card {
+      <!-- Favicon -->
+      <link rel="icon" href="{{ asset('img/dar-logo.png') }}" />
       position: relative;
       z-index: 1;
       width: 100%;
@@ -130,11 +132,18 @@
     .visual-seal {
       width: 52px; height: 52px;
       border-radius: 50%;
-      background: var(--gold);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.5rem;
+      overflow: hidden;
+      display: block;
       box-shadow: 0 0 0 4px rgba(201,153,42,.25);
       animation: pulse-seal 3s ease-in-out infinite;
+      background: transparent;
+    }
+
+    .visual-seal img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
     }
 
     @keyframes pulse-seal {
@@ -410,7 +419,7 @@
     <!-- LEFT: Visual -->
     <div class="panel-visual">
       <div>
-        <div class="visual-seal">🌾</div>
+        <div class="visual-seal"><img src="{{ asset('img/dar-logo.png') }}" alt="DAR logo"></div>
         <div class="visual-copy">
           <p class="visual-eyebrow">DAR — Official System</p>
           <h2 class="visual-title">Cashier<br><em>Transaction</em><br>Management</h2>

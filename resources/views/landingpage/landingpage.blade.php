@@ -11,6 +11,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet" />
+    <!-- Favicon -->
+    <link rel="icon" href="{{ asset('img/dar-logo.png') }}" />
 
     <style>
         :root {
@@ -88,14 +90,11 @@
             width: 48px;
             height: 48px;
             border-radius: 50%;
-            background: var(--dar-gold);
-            display: flex;
-            align-items: center;
-            justify-content: center;
             flex-shrink: 0;
-            font-size: 1.5rem;
+            display: block;
             box-shadow: 0 0 0 3px rgba(232,184,75,.25);
             animation: seal-pulse 3s ease-in-out infinite;
+            object-fit: cover;
         }
 
         @keyframes seal-pulse {
@@ -384,7 +383,7 @@
 
         <!-- TOP BAR -->
         <header class="top-bar">
-            <div class="gov-seal">🌾</div>
+            <img src="{{ asset('img/dar-logo.png') }}" alt="DAR Logo" class="gov-seal" />
             <div class="gov-label">
                 <div class="republic">Republic of the Philippines</div>
                 <div class="agency">Department of Agrarian Reform</div>
