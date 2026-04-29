@@ -3,318 +3,492 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Member Login</title>
+  <title>Sign In — DAR Cashier Transaction Management System</title>
 
   <!-- Bootstrap 5 CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
   <!-- Bootstrap Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
-  <!-- Google Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
 
   <style>
     :root {
-      --clr-primary: #6a3de8;
-      --clr-accent:  #4ade80;
-      --clr-pink:    #d946a8;
-      --clr-text:    #1a1a2e;
-      --clr-muted:   #aaaaaa;
-      --clr-border:  #e8e8e8;
-      --clr-bg:      #fafafa;
+      --green-deep:    #0e2a1a;
+      --green-mid:     #1a4a2e;
+      --green-accent:  #2d7a4f;
+      --gold:          #c9992a;
+      --gold-light:    #e8c46a;
+      --red:           #a0251c;
+      --cream:         #f5f0e8;
+      --muted:         #8a9e90;
+      --border:        #e2ddd5;
+      --input-bg:      #faf8f4;
+      --text-dark:     #0e2a1a;
+      --text-mid:      #3d5045;
     }
 
-    * { box-sizing: border-box; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: 'Nunito', sans-serif;
+      font-family: 'DM Sans', sans-serif;
       min-height: 100vh;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      background: #0f172a;
-      padding: 20px;
+      background: var(--green-deep);
+      padding: 24px;
+      position: relative;
+      overflow-x: hidden;
     }
 
-    /* ── CARD ───────────────────────────────────────── */
+    /* ── BACKGROUND ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 55% at 10% 100%, rgba(45,122,79,.35) 0%, transparent 55%),
+        radial-gradient(ellipse 50% 40% at 92%  0%,  rgba(160,37,28,.18) 0%, transparent 50%),
+        radial-gradient(ellipse 40% 35% at 50% 50%,  rgba(201,153,42,.07) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: radial-gradient(rgba(245,240,232,.05) 1px, transparent 1px);
+      background-size: 28px 28px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── STRIPE ── */
+    .stripe {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--green-accent), var(--gold), var(--red));
+      z-index: 100;
+    }
+
+    /* ── CARD ── */
     .login-card {
-      background: #ffffff;
-      border-radius: 20px;
-      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
-      overflow: hidden;
+      position: relative;
+      z-index: 1;
       width: 100%;
-      max-width: 700px;
+      max-width: 720px;
       display: flex;
-      min-height: 360px;
-      animation: cardIn 0.55s cubic-bezier(.22,.68,0,1.2) both;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 32px 80px rgba(0,0,0,.5);
+      border: 1px solid rgba(245,240,232,.1);
+      animation: card-in .7s cubic-bezier(.16,1,.3,1) both;
     }
 
-    @keyframes cardIn {
-      from { opacity: 0; transform: translateY(28px) scale(0.97); }
-      to   { opacity: 1; transform: translateY(0)    scale(1);    }
+    @keyframes card-in {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
 
-    /* ── LEFT ILLUSTRATION ──────────────────────────── */
-    .illus-panel {
+    /* ── LEFT PANEL ── */
+    .panel-visual {
       flex: 1;
+      background: linear-gradient(150deg, var(--green-mid) 0%, var(--green-deep) 100%);
+      padding: 48px 36px;
       display: flex;
-      align-items: center;
-      justify-content: center;
+      flex-direction: column;
+      justify-content: space-between;
       position: relative;
-      padding: 40px 20px;
-      background: #f8fafc;
+      overflow: hidden;
     }
 
-    .avatar-circle {
-      width: 140px;
-      height: 140px;
-      border-radius: 50%;
-      background: #e2e8f0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      z-index: 2;
-    }
-
-    .monitor-box {
-      width: 82px;
-      height: 62px;
-      background: #334155;
-      border-radius: 7px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-    }
-
-    .monitor-box::after {
+    /* decorative rings */
+    .panel-visual::before {
       content: '';
       position: absolute;
-      bottom: -13px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 30px;
-      height: 9px;
-      background: #334155;
-      border-radius: 0 0 5px 5px;
-    }
-
-    .monitor-box i {
-      font-size: 1.7rem;
-      color: #cbd5e1;
-    }
-
-    /* floating shapes */
-    .shape {
-      position: absolute;
-      animation: floatShape 3s ease-in-out infinite alternate;
-      opacity: 0.55;
-    }
-
-    @keyframes floatShape {
-      from { transform: translateY(0); }
-      to   { transform: translateY(-9px); }
-    }
-
-    .shape-circle {
-      width: 13px; height: 13px;
+      right: -70px; bottom: -70px;
+      width: 300px; height: 300px;
+      border: 1.5px solid rgba(201,153,42,.15);
       border-radius: 50%;
-      border: 2px solid var(--clr-primary);
+      pointer-events: none;
     }
 
-    .shape-triangle {
-      width: 0; height: 0;
-      border-left: 7px solid transparent;
-      border-right: 7px solid transparent;
-      border-bottom: 13px solid var(--clr-accent);
+    .panel-visual::after {
+      content: '';
+      position: absolute;
+      right: -30px; bottom: -30px;
+      width: 190px; height: 190px;
+      border: 1.5px solid rgba(201,153,42,.1);
+      border-radius: 50%;
+      pointer-events: none;
     }
 
-    .shape-play {
-      width: 0; height: 0;
-      border-top: 7px solid transparent;
-      border-bottom: 7px solid transparent;
-      border-left: 13px solid var(--clr-accent);
+    .visual-seal {
+      width: 52px; height: 52px;
+      border-radius: 50%;
+      background: var(--gold);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem;
+      box-shadow: 0 0 0 4px rgba(201,153,42,.25);
+      animation: pulse-seal 3s ease-in-out infinite;
     }
 
-    .s1 { top: 24%; left: 12%; animation-delay: 0s; }
-    .s2 { bottom: 22%; left: 9%; animation-delay: .5s; }
-    .s3 { top: 22%; right: 13%; animation-delay: .3s; }
-    .s4 { bottom: 20%; right: 10%; animation-delay: .8s;
-          border-color: var(--clr-pink); }
-
-    /* ── DIVIDER ────────────────────────────────────── */
-    .v-divider {
-      width: 1px;
-      background: var(--clr-border);
-      margin: 28px 0;
+    @keyframes pulse-seal {
+      0%,100% { box-shadow: 0 0 0 4px rgba(201,153,42,.25); }
+      50%      { box-shadow: 0 0 0 8px rgba(201,153,42,.1); }
     }
 
-    /* ── RIGHT FORM ─────────────────────────────────── */
-    .form-panel {
+    .visual-copy {
+      margin-top: 28px;
+    }
+
+    .visual-eyebrow {
+      font-size: .6rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--gold-light);
+      opacity: .7;
+      font-weight: 500;
+    }
+
+    .visual-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.7rem, 2.8vw, 2.4rem);
+      font-weight: 700;
+      line-height: 1.1;
+      color: var(--cream);
+      margin-top: 10px;
+    }
+
+    .visual-title em {
+      font-style: normal;
+      color: var(--gold-light);
+    }
+
+    .visual-rule {
+      width: 36px; height: 2px;
+      background: var(--gold);
+      border-radius: 2px;
+      margin: 18px 0;
+    }
+
+    .visual-desc {
+      font-size: .82rem;
+      color: var(--muted);
+      line-height: 1.7;
+      font-weight: 300;
+      max-width: 220px;
+    }
+
+    .visual-badges {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .v-badge {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: .78rem;
+      color: rgba(245,240,232,.55);
+      font-weight: 400;
+    }
+
+    .v-badge i {
+      color: var(--gold-light);
+      font-size: .9rem;
+      width: 16px;
+      text-align: center;
+    }
+
+    .watermark {
+      position: absolute;
+      bottom: 16px; right: 14px;
+      font-size: .52rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(245,240,232,.1);
+      font-weight: 600;
+      writing-mode: vertical-rl;
+    }
+
+    /* ── RIGHT FORM PANEL ── */
+    .panel-form {
       flex: 1;
+      background: #ffffff;
+      padding: 48px 42px;
       display: flex;
       flex-direction: column;
       justify-content: center;
-      padding: 40px 38px;
     }
 
-    .form-panel h2 {
-      font-weight: 800;
-      font-size: 1.35rem;
-      color: var(--clr-text);
-      margin-bottom: 22px;
-      letter-spacing: -0.3px;
+    .form-heading {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--text-dark);
+      letter-spacing: -.3px;
+      margin-bottom: 4px;
+    }
+
+    .form-sub {
+      font-size: .8rem;
+      color: #7a9080;
+      margin-bottom: 28px;
+      font-weight: 300;
     }
 
     /* inputs */
-    .input-wrap {
+    .field {
       position: relative;
       margin-bottom: 14px;
     }
 
-    .input-wrap .ico {
+    .field label {
+      display: block;
+      font-size: .72rem;
+      font-weight: 600;
+      letter-spacing: .8px;
+      text-transform: uppercase;
+      color: var(--text-mid);
+      margin-bottom: 6px;
+    }
+
+    .field .ico {
       position: absolute;
-      left: 13px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--clr-muted);
-      font-size: 0.95rem;
+      left: 14px;
+      bottom: 12px;
+      color: var(--muted);
+      font-size: .9rem;
       pointer-events: none;
     }
 
-    /* right-side eye toggle */
-    .input-wrap .toggle-pw {
+    .field .toggle-pw {
       position: absolute;
-      right: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--clr-muted);
+      right: 13px;
+      bottom: 11px;
+      color: var(--muted);
       font-size: 1rem;
       cursor: pointer;
-      z-index: 3;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
     }
 
-    .input-wrap input {
+    .field input {
       width: 100%;
-      padding: 11px 14px 11px 38px;
-      border: 1.5px solid var(--clr-border);
+      padding: 11px 40px 11px 38px;
+      border: 1.5px solid var(--border);
       border-radius: 8px;
-      font-family: 'Nunito', sans-serif;
-      font-size: 0.9rem;
-      color: #555;
-      background: var(--clr-bg);
+      font-family: 'DM Sans', sans-serif;
+      font-size: .88rem;
+      color: var(--text-dark);
+      background: var(--input-bg);
       outline: none;
       transition: border-color .2s, box-shadow .2s, background .2s;
     }
 
-    .input-wrap input::placeholder { color: var(--clr-muted); }
+    .field input::placeholder { color: #b5c4ba; }
 
-    .input-wrap input:focus {
-      border-color: var(--clr-primary);
+    .field input:focus {
+      border-color: var(--green-accent);
       background: #fff;
-      box-shadow: 0 0 0 3px rgba(106,61,232,.12);
+      box-shadow: 0 0 0 3px rgba(45,122,79,.12);
     }
 
-    /* login button */
-    .btn-login {
-      width: 100%;
-      padding: 11px;
-      background: var(--clr-accent);
-      border: none;
-      border-radius: 8px;
-      color: #fff;
-      font-family: 'Nunito', sans-serif;
-      font-weight: 800;
-      font-size: 0.9rem;
-      letter-spacing: 1.8px;
+    /* remember row */
+    .row-options {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .remember-label {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: .78rem;
+      color: var(--text-mid);
       cursor: pointer;
-      margin-top: 6px;
-      transition: background .2s, transform .1s, box-shadow .2s;
-      box-shadow: 0 4px 16px rgba(74,222,128,.38);
+      user-select: none;
     }
 
-    .btn-login:hover {
-      background: #22c55e;
-      transform: translateY(-1px);
-      box-shadow: 0 7px 22px rgba(74,222,128,.48);
+    .remember-label input[type="checkbox"] {
+      accent-color: var(--green-accent);
+      width: 14px; height: 14px;
+      cursor: pointer;
     }
 
-    .btn-login:active { transform: translateY(0); }
-
-    /* links */
     .link-forgot {
-      display: block;
-      text-align: center;
-      font-size: 0.78rem;
-      color: var(--clr-muted);
-      margin-top: 10px;
+      font-size: .78rem;
+      color: var(--muted);
       text-decoration: none;
       transition: color .2s;
     }
 
-    .link-forgot:hover { color: var(--clr-primary); }
+    .link-forgot:hover { color: var(--green-accent); }
 
-    /* ── RESPONSIVE ─────────────────────────────────── */
-    @media (max-width: 520px) {
-      .illus-panel,
-      .v-divider { display: none; }
+    /* submit button */
+    .btn-signin {
+      width: 100%;
+      padding: 13px;
+      background: var(--green-mid);
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+      font-size: .88rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: transform .15s, background .15s, box-shadow .15s;
+      box-shadow: 0 6px 20px rgba(26,74,46,.3);
+    }
 
-      .form-panel { padding: 36px 26px; }
+    .btn-signin::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,.1), transparent 55%);
+      pointer-events: none;
+    }
+
+    .btn-signin:hover {
+      background: var(--green-accent);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(26,74,46,.4);
+    }
+
+    .btn-signin:active { transform: translateY(0); }
+
+    .secure-note {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-size: .7rem;
+      color: #b0c0b5;
+      margin-top: 14px;
+      letter-spacing: .3px;
+    }
+
+    .secure-note i { color: var(--gold); font-size: .8rem; }
+
+    /* ── FOOTER ── */
+    .page-footer {
+      position: relative;
+      z-index: 1;
+      margin-top: 20px;
+      text-align: center;
+      font-size: .66rem;
+      color: rgba(245,240,232,.22);
+      letter-spacing: .6px;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 560px) {
+      .panel-visual { display: none; }
+      .panel-form { padding: 40px 28px; }
+      .login-card { max-width: 100%; }
     }
   </style>
 </head>
 <body>
 
+  <div class="stripe"></div>
+
   <div class="login-card">
 
-    <!-- Left: Illustration -->
-    <div class="illus-panel">
-      <!-- Floating shapes -->
-      <div class="shape shape-circle s1"></div>
-      <div class="shape shape-triangle s2"></div>
-      <div class="shape shape-play s3"></div>
-      <div class="shape shape-circle s4"></div>
-
-      <!-- Avatar -->
-      <div class="avatar-circle">
-        <div class="monitor-box">
-          <i class="bi bi-person"></i>
+    <!-- LEFT: Visual -->
+    <div class="panel-visual">
+      <div>
+        <div class="visual-seal">🌾</div>
+        <div class="visual-copy">
+          <p class="visual-eyebrow">DAR — Official System</p>
+          <h2 class="visual-title">Cashier<br><em>Transaction</em><br>Management</h2>
+          <div class="visual-rule"></div>
+          <p class="visual-desc">Secure access portal for authorized Department of Agrarian Reform personnel.</p>
         </div>
       </div>
+
+      <div class="visual-badges">
+        <div class="v-badge"><i class="bi bi-shield-lock-fill"></i> End-to-end secured session</div>
+        <div class="v-badge"><i class="bi bi-clock-history"></i> Full audit trail on all actions</div>
+        <div class="v-badge"><i class="bi bi-person-check-fill"></i> Authorized personnel only</div>
+      </div>
+
+      <span class="watermark">Department of Agrarian Reform</span>
     </div>
 
-    <!-- Vertical Divider -->
-    <div class="v-divider"></div>
+    <!-- RIGHT: Form -->
+    <div class="panel-form">
+      <h1 class="form-heading">Sign In</h1>
+      <p class="form-sub">Enter your credentials to access the system.</p>
 
-    <!-- Right: Form -->
-    <div class="form-panel">
-      <h2>Member Login</h2>
-
-      <form method="POST" action="{{ route('login.attempt') }}">
+      <form method="POST" action="{{ route('login') }}">
         @csrf
 
-        <div class="input-wrap">
+        <div class="field">
+          <label for="email">Email Address</label>
           <i class="bi bi-envelope ico"></i>
-          <input name="email" type="email" placeholder="Email" autocomplete="email" />
+          <input
+            id="email"
+            name="email"
+            type="email"
+            placeholder="you@dar.gov.ph"
+            autocomplete="email"
+            value="{{ old('email') }}"
+            required
+          />
         </div>
 
-        <div class="input-wrap">
+        <div class="field">
+          <label for="password">Password</label>
           <i class="bi bi-lock ico"></i>
-          <input name="password" type="password" placeholder="Password" autocomplete="current-password" />
-          <i class="bi bi-eye-slash toggle-pw" title="Show password" aria-hidden="true"></i>
+          <input
+            id="password"
+            name="password"
+            type="password"
+            placeholder="••••••••"
+            autocomplete="current-password"
+            required
+          />
+          <i class="bi bi-eye-slash toggle-pw" title="Show password"></i>
         </div>
 
-        <button type="submit" class="btn-login">LOGIN</button>
+        <div class="row-options">
+          <label class="remember-label">
+            <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}>
+            Remember me
+          </label>
+          @if (Route::has('password.request'))
+            <a href="{{ route('password.request') }}" class="link-forgot">Forgot password?</a>
+          @endif
+        </div>
 
-        <a href="#" class="link-forgot">Forgot Password?</a>
+        <button type="submit" class="btn-signin">
+          <i class="bi bi-box-arrow-in-right me-1"></i> Sign In
+        </button>
+
+        <p class="secure-note">
+          <i class="bi bi-lock-fill"></i>
+          Restricted to authorized DAR personnel only
+        </p>
 
       </form>
     </div>
 
   </div>
+
+  <p class="page-footer">&copy; {{ date('Y') }} Department of Agrarian Reform — Republic of the Philippines</p>
 
   <!-- Bootstrap 5 JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -322,40 +496,49 @@
   <!-- SweetAlert2 -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script>
-    document.querySelectorAll('.toggle-pw').forEach(function(btn){
-      btn.addEventListener('click', function(){
-        var wrapper = btn.closest('.input-wrap');
-        if(!wrapper) return;
-        var input = wrapper.querySelector('input');
-        if(!input) return;
+    // Password toggle
+    document.querySelectorAll('.toggle-pw').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var input = btn.closest('.field').querySelector('input');
+        if (!input) return;
         if (input.type === 'password') {
           input.type = 'text';
-          btn.classList.remove('bi-eye-slash');
-          btn.classList.add('bi-eye');
-          btn.setAttribute('title','Hide password');
+          btn.classList.replace('bi-eye-slash', 'bi-eye');
+          btn.title = 'Hide password';
         } else {
           input.type = 'password';
-          btn.classList.remove('bi-eye');
-          btn.classList.add('bi-eye-slash');
-          btn.setAttribute('title','Show password');
+          btn.classList.replace('bi-eye', 'bi-eye-slash');
+          btn.title = 'Show password';
         }
       });
     });
 
-    document.addEventListener('DOMContentLoaded', function(){
-      @if($errors->any())
+    // Blade-driven alerts
+    document.addEventListener('DOMContentLoaded', function() {
+      @if ($errors->any())
         Swal.fire({
           icon: 'error',
-          title: 'Login failed',
-          text: {!! json_encode($errors->first()) !!}
+          title: 'Sign In Failed',
+          text: {!! json_encode($errors->first()) !!},
+          confirmButtonColor: '#1a4a2e'
         });
       @endif
 
-      @if(session('success'))
+      @if (session('success'))
         Swal.fire({
           icon: 'success',
           title: 'Success',
-          text: {!! json_encode(session('success')) !!}
+          text: {!! json_encode(session('success')) !!},
+          confirmButtonColor: '#1a4a2e'
+        });
+      @endif
+
+      @if (session('status'))
+        Swal.fire({
+          icon: 'info',
+          title: 'Notice',
+          text: {!! json_encode(session('status')) !!},
+          confirmButtonColor: '#1a4a2e'
         });
       @endif
     });
