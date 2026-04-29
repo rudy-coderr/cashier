@@ -257,20 +257,6 @@
 
     .link-forgot:hover { color: var(--clr-primary); }
 
-    .link-create {
-      display: block;
-      text-align: right;
-      font-size: 0.78rem;
-      color: var(--clr-muted);
-      margin-top: auto;
-      padding-top: 28px;
-      text-decoration: none;
-      transition: color .2s;
-    }
-
-    .link-create span { color: var(--clr-primary); font-weight: 700; }
-    .link-create:hover { color: var(--clr-primary); }
-
     /* ── RESPONSIVE ─────────────────────────────────── */
     @media (max-width: 520px) {
       .illus-panel,
@@ -307,28 +293,34 @@
     <div class="form-panel">
       <h2>Member Login</h2>
 
-      <div class="input-wrap">
-        <i class="bi bi-envelope ico"></i>
-        <input type="email" placeholder="Email" autocomplete="email" />
-      </div>
+      <form method="POST" action="{{ route('login.attempt') }}">
+        @csrf
 
-      <div class="input-wrap">
-        <i class="bi bi-lock ico"></i>
-        <input type="password" placeholder="Password" autocomplete="current-password" />
-        <i class="bi bi-eye-slash toggle-pw" title="Show password" aria-hidden="true"></i>
-      </div>
+        <div class="input-wrap">
+          <i class="bi bi-envelope ico"></i>
+          <input name="email" type="email" placeholder="Email" autocomplete="email" />
+        </div>
 
-      <button class="btn-login">LOGIN</button>
+        <div class="input-wrap">
+          <i class="bi bi-lock ico"></i>
+          <input name="password" type="password" placeholder="Password" autocomplete="current-password" />
+          <i class="bi bi-eye-slash toggle-pw" title="Show password" aria-hidden="true"></i>
+        </div>
 
-      <a href="#" class="link-forgot">Forgot Username / Password?</a>
+        <button type="submit" class="btn-login">LOGIN</button>
 
-      <a href="#" class="link-create">Create your Account <span>→</span></a>
+        <a href="#" class="link-forgot">Forgot Password?</a>
+
+      </form>
     </div>
 
   </div>
 
   <!-- Bootstrap 5 JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- SweetAlert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script>
     document.querySelectorAll('.toggle-pw').forEach(function(btn){
       btn.addEventListener('click', function(){
@@ -348,6 +340,24 @@
           btn.setAttribute('title','Show password');
         }
       });
+    });
+
+    document.addEventListener('DOMContentLoaded', function(){
+      @if($errors->any())
+        Swal.fire({
+          icon: 'error',
+          title: 'Login failed',
+          text: {!! json_encode($errors->first()) !!}
+        });
+      @endif
+
+      @if(session('success'))
+        Swal.fire({
+          icon: 'success',
+          title: 'Success',
+          text: {!! json_encode(session('success')) !!}
+        });
+      @endif
     });
   </script>
 </body>
