@@ -15,4 +15,7 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
+// Handle payment form submissions from the dashboard
+Route::post('/dashboard', [DashboardController::class, 'store'])->name('dashboard.store');
+
 
