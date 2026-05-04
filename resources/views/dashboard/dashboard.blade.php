@@ -520,9 +520,9 @@
                 <input name="email" type="email" placeholder="example@gmail.com" required />
               </div>
               <div class="field">
-                <label>Order of Payment No. : <span class="req">*</span></label>
-                <input name="op_number" type="text" placeholder="e.g. F01-2026-01-0001" required data-validate="alphanumeric" />
-                <small style="font-size:.71rem; color:var(--muted); margin-top:4px; display:block;">Format: year-month-number series (e.g. F01-2026-01-0001). Resets monthly &amp; yearly.</small>
+                <label>Order of Payment No. :</label>
+                <input name="op_number" type="text" placeholder="Auto-generated on save" readonly />
+                <small style="font-size:.71rem; color:var(--muted); margin-top:4px; display:block;">Format: year-month-number series (e.g. F01-2026-01-0001). Generated automatically on save; resets monthly &amp; yearly.</small>
               </div>
 
               <!-- ══ EXTRA FIELDS PER TRANSACTION TYPE ══ -->

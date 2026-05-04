@@ -40,12 +40,11 @@ class DashboardController extends Controller
             'contact' => 'required|string|max:50',
             'address' => 'required|string|max:255',
             'email' => 'required|email|max:191',
-            'op_number' => 'required|string|max:100',
             'agree_terms' => 'accepted',
         ]);
 
         // persist to payments table
-        $meta = $request->except(['_token', 'transaction_type', 'fund_type', 'amount', 'name', 'contact', 'address', 'email', 'op_number', 'payment_mode', 'agree_terms']);
+        $meta = $request->except(['_token', 'transaction_type', 'fund_type', 'amount', 'name', 'contact', 'address', 'email', 'payment_mode', 'agree_terms']);
 
         Payment::create([
             'transaction_type' => $data['transaction_type'] ?? null,
@@ -55,7 +54,6 @@ class DashboardController extends Controller
             'contact' => $data['contact'],
             'address' => $data['address'],
             'email' => $data['email'],
-            'op_number' => $data['op_number'],
             'payment_mode' => $request->input('payment_mode'),
             'meta' => $meta,
             'status' => 'waiting',
