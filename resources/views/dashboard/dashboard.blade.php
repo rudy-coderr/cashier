@@ -7,7 +7,6 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
-  <link rel="icon" href="{{ asset('img/dar-logo.png') }}" />
 
   <style>
     :root {
@@ -26,854 +25,301 @@
       --surface:      #ffffff;
       --red:          #a0251c;
     }
-
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); min-height: 100vh; color: var(--text-dark); }
 
-    body {
-      font-family: 'DM Sans', sans-serif;
-      background: var(--bg);
-      min-height: 100vh;
-      color: var(--text-dark);
-    }
-
-    .top-stripe {
-      height: 4px;
-      background: linear-gradient(90deg, var(--green-accent), var(--gold), var(--red));
-    }
+    .top-stripe { height: 4px; background: linear-gradient(90deg, var(--green-accent), var(--gold), var(--red)); }
 
     /* ── HEADER ── */
     .page-header {
-      background: var(--green-deep);
-      padding: 16px 32px;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      position: sticky;
-      top: 0;
-      z-index: 100;
+      background: var(--green-deep); padding: 16px 32px;
+      display: flex; align-items: center; gap: 14px;
+      position: sticky; top: 0; z-index: 200;
     }
-
-    .header-seal {
-      width: 38px; height: 38px;
-      border-radius: 50%;
-      background: var(--gold);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.2rem;
-      flex-shrink: 0;
-    }
-
-    .header-text .t1 {
-      font-size: .58rem;
-      letter-spacing: 2.5px;
-      text-transform: uppercase;
-      color: rgba(245,240,232,.35);
-      font-weight: 300;
-    }
-
-    .header-text .t2 {
-      font-size: .85rem;
-      font-weight: 600;
-      color: var(--cream);
-    }
-
-    .header-sep {
-      width: 1px; height: 30px;
-      background: rgba(245,240,232,.15);
-      margin: 0 4px;
-    }
-
-    .header-page {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: var(--gold-light);
-    }
-
-    .header-back {
-      margin-left: auto;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: .78rem;
-      color: rgba(245,240,232,.45);
-      text-decoration: none;
-      transition: color .18s;
-    }
+    .header-seal { width: 38px; height: 38px; border-radius: 50%; background: var(--gold); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
+    .header-text .t1 { font-size: .58rem; letter-spacing: 2.5px; text-transform: uppercase; color: rgba(245,240,232,.35); font-weight: 300; }
+    .header-text .t2 { font-size: .85rem; font-weight: 600; color: var(--cream); }
+    .header-sep { width: 1px; height: 30px; background: rgba(245,240,232,.15); margin: 0 4px; }
+    .header-page { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-weight: 700; color: var(--gold-light); }
+    .header-back { margin-left: auto; display: flex; align-items: center; gap: 6px; font-size: .78rem; color: rgba(245,240,232,.45); text-decoration: none; transition: color .18s; }
     .header-back:hover { color: var(--cream); }
 
-    /* ── OUTER WRAPPER ── */
-    .outer-wrapper {
-      display: flex;
-      min-height: calc(100vh - 72px);
-    }
+    /* ── LAYOUT ── */
+    .outer-wrapper { display: flex; min-height: calc(100vh - 72px); }
 
     /* ── SIDEBAR ── */
     .sidebar {
-      width: 270px;
-      flex-shrink: 0;
+      width: 280px; flex-shrink: 0;
       background: var(--green-deep);
-      display: flex;
-      flex-direction: column;
       border-right: 1px solid rgba(255,255,255,.07);
-      position: sticky;
-      top: 72px;
-      height: calc(100vh - 72px);
-      overflow-y: auto;
+      position: sticky; top: 56px;
+      height: calc(100vh - 56px);
+      display: flex; flex-direction: column;
+      overflow: hidden;
     }
 
-    .sidebar::-webkit-scrollbar { width: 3px; }
-    .sidebar::-webkit-scrollbar-track { background: transparent; }
-    .sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,.12); border-radius: 4px; }
+    /* Sidebar top scrollable zone */
+    .sidebar-scroll { flex: 1; overflow-y: auto; padding: 24px 0 0; }
+    .sidebar-scroll::-webkit-scrollbar { width: 3px; }
+    .sidebar-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,.12); border-radius: 4px; }
 
-    .sidebar-inner { padding: 28px 0 40px; display: flex; flex-direction: column; flex: 1; }
-
-    /* Step badge in sidebar */
-    .sidebar-step-badge {
-      display: flex;
-      align-items: center;
-      gap: 9px;
-      padding: 0 22px;
-      margin-bottom: 18px;
-    }
-
-    .sidebar-step-num {
-      width: 22px; height: 22px;
-      border-radius: 50%;
-      background: var(--gold);
-      color: var(--green-deep);
-      font-size: .68rem;
-      font-weight: 700;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .sidebar-step-label {
-      font-size: .65rem;
-      font-weight: 600;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: rgba(245,240,232,.45);
-    }
-
-    .sidebar-title {
-      padding: 0 22px;
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: var(--gold-light);
-      margin-bottom: 6px;
-      line-height: 1.3;
-    }
-
-    .sidebar-sub {
-      padding: 0 22px;
-      font-size: .72rem;
-      color: rgba(245,240,232,.35);
-      font-weight: 300;
-      margin-bottom: 22px;
-      line-height: 1.5;
-    }
-
-    .sidebar-divider {
-      border: none;
-      border-top: 1px solid rgba(255,255,255,.07);
-      margin: 0 22px 20px;
-    }
+    .sidebar-step-badge { display: flex; align-items: center; gap: 9px; padding: 0 22px; margin-bottom: 14px; }
+    .sidebar-step-num { width: 22px; height: 22px; border-radius: 50%; background: var(--gold); color: var(--green-deep); font-size: .68rem; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .sidebar-step-label { font-size: .65rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: rgba(245,240,232,.45); }
+    .sidebar-title { padding: 0 22px; font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-weight: 700; color: var(--gold-light); margin-bottom: 4px; }
+    .sidebar-sub { padding: 0 22px; font-size: .71rem; color: rgba(245,240,232,.35); font-weight: 300; margin-bottom: 18px; line-height: 1.5; }
+    .sidebar-divider { border: none; border-top: 1px solid rgba(255,255,255,.07); margin: 0 22px 16px; }
 
     /* Fund items */
-    .fund-list { flex: 1; }
-
-    .fund-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 12px 22px;
-      cursor: pointer;
-      transition: background .15s;
-      border-left: 3px solid transparent;
-      position: relative;
-    }
-
+    .fund-item { display: flex; align-items: center; gap: 11px; padding: 10px 22px; cursor: pointer; transition: background .15s; border-left: 3px solid transparent; }
     .fund-item:hover { background: rgba(255,255,255,.04); }
-
-    .fund-item.active {
-      background: rgba(45,122,79,.18);
-      border-left-color: var(--gold);
-    }
-
-    .fund-dot {
-      width: 34px; height: 34px;
-      border-radius: 9px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: .78rem;
-      font-weight: 700;
-      flex-shrink: 0;
-      transition: background .15s, color .15s;
-    }
-
-    .fund-item:not(.active) .fund-dot {
-      background: rgba(255,255,255,.07);
-      color: rgba(245,240,232,.55);
-    }
-
-    .fund-item.active .fund-dot {
-      background: var(--gold);
-      color: var(--green-deep);
-    }
-
+    .fund-item.active { background: rgba(45,122,79,.18); border-left-color: var(--gold); }
+    .fund-dot { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: .68rem; font-weight: 700; flex-shrink: 0; transition: background .15s, color .15s; }
+    .fund-item:not(.active) .fund-dot { background: rgba(255,255,255,.07); color: rgba(245,240,232,.55); }
+    .fund-item.active .fund-dot { background: var(--gold); color: var(--green-deep); }
     .fund-info { flex: 1; min-width: 0; }
-
-    .fund-name {
-      font-size: .82rem;
-      font-weight: 600;
-      color: rgba(245,240,232,.8);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      transition: color .15s;
-    }
-
+    .fund-name { font-size: .79rem; font-weight: 600; color: rgba(245,240,232,.8); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .fund-item.active .fund-name { color: var(--cream); }
-
-    .fund-tag {
-      font-size: .65rem;
-      color: rgba(245,240,232,.3);
-      margin-top: 2px;
-      font-weight: 300;
-      letter-spacing: .3px;
-    }
-
-    .fund-item.active .fund-tag { color: rgba(245,240,232,.5); }
-
-    .fund-check {
-      font-size: .9rem;
-      color: var(--gold);
-      opacity: 0;
-      transition: opacity .15s;
-    }
-
+    .fund-check { font-size: .85rem; color: var(--gold); opacity: 0; transition: opacity .15s; flex-shrink: 0; }
     .fund-item.active .fund-check { opacity: 1; }
 
-    /* Selected fund indicator in sidebar footer */
-    .sidebar-footer {
-      padding: 16px 22px;
-      border-top: 1px solid rgba(255,255,255,.07);
-      margin-top: auto;
-    }
+    /* Sidebar footer (proceed button) */
+    .sidebar-footer { padding: 14px 22px; border-top: 1px solid rgba(255,255,255,.07); flex-shrink: 0; }
+    .sidebar-footer-label { font-size: .6rem; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(245,240,232,.3); margin-bottom: 3px; }
+    .sidebar-footer-value { font-size: .78rem; font-weight: 600; color: var(--gold-light); min-height: 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .sidebar-proceed-btn { width: 100%; margin-top: 10px; padding: 9px 14px; background: var(--gold); border: none; border-radius: 8px; color: var(--green-deep); font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: .73rem; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: background .15s, transform .12s; opacity: .35; pointer-events: none; }
+    .sidebar-proceed-btn.enabled { opacity: 1; pointer-events: all; }
+    .sidebar-proceed-btn.enabled:hover { background: var(--gold-light); transform: translateY(-1px); }
 
-    .sidebar-footer-label {
-      font-size: .6rem;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      color: rgba(245,240,232,.3);
-      margin-bottom: 4px;
-    }
+    /* ── SIDEBAR HISTORY ── */
+    .sidebar-history-wrap { flex-shrink: 0; border-top: 1px solid rgba(255,255,255,.07); }
+    .sidebar-history-head { display: flex; align-items: center; justify-content: space-between; padding: 12px 22px 8px; }
+    .sidebar-history-title { display: flex; align-items: center; gap: 7px; font-size: .63rem; font-weight: 700; letter-spacing: 1.8px; text-transform: uppercase; color: rgba(245,240,232,.4); }
+    .sidebar-history-title i { font-size: .75rem; color: var(--gold); }
+    .sidebar-history-badge { font-size: .6rem; font-weight: 700; padding: 2px 7px; border-radius: 20px; background: rgba(201,153,42,.15); color: var(--gold-light); border: 1px solid rgba(201,153,42,.2); }
 
-    .sidebar-footer-value {
-      font-size: .8rem;
-      font-weight: 600;
-      color: var(--gold-light);
-      min-height: 18px;
-    }
+    .sidebar-history-list { max-height: 210px; overflow-y: auto; }
+    .sidebar-history-list::-webkit-scrollbar { width: 3px; }
+    .sidebar-history-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,.1); border-radius: 4px; }
 
-    .sidebar-proceed-btn {
-      width: 100%;
-      margin-top: 12px;
-      padding: 10px 14px;
-      background: var(--gold);
-      border: none;
-      border-radius: 8px;
-      color: var(--green-deep);
-      font-family: 'DM Sans', sans-serif;
-      font-weight: 700;
-      font-size: .75rem;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      transition: background .15s, transform .12s;
-      opacity: .4;
-      pointer-events: none;
-    }
+    .sidebar-txn-item { display: flex; align-items: center; gap: 10px; padding: 8px 22px; cursor: pointer; transition: background .15s; }
+    .sidebar-txn-item:hover { background: rgba(255,255,255,.04); }
+    .sidebar-txn-icon { width: 28px; height: 28px; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: .72rem; flex-shrink: 0; }
+    .ti-green { background: rgba(45,122,79,.25); color: #5ec98a; }
+    .ti-amber { background: rgba(201,153,42,.2); color: var(--gold-light); }
+    .ti-blue  { background: rgba(60,100,200,.2); color: #7faee8; }
+    .sidebar-txn-body { flex: 1; min-width: 0; }
+    .sidebar-txn-name { font-size: .76rem; font-weight: 600; color: rgba(245,240,232,.8); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .sidebar-txn-type { font-size: .64rem; color: rgba(245,240,232,.3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .sidebar-txn-right { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; flex-shrink: 0; }
+    .sidebar-txn-amount { font-size: .73rem; font-weight: 700; color: rgba(245,240,232,.7); }
+    .sidebar-txn-status { font-size: .56rem; font-weight: 700; letter-spacing: .4px; text-transform: uppercase; padding: 2px 6px; border-radius: 20px; }
+    .s-approved { background: rgba(45,122,79,.3); color: #6dd49a; }
+    .s-waiting  { background: rgba(201,153,42,.2); color: var(--gold-light); }
+    .s-rejected { background: rgba(160,37,28,.25); color: #e88a82; }
 
-    .sidebar-proceed-btn.enabled {
-      opacity: 1;
-      pointer-events: all;
-    }
+    .sidebar-view-all-btn { display: flex; align-items: center; justify-content: center; gap: 6px; margin: 8px 22px 14px; padding: 8px; background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08); border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: .71rem; font-weight: 600; color: rgba(245,240,232,.45); cursor: pointer; transition: background .15s, color .15s; }
+    .sidebar-view-all-btn:hover { background: rgba(255,255,255,.08); color: var(--cream); }
 
-    .sidebar-proceed-btn.enabled:hover {
-      background: var(--gold-light);
-      transform: translateY(-1px);
-    }
-
-    /* ── MAIN CONTENT ── */
-    .main-content {
-      flex: 1;
-      padding: 0 32px 60px;
-      min-width: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .main-inner {
-      width: 100%;
-      max-width: 640px;
-      padding-top: 40px;
-    }
-
-    /* Fund gate overlay */
-    .fund-gate {
-      text-align: center;
-      padding: 80px 20px;
-    }
-
-    .fund-gate-icon {
-      font-size: 2.8rem;
-      color: var(--border);
-      margin-bottom: 14px;
-    }
-
-    .fund-gate-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.4rem;
-      font-weight: 700;
-      color: var(--text-mid);
-      margin-bottom: 8px;
-    }
-
-    .fund-gate-sub {
-      font-size: .82rem;
-      color: var(--muted);
-      font-weight: 300;
-      max-width: 320px;
-      margin: 0 auto;
-      line-height: 1.6;
-    }
-
-    /* Selected fund banner (shown above form) */
-    /* Sticky fund banner wrapper — full width across main area */
-    .fund-banner-sticky-wrap {
-      display: none;
-      position: sticky;
-      top: 72px;
-      z-index: 50;
-      width: 100%;
-      background: var(--green-deep);
-      border-bottom: 1px solid rgba(255,255,255,.08);
-      padding: 10px 32px;
-    }
-
+    /* ── STICKY FUND BANNER ── */
+    .fund-banner-sticky-wrap { display: none; position: sticky; top: 56px; z-index: 150; width: 100%; background: var(--green-deep); border-bottom: 1px solid rgba(255,255,255,.08); padding: 9px 32px; }
     .fund-banner-sticky-wrap.show { display: block; }
-
-    .fund-banner {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      max-width: 640px;
-      margin: 0 auto;
-    }
-
-    .fund-banner-icon {
-      width: 36px; height: 36px;
-      border-radius: 8px;
-      background: var(--gold);
-      display: flex; align-items: center; justify-content: center;
-      font-size: .85rem;
-      font-weight: 700;
-      color: var(--green-deep);
-      flex-shrink: 0;
-    }
-
+    .fund-banner { display: flex; align-items: center; gap: 12px; max-width: 640px; margin: 0 auto; }
+    .fund-banner-icon { width: 34px; height: 34px; border-radius: 8px; background: var(--gold); display: flex; align-items: center; justify-content: center; font-size: .78rem; font-weight: 700; color: var(--green-deep); flex-shrink: 0; }
     .fund-banner-info { flex: 1; }
-
-    .fund-banner-label {
-      font-size: .6rem;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      color: rgba(245,240,232,.4);
-      margin-bottom: 2px;
-    }
-
-    .fund-banner-name {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--gold-light);
-    }
-
-    .fund-banner-change {
-      font-size: .72rem;
-      color: rgba(245,240,232,.4);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      transition: color .15s;
-      background: none;
-      border: none;
-      font-family: 'DM Sans', sans-serif;
-    }
-
+    .fund-banner-label { font-size: .58rem; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(245,240,232,.4); margin-bottom: 1px; }
+    .fund-banner-name { font-family: 'Cormorant Garamond', serif; font-size: .95rem; font-weight: 700; color: var(--gold-light); }
+    .fund-banner-change { font-size: .72rem; color: rgba(245,240,232,.4); cursor: pointer; display: flex; align-items: center; gap: 4px; transition: color .15s; background: none; border: none; font-family: 'DM Sans', sans-serif; }
     .fund-banner-change:hover { color: var(--cream); }
 
-    .page-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.6rem;
-      font-weight: 700;
-      color: var(--text-dark);
-      margin-bottom: 4px;
-    }
+    /* ── MAIN ── */
+    .main-content { flex: 1; padding: 0 32px 60px; min-width: 0; display: flex; flex-direction: column; align-items: center; }
+    .main-inner { width: 100%; max-width: 640px; padding-top: 36px; }
 
-    .page-sub {
-      font-size: .82rem;
-      color: var(--muted);
-      font-weight: 300;
-      margin-bottom: 28px;
-    }
+    /* Gate */
+    .fund-gate { text-align: center; padding: 80px 20px; }
+    .fund-gate-icon { font-size: 2.8rem; color: var(--border); margin-bottom: 14px; }
+    .fund-gate-title { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-weight: 700; color: var(--text-mid); margin-bottom: 8px; }
+    .fund-gate-sub { font-size: .82rem; color: var(--muted); font-weight: 300; max-width: 320px; margin: 0 auto; line-height: 1.6; }
+
+    /* Page title */
+    .page-title { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-weight: 700; color: var(--text-dark); margin-bottom: 4px; }
+    .page-sub { font-size: .82rem; color: var(--muted); font-weight: 300; margin-bottom: 24px; }
 
     /* Step indicator */
-    .step-indicator {
-      display: flex;
-      align-items: center;
-      gap: 0;
-      margin-bottom: 28px;
-    }
-
-    .step-ind-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .step-ind-num {
-      width: 24px; height: 24px;
-      border-radius: 50%;
-      font-size: .7rem;
-      font-weight: 700;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
-      transition: background .2s, color .2s;
-    }
-
-    .step-ind-item.done .step-ind-num {
-      background: var(--green-accent);
-      color: #fff;
-    }
-
-    .step-ind-item.active .step-ind-num {
-      background: var(--green-mid);
-      color: #fff;
-    }
-
-    .step-ind-item.inactive .step-ind-num {
-      background: var(--border);
-      color: var(--muted);
-    }
-
-    .step-ind-text {
-      font-size: .72rem;
-      font-weight: 600;
-      letter-spacing: .5px;
-      text-transform: uppercase;
-    }
-
+    .step-indicator { display: flex; align-items: center; margin-bottom: 24px; }
+    .step-ind-item { display: flex; align-items: center; gap: 8px; }
+    .step-ind-num { width: 24px; height: 24px; border-radius: 50%; font-size: .7rem; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .step-ind-item.done .step-ind-num { background: var(--green-accent); color: #fff; }
+    .step-ind-item.active .step-ind-num { background: var(--green-mid); color: #fff; }
+    .step-ind-item.inactive .step-ind-num { background: var(--border); color: var(--muted); }
+    .step-ind-text { font-size: .7rem; font-weight: 600; letter-spacing: .5px; text-transform: uppercase; }
     .step-ind-item.done .step-ind-text { color: var(--green-accent); }
     .step-ind-item.active .step-ind-text { color: var(--text-mid); }
     .step-ind-item.inactive .step-ind-text { color: var(--muted); }
+    .step-ind-line { flex: 1; height: 1px; background: var(--border); margin: 0 10px; max-width: 36px; }
 
-    .step-ind-line {
-      flex: 1;
-      height: 1px;
-      background: var(--border);
-      margin: 0 12px;
-      max-width: 40px;
-    }
-
-    /* ── SELECT CARD ── */
-    .select-card {
-      background: var(--surface);
-      border: 1.5px solid var(--border);
-      border-radius: 14px;
-      padding: 28px;
-    }
-
-    .step-label {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 14px;
-    }
-
-    .step-num {
-      width: 26px; height: 26px;
-      border-radius: 50%;
-      background: var(--green-mid);
-      color: #fff;
-      font-size: .72rem;
-      font-weight: 700;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .step-text {
-      font-size: .72rem;
-      font-weight: 600;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      color: var(--text-mid);
-    }
-
+    /* Select card */
+    .select-card { background: var(--surface); border: 1.5px solid var(--border); border-radius: 14px; padding: 26px; }
+    .step-label { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+    .step-num { width: 26px; height: 26px; border-radius: 50%; background: var(--green-mid); color: #fff; font-size: .72rem; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .step-text { font-size: .72rem; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-mid); }
     .select-wrap { position: relative; }
+    .select-wrap select { width: 100%; padding: 13px 44px 13px 16px; border: 1.5px solid var(--border); border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: .93rem; color: var(--text-dark); background: #faf8f4; outline: none; appearance: none; cursor: pointer; transition: border-color .2s, box-shadow .2s; }
+    .select-wrap select:focus { border-color: var(--green-accent); box-shadow: 0 0 0 3px rgba(45,122,79,.1); background: #fff; }
+    .select-wrap::after { content: '\F282'; font-family: 'bootstrap-icons'; position: absolute; right: 16px; top: 50%; transform: translateY(-50%); color: var(--muted); pointer-events: none; font-size: 1rem; }
 
-    .select-wrap select {
-      width: 100%;
-      padding: 13px 44px 13px 16px;
-      border: 1.5px solid var(--border);
-      border-radius: 10px;
-      font-family: 'DM Sans', sans-serif;
-      font-size: .95rem;
-      color: var(--text-dark);
-      background: #faf8f4;
-      outline: none;
-      appearance: none;
-      -webkit-appearance: none;
-      cursor: pointer;
-      transition: border-color .2s, box-shadow .2s;
-    }
-
-    .select-wrap select:focus {
-      border-color: var(--green-accent);
-      box-shadow: 0 0 0 3px rgba(45,122,79,.1);
-      background: #fff;
-    }
-
-    .select-wrap::after {
-      content: '\F282';
-      font-family: 'bootstrap-icons';
-      position: absolute;
-      right: 16px; top: 50%;
-      transform: translateY(-50%);
-      color: var(--muted);
-      pointer-events: none;
-      font-size: 1rem;
-    }
-
-    /* ── FORM CARD ── */
-    .form-card {
-      background: var(--surface);
-      border: 1.5px solid var(--border);
-      border-radius: 14px;
-      overflow: hidden;
-      margin-top: 20px;
-      max-height: 0;
-      opacity: 0;
-      pointer-events: none;
-      transition: max-height .5s cubic-bezier(.16,1,.3,1), opacity .35s ease;
-    }
-
-    .form-card.visible {
-      max-height: 3000px;
-      opacity: 1;
-      pointer-events: all;
-    }
-
-    .form-header {
-      padding: 18px 28px;
-      background: linear-gradient(90deg, var(--green-mid), var(--green-deep));
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .form-header-seal {
-      width: 46px; height: 46px;
-      border-radius: 50%;
-      background: rgba(255,255,255,.1);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.4rem;
-      flex-shrink: 0;
-    }
-
-    .form-header-info .org {
-      font-size: .6rem;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      color: rgba(245,240,232,.4);
-      font-weight: 300;
-    }
-
-    .form-header-info .txn-name {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: var(--gold-light);
-    }
-
-    .required-note {
-      padding: 9px 28px;
-      font-size: .74rem;
-      color: var(--red);
-      background: #fff9f8;
-      border-bottom: 1px solid #f5e0de;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-
-    /* ── FORM BODY ── */
-    .form-body { padding: 28px; }
-
-    .section-heading {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: .7rem;
-      font-weight: 700;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      color: var(--text-mid);
-      margin-bottom: 20px;
-    }
-
+    /* Form card */
+    .form-card { background: var(--surface); border: 1.5px solid var(--border); border-radius: 14px; overflow: hidden; margin-top: 18px; max-height: 0; opacity: 0; pointer-events: none; transition: max-height .5s cubic-bezier(.16,1,.3,1), opacity .35s ease; }
+    .form-card.visible { max-height: 4000px; opacity: 1; pointer-events: all; }
+    .form-header { padding: 16px 26px; background: linear-gradient(90deg, var(--green-mid), var(--green-deep)); display: flex; align-items: center; gap: 12px; }
+    .form-header-seal { width: 42px; height: 42px; border-radius: 50%; background: rgba(255,255,255,.1); display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0; }
+    .form-header-info .org { font-size: .58rem; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(245,240,232,.4); font-weight: 300; }
+    .form-header-info .txn-name { font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-weight: 700; color: var(--gold-light); }
+    .required-note { padding: 8px 26px; font-size: .73rem; color: var(--red); background: #fff9f8; border-bottom: 1px solid #f5e0de; display: flex; align-items: center; gap: 5px; }
+    .form-body { padding: 26px; }
+    .section-heading { display: flex; align-items: center; gap: 8px; font-size: .68rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-mid); margin-bottom: 18px; }
     .section-heading i { color: var(--green-accent); }
 
-    .field { margin-bottom: 16px; }
-
-    .field label {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      font-size: .82rem;
-      font-weight: 500;
-      color: var(--text-mid);
-      margin-bottom: 6px;
-    }
-
+    /* Fields */
+    .field { margin-bottom: 15px; }
+    .field label { display: flex; align-items: center; gap: 4px; font-size: .81rem; font-weight: 500; color: var(--text-mid); margin-bottom: 5px; }
     .req { color: var(--red); font-size: .85rem; line-height: 1; }
-
-    .field input,
-    .field select,
-    .field textarea {
-      width: 100%;
-      padding: 10px 14px;
-      border: 1.5px solid var(--border);
-      border-radius: 8px;
-      font-family: 'DM Sans', sans-serif;
-      font-size: .9rem;
-      color: var(--text-dark);
-      background: #faf8f4;
-      outline: none;
-      transition: border-color .2s, box-shadow .2s, background .2s;
-      appearance: none;
-    }
-
-    .field textarea { resize: vertical; min-height: 72px; }
-
-    .field input:focus,
-    .field select:focus,
-    .field textarea:focus {
-      border-color: var(--green-accent);
-      box-shadow: 0 0 0 3px rgba(45,122,79,.1);
-      background: #fff;
-    }
-
-    .field input::placeholder,
-    .field textarea::placeholder { color: #b5c4ba; }
-
-    .field-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-    }
-
+    .field input, .field select, .field textarea { width: 100%; padding: 9px 13px; border: 1.5px solid var(--border); border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: .88rem; color: var(--text-dark); background: #faf8f4; outline: none; transition: border-color .2s, box-shadow .2s, background .2s; appearance: none; }
+    .field textarea { resize: vertical; min-height: 70px; }
+    .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--green-accent); box-shadow: 0 0 0 3px rgba(45,122,79,.1); background: #fff; }
+    .field input::placeholder, .field textarea::placeholder { color: #b5c4ba; }
+    .field.invalid input, .field.invalid select, .field.invalid textarea { border-color: var(--red); box-shadow: none; background: #fff6f6; }
+    .field .error-msg { display: none; font-size: .75rem; color: var(--red); margin-top: 6px; }
+    .field.invalid .error-msg { display: block; }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 13px; }
     .amount-wrap { position: relative; }
-    .amount-wrap span {
-      position: absolute;
-      left: 12px; top: 50%;
-      transform: translateY(-50%);
-      font-size: .88rem;
-      color: var(--muted);
-      font-weight: 500;
-      pointer-events: none;
-    }
+    .amount-wrap span { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: .86rem; color: var(--muted); font-weight: 500; pointer-events: none; }
     .amount-wrap input { padding-left: 28px; }
-
     .sel-wrap { position: relative; }
-    .sel-wrap::after {
-      content: '\F282';
-      font-family: 'bootstrap-icons';
-      position: absolute;
-      right: 13px; top: 50%;
-      transform: translateY(-50%);
-      color: var(--muted);
-      pointer-events: none;
-    }
-    .sel-wrap select { padding-right: 36px; }
+    .sel-wrap::after { content: '\F282'; font-family: 'bootstrap-icons'; position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: var(--muted); pointer-events: none; }
+    .sel-wrap select { padding-right: 34px; }
 
+    /* Extra fields */
     .extra-fields { display: none; }
     .extra-fields.show { display: block; }
+    .extra-divider { border: none; border-top: 1px solid var(--green-light); margin: 4px 0 14px; }
+    .extra-label { font-size: .66rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--green-accent); margin-bottom: 13px; }
 
-    .extra-divider {
-      border: none;
-      border-top: 1px solid var(--green-light);
-      margin: 4px 0 16px;
-    }
+    /* Checkboxes for type-of-transaction */
+    .check-group { display: flex; flex-direction: column; gap: 8px; }
+    .check-item { display: flex; align-items: center; gap: 9px; font-size: .85rem; color: var(--text-mid); cursor: pointer; padding: 8px 12px; border: 1.5px solid var(--border); border-radius: 8px; background: #faf8f4; transition: border-color .2s, background .2s; position: relative; padding-left: 44px; }
+    .check-item:hover { border-color: var(--green-accent); background: #fff; }
+    /* visually hide native checkbox but keep it accessible */
+    .check-item input[type="checkbox"] { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 20px; height: 20px; opacity: 0; margin: 0; cursor: pointer; }
+    /* custom box */
+    .check-item::before { content: ''; position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 20px; height: 20px; border-radius: 6px; border: 2px solid var(--border); background: #faf8f4; }
+    .check-item::after { content: ''; position: absolute; left: 17px; top: 50%; transform: translateY(-56%) rotate(45deg); width: 6px; height: 10px; border: solid white; border-width: 0 2px 2px 0; opacity: 0; }
+    .check-item.checked { border-color: var(--green-accent); background: var(--green-light); }
+    .check-item.checked::before { background: var(--green-accent); border-color: var(--green-accent); }
+    .check-item.checked::after { opacity: 1; }
 
-    .extra-label {
-      font-size: .68rem;
-      font-weight: 600;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      color: var(--green-accent);
-      margin-bottom: 14px;
-    }
+    /* Remittance checkboxes */
+    .remit-check-group { display: flex; flex-direction: column; gap: 8px; }
+    .remit-check-item { display: flex; align-items: flex-start; gap: 9px; font-size: .85rem; color: var(--text-mid); cursor: pointer; padding: 8px 12px; border: 1.5px solid var(--border); border-radius: 8px; background: #faf8f4; transition: border-color .2s, background .2s; position: relative; padding-left: 44px; }
+    .remit-check-item:hover { border-color: var(--green-accent); background: #fff; }
+    .remit-check-item input[type="checkbox"] { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 20px; height: 20px; opacity: 0; margin: 0; cursor: pointer; }
+    .remit-check-item::before { content: ''; position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 20px; height: 20px; border-radius: 6px; border: 2px solid var(--border); background: #faf8f4; }
+    .remit-check-item::after { content: ''; position: absolute; left: 17px; top: 50%; transform: translateY(-56%) rotate(45deg); width: 6px; height: 10px; border: solid white; border-width: 0 2px 2px 0; opacity: 0; }
+    .remit-check-item.checked { border-color: var(--green-accent); background: var(--green-light); }
+    .remit-check-item.checked::before { background: var(--green-accent); border-color: var(--green-accent); }
+    .remit-check-item.checked::after { opacity: 1; }
+    .remit-open-field { display: none; margin-top: 6px; }
+    .remit-open-field.show { display: block; }
 
-    .form-divider {
-      border: none;
-      border-top: 1px dashed var(--border);
-      margin: 22px 0;
-    }
-
-    .terms-block {
-      background: #faf8f4;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 14px 16px;
-      margin-bottom: 14px;
-    }
-
-    .terms-block label {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      font-size: .82rem;
-      color: var(--text-mid);
-      cursor: pointer;
-      line-height: 1.55;
-    }
-
-    .terms-block input[type="checkbox"] {
-      accent-color: var(--green-accent);
-      width: 15px; height: 15px;
-      flex-shrink: 0;
-      margin-top: 2px;
-      cursor: pointer;
-    }
-
+    .form-divider { border: none; border-top: 1px dashed var(--border); margin: 20px 0; }
+    .terms-block { background: #faf8f4; border: 1px solid var(--border); border-radius: 8px; padding: 13px 15px; margin-bottom: 13px; }
+    .terms-block label { display: flex; align-items: flex-start; gap: 10px; font-size: .81rem; color: var(--text-mid); cursor: pointer; line-height: 1.55; }
+    .terms-block input[type="checkbox"] { accent-color: var(--green-accent); width: 15px; height: 15px; flex-shrink: 0; margin-top: 2px; cursor: pointer; }
     .terms-block a { color: var(--green-accent); text-decoration: underline; }
+    .review-note { font-size: .77rem; color: var(--red); margin-bottom: 14px; display: flex; align-items: center; gap: 6px; }
+    .btn-submit { width: 100%; padding: 13px; background: var(--green-mid); border: none; border-radius: 9px; color: #fff; font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: .88rem; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; position: relative; overflow: hidden; transition: background .15s, transform .12s, box-shadow .15s; box-shadow: 0 5px 20px rgba(26,74,46,.3); }
+    .btn-submit::after { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255,255,255,.1), transparent 55%); pointer-events: none; }
+    .btn-submit:hover:not(:disabled) { background: var(--green-accent); transform: translateY(-2px); box-shadow: 0 9px 28px rgba(26,74,46,.38); }
+    .btn-submit:disabled { opacity: .45; cursor: not-allowed; }
 
-    .review-note {
-      font-size: .78rem;
-      color: var(--red);
-      margin-bottom: 16px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
+    #section-gate { display: block; }
+    #section-form { display: none; }
 
-    .btn-submit {
-      width: 100%;
-      padding: 14px;
-      background: var(--green-mid);
-      border: none;
-      border-radius: 9px;
-      color: #fff;
-      font-family: 'DM Sans', sans-serif;
-      font-weight: 600;
-      font-size: .9rem;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      cursor: pointer;
-      position: relative;
-      overflow: hidden;
-      transition: background .15s, transform .12s, box-shadow .15s;
-      box-shadow: 0 5px 20px rgba(26,74,46,.3);
-    }
+    /* ── TRANSACTIONS MODAL ── */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.55); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
+    .modal-overlay.open { display: flex; }
+    .txn-modal { background: var(--surface); border-radius: 16px; width: 100%; max-width: 700px; max-height: 88vh; display: flex; flex-direction: column; overflow: hidden; animation: modalIn .22s cubic-bezier(.16,1,.3,1); }
+    @keyframes modalIn { from { opacity: 0; transform: translateY(16px) scale(.97); } to { opacity: 1; transform: none; } }
 
-    .btn-submit::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, rgba(255,255,255,.1), transparent 55%);
-      pointer-events: none;
-    }
+    .modal-head { padding: 16px 22px; background: var(--green-deep); display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+    .modal-head-left { display: flex; align-items: center; gap: 12px; }
+    .modal-head-icon { width: 36px; height: 36px; border-radius: 9px; background: rgba(201,153,42,.2); display: flex; align-items: center; justify-content: center; font-size: .95rem; color: var(--gold-light); flex-shrink: 0; }
+    .modal-head-title { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 700; color: var(--gold-light); }
+    .modal-head-sub { font-size: .6rem; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(245,240,232,.3); }
+    .modal-close-btn { width: 32px; height: 32px; border-radius: 8px; background: rgba(255,255,255,.07); border: none; color: rgba(245,240,232,.5); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1rem; transition: background .15s, color .15s; }
+    .modal-close-btn:hover { background: rgba(255,255,255,.14); color: var(--cream); }
 
-    .btn-submit:hover:not(:disabled) {
-      background: var(--green-accent);
-      transform: translateY(-2px);
-      box-shadow: 0 9px 28px rgba(26,74,46,.38);
-    }
+    .modal-tabs { display: flex; padding: 12px 22px 0; border-bottom: 1px solid var(--border); background: #faf8f4; flex-shrink: 0; gap: 2px; overflow-x: auto; }
+    .modal-tab { padding: 7px 14px 9px; font-size: .73rem; font-weight: 600; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; transition: color .15s, border-color .15s; display: flex; align-items: center; gap: 6px; white-space: nowrap; background: none; border-top: none; border-left: none; border-right: none; font-family: 'DM Sans', sans-serif; }
+    .modal-tab:hover { color: var(--text-mid); }
+    .modal-tab.active { color: var(--green-mid); border-bottom-color: var(--green-accent); }
+    .modal-tab-count { font-size: .6rem; padding: 1px 6px; border-radius: 20px; font-weight: 700; }
+    .tab-all .modal-tab-count { background: #e8e4dc; color: var(--text-mid); }
+    .tab-approved .modal-tab-count { background: var(--green-light); color: var(--green-accent); }
+    .tab-waiting .modal-tab-count { background: #fdf3dc; color: #a0700a; }
+    .tab-rejected .modal-tab-count { background: #fdf0ef; color: var(--red); }
 
-    .btn-submit:active:not(:disabled) { transform: translateY(0); }
+    .modal-search-bar { padding: 12px 22px; background: #faf8f4; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+    .modal-search-inner { position: relative; }
+    .modal-search-inner i { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: .85rem; pointer-events: none; }
+    .modal-search-inner input { width: 100%; padding: 8px 12px 8px 32px; border: 1.5px solid var(--border); border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: .85rem; color: var(--text-dark); background: #fff; outline: none; transition: border-color .2s, box-shadow .2s; }
+    .modal-search-inner input:focus { border-color: var(--green-accent); box-shadow: 0 0 0 3px rgba(45,122,79,.09); }
 
-    .btn-submit:disabled {
-      opacity: .45;
-      cursor: not-allowed;
-    }
+    .modal-list { overflow-y: auto; flex: 1; }
+    .modal-list::-webkit-scrollbar { width: 4px; }
+    .modal-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
 
-    /* ── Sections shown/hidden ── */
-    #section-gate   { display: block; }
-    #section-form   { display: none; }
+    .modal-txn-row { display: flex; align-items: center; gap: 14px; padding: 13px 22px; border-bottom: 1px solid var(--border); transition: background .12s; cursor: pointer; }
+    .modal-txn-row:last-child { border-bottom: none; }
+    .modal-txn-row:hover { background: #f9f7f2; }
+    .modal-txn-icon { width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: .9rem; flex-shrink: 0; }
+    .mi-green { background: var(--green-light); color: var(--green-accent); }
+    .mi-gold  { background: #fdf3dc; color: var(--gold); }
+    .mi-blue  { background: #eef3fc; color: #2a5fa0; }
+    .mi-red   { background: #fdf0ef; color: var(--red); }
+    .modal-txn-main { flex: 1; min-width: 0; }
+    .modal-txn-name { font-size: .87rem; font-weight: 600; color: var(--text-dark); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .modal-txn-type { font-size: .73rem; color: var(--muted); margin-top: 2px; }
+    .modal-txn-meta { font-size: .67rem; color: #b5c4ba; margin-top: 4px; display: flex; align-items: center; gap: 8px; }
+    .modal-txn-right { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; flex-shrink: 0; }
+    .modal-txn-amount { font-size: .9rem; font-weight: 700; color: var(--green-mid); }
+    .modal-status-badge { display: inline-flex; align-items: center; gap: 4px; font-size: .65rem; font-weight: 700; padding: 3px 9px; border-radius: 20px; letter-spacing: .4px; text-transform: uppercase; }
+    .ms-approved { background: var(--green-light); color: var(--green-accent); }
+    .ms-waiting  { background: #fdf3dc; color: #a0700a; }
+    .ms-rejected { background: #fdf0ef; color: var(--red); }
+    .modal-txn-or { font-size: .67rem; color: var(--muted); }
+
+    .modal-empty { padding: 50px 20px; text-align: center; }
+    .modal-empty i { font-size: 2.2rem; color: var(--border); display: block; margin-bottom: 12px; }
+    .modal-empty p { font-size: .82rem; color: var(--muted); }
+
+    .modal-foot { padding: 11px 22px; background: #faf8f4; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+    .modal-foot-info { font-size: .73rem; color: var(--muted); }
+    .modal-foot-info strong { color: var(--text-mid); }
 
     /* ── RESPONSIVE ── */
     @media (max-width: 768px) {
       .outer-wrapper { flex-direction: column; }
-
-      .sidebar {
-        width: 100%;
-        height: auto;
-        position: static;
-        flex-direction: row;
-        overflow-x: auto;
-        overflow-y: hidden;
-        border-right: none;
-        border-bottom: 1px solid rgba(255,255,255,.07);
-      }
-
-      .sidebar-inner {
-        flex-direction: row;
-        align-items: center;
-        padding: 12px 16px;
-        gap: 8px;
-        width: max-content;
-      }
-
-      .sidebar-step-badge,
-      .sidebar-title,
-      .sidebar-sub,
-      .sidebar-divider,
-      .sidebar-footer { display: none; }
-
-      .fund-list {
-        display: flex;
-        flex-direction: row;
-        gap: 6px;
-      }
-
-      .fund-item {
-        padding: 9px 14px;
-        border-left: none;
-        border-bottom: 2px solid transparent;
-        border-radius: 8px;
-        white-space: nowrap;
-      }
-
-      .fund-item.active {
-        background: rgba(45,122,79,.2);
-        border-bottom-color: var(--gold);
-      }
-
-      .fund-dot { width: 28px; height: 28px; font-size: .7rem; }
-      .fund-check { font-size: .75rem; }
-
+      .sidebar { width: 100%; height: auto; position: static; flex-direction: row; overflow-x: auto; border-right: none; border-bottom: 1px solid rgba(255,255,255,.07); }
+      .sidebar-scroll { overflow: visible; padding: 10px 0; }
+      .sidebar-step-badge, .sidebar-title, .sidebar-sub, .sidebar-divider, .sidebar-footer, .sidebar-history-wrap { display: none; }
+      .fund-item { padding: 8px 13px; border-left: none; border-bottom: 2px solid transparent; border-radius: 8px; white-space: nowrap; }
+      .fund-item.active { border-bottom-color: var(--gold); }
+      .fund-dot { width: 28px; height: 28px; font-size: .65rem; }
       .main-content { padding: 0 16px 48px; }
-      .fund-banner-sticky-wrap { padding: 10px 16px; top: 0; }
+      .fund-banner-sticky-wrap { padding: 9px 16px; top: 0; }
     }
-
     @media (max-width: 560px) {
       .field-row { grid-template-columns: 1fr; }
     }
@@ -881,135 +327,181 @@
 </head>
 <body>
 
-  <div class="top-stripe"></div>
+<div class="top-stripe"></div>
 
-  <header class="page-header">
-    <div class="header-seal">🌾</div>
-    <div class="header-text">
-      <div class="t1">Republic of the Philippines</div>
-      <div class="t2">Department of Agrarian Reform</div>
-    </div>
-    <div class="header-sep"></div>
-    <div class="header-page">New Transaction</div>
-    <a href="{{ url()->previous() }}" class="header-back">
-      <i class="bi bi-arrow-left"></i> Back
-    </a>
-  </header>
+<header class="page-header">
+  <div class="header-seal">🌾</div>
+  <div class="header-text">
+    <div class="t1">Republic of the Philippines</div>
+    <div class="t2">Department of Agrarian Reform</div>
+  </div>
+  <div class="header-sep"></div>
+  <div class="header-page">New Transaction</div>
+  <a href="{{ url()->previous() }}" class="header-back">
+    <i class="bi bi-arrow-left"></i> Back
+  </a>
+</header>
 
-  <div class="outer-wrapper">
+<div class="outer-wrapper">
 
-    <!-- ══════════════ SIDEBAR ══════════════ -->
-    <aside class="sidebar" id="sidebar">
-      <div class="sidebar-inner">
+  <!-- ══════════════ SIDEBAR ══════════════ -->
+  <aside class="sidebar">
 
-        <div class="sidebar-step-badge">
-          <div class="sidebar-step-num">1</div>
-          <div class="sidebar-step-label">Select Fund</div>
+    <div class="sidebar-scroll">
+      <div class="sidebar-step-badge">
+        <div class="sidebar-step-num">1</div>
+        <div class="sidebar-step-label">Select Fund</div>
+      </div>
+      <div class="sidebar-title">Choose a Fund</div>
+      <div class="sidebar-sub">Select the fund this transaction will be processed under before continuing.</div>
+      <hr class="sidebar-divider">
+
+      <div class="fund-list">
+        <div class="fund-item" data-fund="F01" data-name="Fund 01 - REGULAR" data-label="Regular Fund" onclick="selectFund(this)">
+          <div class="fund-dot">F01</div>
+          <div class="fund-info"><div class="fund-name">Fund 01 — REGULAR</div></div>
+          <i class="bi bi-check-circle-fill fund-check"></i>
         </div>
-
-        <div class="sidebar-title">Choose a Fund</div>
-        <div class="sidebar-sub">Select the fund this transaction will be processed under before continuing.</div>
-
-        <hr class="sidebar-divider">
-
-        <div class="fund-list">
-
-          <div class="fund-item" data-fund="fund1" data-label="Funds 1 RO1 — Regular" onclick="selectFund(this)">
-            <div class="fund-dot">F1</div>
-            <div class="fund-info">
-              <div class="fund-name">Funds 1 RO1</div>
-              <div class="fund-tag">Regular</div>
-            </div>
-            <i class="bi bi-check-circle-fill fund-check"></i>
-          </div>
-
-          <div class="fund-item" data-fund="fund2" data-label="Funds 2 — ARF" onclick="selectFund(this)">
-            <div class="fund-dot">F2</div>
-            <div class="fund-info">
-              <div class="fund-name">Funds 2</div>
-              <div class="fund-tag">ARF</div>
-            </div>
-            <i class="bi bi-check-circle-fill fund-check"></i>
-          </div>
-
-          <div class="fund-item" data-fund="fund3" data-label="Funds 3 — Split LPG" onclick="selectFund(this)">
-            <div class="fund-dot">F3</div>
-            <div class="fund-info">
-              <div class="fund-name">Funds 3</div>
-              <div class="fund-tag">Split LPG</div>
-            </div>
-            <i class="bi bi-check-circle-fill fund-check"></i>
-          </div>
-
-          <div class="fund-item" data-fund="fund4" data-label="Funds 4 — Split LP" onclick="selectFund(this)">
-            <div class="fund-dot">F4</div>
-            <div class="fund-info">
-              <div class="fund-name">Funds 4</div>
-              <div class="fund-tag">Split LP</div>
-            </div>
-            <i class="bi bi-check-circle-fill fund-check"></i>
-          </div>
-
-          <div class="fund-item" data-fund="fund5" data-label="Funds 5 — DAR" onclick="selectFund(this)">
-            <div class="fund-dot">F5</div>
-            <div class="fund-info">
-              <div class="fund-name">Funds 5</div>
-              <div class="fund-tag">DAR</div>
-            </div>
-            <i class="bi bi-check-circle-fill fund-check"></i>
-          </div>
-
-        </div><!-- /fund-list -->
-
-        <div class="sidebar-footer">
-          <div class="sidebar-footer-label">Selected Fund</div>
-          <div class="sidebar-footer-value" id="sidebar-selected-label">—</div>
-          <button class="sidebar-proceed-btn" id="sidebar-proceed-btn" onclick="proceedToForm()">
-            <i class="bi bi-arrow-right"></i> Proceed
-          </button>
+        <div class="fund-item" data-fund="F03" data-name="Fund 03 - ARF" data-label="Agrarian Reform Fund" onclick="selectFund(this)">
+          <div class="fund-dot">F03</div>
+          <div class="fund-info"><div class="fund-name">Fund 03 — ARF</div></div>
+          <i class="bi bi-check-circle-fill fund-check"></i>
         </div>
-
-      </div><!-- /sidebar-inner -->
-    </aside>
-
-    <!-- ══════════════ MAIN ══════════════ -->
-    <div style="flex:1; display:flex; flex-direction:column; min-width:0;">
-
-      <!-- Sticky fund banner — full width, outside scroll area of form -->
-      <div class="fund-banner-sticky-wrap" id="fund-banner-wrap">
-        <div class="fund-banner" id="fund-banner">
-          <div class="fund-banner-icon" id="fund-banner-dot">F1</div>
-          <div class="fund-banner-info">
-            <div class="fund-banner-label">Processing Under</div>
-            <div class="fund-banner-name" id="fund-banner-name">—</div>
-          </div>
-          <button class="fund-banner-change" onclick="changeFund()">
-            <i class="bi bi-pencil"></i> Change
-          </button>
+        <div class="fund-item" data-fund="F07" data-name="Fund 07 - TRUST" data-label="Trust Fund" onclick="selectFund(this)">
+          <div class="fund-dot">F07</div>
+          <div class="fund-info"><div class="fund-name">Fund 07 — TRUST</div></div>
+          <i class="bi bi-check-circle-fill fund-check"></i>
+        </div>
+        <div class="fund-item" data-fund="F02-LP" data-name="LP SPLIT - FUND 02" data-label="Loan Proceeds" onclick="selectFund(this)">
+          <div class="fund-dot">F02</div>
+          <div class="fund-info"><div class="fund-name">LP SPLIT — FUND 02</div></div>
+          <i class="bi bi-check-circle-fill fund-check"></i>
+        </div>
+        <div class="fund-item" data-fund="F02-GOP" data-name="GOP SPLIT - FUND 02" data-label="Government of The Philippines" onclick="selectFund(this)">
+          <div class="fund-dot">F02</div>
+          <div class="fund-info"><div class="fund-name">GOP SPLIT — FUND 02</div></div>
+          <i class="bi bi-check-circle-fill fund-check"></i>
         </div>
       </div>
+    </div><!-- /sidebar-scroll -->
 
-      <main class="main-content">
-      <div class="main-inner">
+    <!-- Proceed button -->
+    <div class="sidebar-footer">
+      <div class="sidebar-footer-label">Selected Fund</div>
+      <div class="sidebar-footer-value" id="sidebar-selected-label">—</div>
+      <button class="sidebar-proceed-btn" id="sidebar-proceed-btn" onclick="proceedToForm()">
+        <i class="bi bi-arrow-right"></i> Proceed
+      </button>
+    </div>
 
-      <!-- GATE: shown before fund is selected & confirmed -->
+    <!-- ── TRANSACTION HISTORY ── -->
+    <div class="sidebar-history-wrap">
+      <div class="sidebar-history-head">
+        <div class="sidebar-history-title">
+          <i class="bi bi-clock-history"></i> Today's Transactions
+        </div>
+        <span class="sidebar-history-badge" id="hist-badge">5</span>
+      </div>
+
+      <div class="sidebar-history-list" id="sidebar-history-list">
+        <!-- Demo records — replace with @@foreach ($transactions as $transaction) -->
+        <div class="sidebar-txn-item">
+          <div class="sidebar-txn-icon ti-green"><i class="bi bi-receipt"></i></div>
+          <div class="sidebar-txn-body">
+            <div class="sidebar-txn-name">Juan Dela Cruz</div>
+            <div class="sidebar-txn-type">Filing Fee</div>
+          </div>
+          <div class="sidebar-txn-right">
+            <div class="sidebar-txn-amount">₱1,500</div>
+            <span class="sidebar-txn-status s-approved">Approved</span>
+          </div>
+        </div>
+        <div class="sidebar-txn-item">
+          <div class="sidebar-txn-icon ti-amber"><i class="bi bi-file-earmark-check"></i></div>
+          <div class="sidebar-txn-body">
+            <div class="sidebar-txn-name">Maria Santos</div>
+            <div class="sidebar-txn-type">Certification</div>
+          </div>
+          <div class="sidebar-txn-right">
+            <div class="sidebar-txn-amount">₱250</div>
+            <span class="sidebar-txn-status s-waiting">Waiting</span>
+          </div>
+        </div>
+        <div class="sidebar-txn-item">
+          <div class="sidebar-txn-icon ti-blue"><i class="bi bi-cash-stack"></i></div>
+          <div class="sidebar-txn-body">
+            <div class="sidebar-txn-name">Pedro Reyes</div>
+            <div class="sidebar-txn-type">Cash Bond</div>
+          </div>
+          <div class="sidebar-txn-right">
+            <div class="sidebar-txn-amount">₱5,000</div>
+            <span class="sidebar-txn-status s-approved">Approved</span>
+          </div>
+        </div>
+        <div class="sidebar-txn-item">
+          <div class="sidebar-txn-icon ti-green"><i class="bi bi-gavel"></i></div>
+          <div class="sidebar-txn-body">
+            <div class="sidebar-txn-name">Ana Garcia</div>
+            <div class="sidebar-txn-type">Appeal Fee</div>
+          </div>
+          <div class="sidebar-txn-right">
+            <div class="sidebar-txn-amount">₱3,200</div>
+            <span class="sidebar-txn-status s-waiting">Waiting</span>
+          </div>
+        </div>
+        <div class="sidebar-txn-item">
+          <div class="sidebar-txn-icon ti-blue"><i class="bi bi-arrow-counterclockwise"></i></div>
+          <div class="sidebar-txn-body">
+            <div class="sidebar-txn-name">Roberto Luna</div>
+            <div class="sidebar-txn-type">Refund of O.P.</div>
+          </div>
+          <div class="sidebar-txn-right">
+            <div class="sidebar-txn-amount">₱800</div>
+            <span class="sidebar-txn-status s-approved">Approved</span>
+          </div>
+        </div>
+      </div><!-- /sidebar-history-list -->
+
+      <button class="sidebar-view-all-btn" onclick="openModal()">
+        <i class="bi bi-list-ul"></i> View All Transactions
+      </button>
+    </div><!-- /sidebar-history-wrap -->
+
+  </aside>
+
+  <!-- ══════════════ MAIN ══════════════ -->
+  <div style="flex:1; display:flex; flex-direction:column; min-width:0;">
+
+    <div class="fund-banner-sticky-wrap" id="fund-banner-wrap">
+      <div class="fund-banner">
+        <div class="fund-banner-icon" id="fund-banner-dot">—</div>
+        <div class="fund-banner-info">
+          <div class="fund-banner-label">Processing Under</div>
+          <div class="fund-banner-name" id="fund-banner-name">—</div>
+        </div>
+        <button class="fund-banner-change" onclick="changeFund()">
+          <i class="bi bi-pencil"></i> Change
+        </button>
+      </div>
+    </div>
+
+    <main class="main-content">
+    <div class="main-inner">
+
+      <!-- GATE -->
       <div id="section-gate">
         <div class="fund-gate">
           <div class="fund-gate-icon"><i class="bi bi-bank2"></i></div>
           <div class="fund-gate-title">Select a Fund First</div>
-          <div class="fund-gate-sub">
-            Choose the appropriate fund from the sidebar on the left, then click <strong>Proceed</strong> to begin processing a payment.
-          </div>
+          <div class="fund-gate-sub">Choose the appropriate fund from the sidebar on the left, then click <strong>Proceed</strong> to begin processing a payment.</div>
         </div>
       </div>
 
-      <!-- FORM: shown after fund confirmed -->
+      <!-- FORM -->
       <div id="section-form">
-
         <h1 class="page-title">Process a Payment</h1>
         <p class="page-sub">Select the type of transaction, then fill in the required details.</p>
 
-        <!-- Step indicator -->
         <div class="step-indicator">
           <div class="step-ind-item done">
             <div class="step-ind-num"><i class="bi bi-check" style="font-size:.7rem;"></i></div>
@@ -1027,7 +519,6 @@
           </div>
         </div>
 
-        <!-- STEP 2: Select transaction type -->
         <div class="select-card">
           <div class="step-label">
             <div class="step-num">2</div>
@@ -1038,21 +529,24 @@
               <option value="" disabled selected>Please select transaction type</option>
               <option value="appeal_fee">Appeal Fee</option>
               <option value="bidding_documents">Bidding Documents</option>
-              <option value="certification_photocopy">Certification and Photocopy Fees</option>
+              <option value="cash_bond">Cash Bond</option>
+              <option value="certification_copy_fee">Certification, Copy Fee and Reproduction Cost</option>
+              <option value="consignment">Consignment</option>
+              <option value="execution_judgment">Execution of Judgment Involving Money</option>
               <option value="filing_fee">Filing Fee and Inspection Cost</option>
-              <option value="fund_transfer">Fund Transfer from DAR C.O.</option>
               <option value="income_unserviceable">Income from Sale of Unserviceable Property</option>
-              <option value="luc_cash_bond">LUC Cash Bond</option>
+              <option value="legal_research">Legal Research</option>
+              <option value="performance_bond">Performance Bond</option>
+              <option value="refund_cash_advances">Refund of Cash Advances</option>
               <option value="refund_overpayment">Refund of Overpayment</option>
-              <option value="refund_lgu">Refund of Transfer from LGUs</option>
               <option value="settlement_disallowances">Settlement of Notice of Disallowances</option>
+              <option value="unwithheld_remittances">Unwithheld Remittances</option>
             </select>
           </div>
         </div>
 
-        <!-- STEP 3: Form -->
+        <!-- ════ FORM CARD ════ -->
         <div class="form-card" id="form-card">
-
           <div class="form-header">
             <div class="form-header-seal">🌾</div>
             <div class="form-header-info">
@@ -1060,11 +554,7 @@
               <div class="txn-name" id="form-txn-name">—</div>
             </div>
           </div>
-
-          <div class="required-note">
-            <i class="bi bi-asterisk"></i>
-            Fields with * (asterisk) are required/mandatory.
-          </div>
+          <div class="required-note"><i class="bi bi-asterisk"></i> Fields with * are required/mandatory.</div>
 
           <div class="form-body">
             <form method="POST" action="{{ route('dashboard.store') }}" id="payment-form">
@@ -1072,177 +562,291 @@
               <input type="hidden" name="transaction_type" id="hidden-txn-type" />
               <input type="hidden" name="fund_type" id="hidden-fund-type" />
 
-              <div class="section-heading">
-                <i class="bi bi-card-checklist"></i> Payment Details
-              </div>
+              <div class="section-heading"><i class="bi bi-card-checklist"></i> Payment Details</div>
 
+              <!-- ── COMMON FIELDS (all types) ── -->
               <div class="field">
                 <label>Amount : <span class="req">*</span></label>
-                <div class="amount-wrap">
-                  <span>₱</span>
-                  <input name="amount" type="number" min="0" step="0.01" placeholder="0.00" required />
-                </div>
+                <div class="amount-wrap"><span>₱</span><input name="amount" type="number" min="0" step="0.01" placeholder="0.00" required data-validate="numeric" /></div>
               </div>
-
               <div class="field">
-                <label>Name : <span class="req">*</span></label>
-                <input name="name" type="text" placeholder="Full name" required />
+                <label>Name of Payor : <span class="req">*</span></label>
+                <input name="name" type="text" placeholder="Full name of payor" required />
               </div>
-
               <div class="field">
                 <label>Contact No. of Client : <span class="req">*</span></label>
-                <input name="contact" type="tel" placeholder="e.g. 09123456789" required />
+                <input name="contact" type="tel" placeholder="e.g. 09123456789" required data-validate="tel" />
               </div>
-
               <div class="field">
                 <label>Address : <span class="req">*</span></label>
                 <input name="address" type="text" placeholder="Barangay, Municipality, Province" required />
               </div>
-
               <div class="field">
                 <label>Email Address : <span class="req">*</span></label>
                 <input name="email" type="email" placeholder="example@gmail.com" required />
               </div>
-
               <div class="field">
                 <label>Order of Payment No. : <span class="req">*</span></label>
-                <input name="op_number" type="text" placeholder="e.g. 982123" required />
+                <input name="op_number" type="text" placeholder="e.g. F01-2026-01-0001" required data-validate="alphanumeric" />
+                <small style="font-size:.71rem; color:var(--muted); margin-top:4px; display:block;">Format: year-month-number series (e.g. F01-2026-01-0001). Resets monthly &amp; yearly.</small>
               </div>
 
-              <!-- TYPE-SPECIFIC EXTRA FIELDS -->
+              <!-- ══ EXTRA FIELDS PER TRANSACTION TYPE ══ -->
 
+              <!-- 1. APPEAL FEE -->
               <div class="extra-fields" id="extra-appeal_fee">
                 <hr class="extra-divider">
                 <div class="extra-label">Appeal Fee Details</div>
                 <div class="field">
-                  <label>Case Number : <span class="req">*</span></label>
-                  <input name="case_number" type="text" placeholder="e.g. DARAB Case No. 001-2025" />
-                </div>
-                <div class="field">
-                  <label>Nature of Appeal :</label>
-                  <input name="nature_of_appeal" type="text" placeholder="Brief description of appeal" />
+                  <label>Open-ended Field <small style="color:var(--muted); font-weight:300;">(remarks, comments, and others)</small> :</label>
+                  <textarea name="appeal_remarks" placeholder="Enter any relevant remarks, comments, or additional information…"></textarea>
                 </div>
               </div>
 
+              <!-- 2. BIDDING DOCUMENTS -->
               <div class="extra-fields" id="extra-bidding_documents">
                 <hr class="extra-divider">
                 <div class="extra-label">Bidding Document Details</div>
                 <div class="field">
-                  <label>Project / Bid Name : <span class="req">*</span></label>
-                  <input name="project_name" type="text" placeholder="Name of bidding project" />
+                  <label>Details of the Availed Bid : <span class="req">*</span></label>
+                  <input name="bid_details" type="text" placeholder="e.g. Bid title, project name" />
                 </div>
                 <div class="field">
-                  <label>Bid Reference No. : <span class="req">*</span></label>
-                  <input name="bid_ref" type="text" placeholder="e.g. DARCO-BID-2025-001" />
+                  <label>Open-ended Field <small style="color:var(--muted); font-weight:300;">(remarks, comments, and others)</small> :</label>
+                  <textarea name="bid_remarks" placeholder="Enter any relevant remarks, comments, or additional information…"></textarea>
                 </div>
               </div>
 
-              <div class="extra-fields" id="extra-certification_photocopy">
+              <!-- 3. CASH BOND -->
+              <div class="extra-fields" id="extra-cash_bond">
                 <hr class="extra-divider">
-                <div class="extra-label">Certification / Photocopy Details</div>
+                <div class="extra-label">Cash Bond Details</div>
                 <div class="field">
-                  <label>Type of Certification : <span class="req">*</span></label>
-                  <input name="cert_type" type="text" placeholder="e.g. Certificate of Coverage, CTC of documents" />
+                  <label>Total Area Applied for Conversion (in hectares) : <span class="req">*</span></label>
+                  <input name="area_hectares" type="number" step="0.0001" min="0" placeholder="e.g. 2.5000" data-validate="numeric" />
                 </div>
                 <div class="field">
-                  <label>Number of Pages / Copies :</label>
-                  <input name="num_pages" type="number" min="1" placeholder="e.g. 5" />
+                  <label>Zonal Value : <span class="req">*</span></label>
+                  <div class="amount-wrap"><span>₱</span><input name="zonal_value" type="number" step="0.01" min="0" placeholder="0.00" data-validate="numeric" /></div>
+                </div>
+                <div class="field">
+                  <label>Location of Property / Landholding : <span class="req">*</span></label>
+                  <input name="property_location" type="text" placeholder="e.g. Barangay, Municipality, Province" />
+                </div>
+                <div class="field">
+                  <label>Assessment Form : <span class="req">*</span></label>
+                  <input name="assessment_form" type="text" placeholder="Assessment form reference" data-validate="alphanumeric" />
+                </div>
+                <div class="field">
+                  <label>Open-ended Field <small style="color:var(--muted); font-weight:300;">(remarks, comments, and others)</small> :</label>
+                  <textarea name="cash_bond_remarks" placeholder="Enter any relevant remarks, comments, or additional information…"></textarea>
                 </div>
               </div>
 
+              <!-- 4. CERTIFICATION, COPY FEE AND REPRODUCTION COST -->
+              <div class="extra-fields" id="extra-certification_copy_fee">
+                <hr class="extra-divider">
+                <div class="extra-label">Certification / Copy Fee Details</div>
+                <div class="field">
+                  <label>Letter Request : <span class="req">*</span></label>
+                  <input name="letter_request" type="text" placeholder="Reference to the letter request" />
+                </div>
+                <div class="field">
+                  <label>Type of Transaction Paid : <span class="req">*</span></label>
+                  <div class="check-group" id="cert-type-checks">
+                    <label class="check-item"><input type="checkbox" name="cert_type[]" value="certification" onchange="toggleCheckItem(this)"> Certification</label>
+                    <label class="check-item"><input type="checkbox" name="cert_type[]" value="copy_fee" onchange="toggleCheckItem(this)"> Copy Fee</label>
+                    <label class="check-item"><input type="checkbox" name="cert_type[]" value="reproduction_cost" onchange="toggleCheckItem(this)"> Reproduction Cost</label>
+                  </div>
+                </div>
+                <div class="field">
+                  <label>Open-ended Field <small style="color:var(--muted); font-weight:300;">(remarks, comments, and others)</small> :</label>
+                  <textarea name="cert_remarks" placeholder="Enter any relevant remarks, comments, or additional information…"></textarea>
+                </div>
+              </div>
+
+              <!-- 5. CONSIGNMENT -->
+              <div class="extra-fields" id="extra-consignment">
+                <hr class="extra-divider">
+                <div class="extra-label">Consignment Details</div>
+                <div class="field">
+                  <label>Assessment Form No. : <span class="req">*</span></label>
+                  <input name="consignment_assessment_form" type="text" placeholder="Assessment form number" data-validate="alphanumeric" />
+                </div>
+                <div class="field">
+                  <label>Case No. : <span class="req">*</span></label>
+                  <input name="consignment_case_no" type="text" placeholder="e.g. DARAB Case No. 001-2025" data-validate="alphanumeric" />
+                </div>
+                <div class="field">
+                  <label>Open-ended Field <small style="color:var(--muted); font-weight:300;">(remarks, comments, and others)</small> :</label>
+                  <textarea name="consignment_remarks" placeholder="Enter any relevant remarks, comments, or additional information…"></textarea>
+                </div>
+              </div>
+
+              <!-- 6. EXECUTION OF JUDGMENT INVOLVING MONEY -->
+              <div class="extra-fields" id="extra-execution_judgment">
+                <hr class="extra-divider">
+                <div class="extra-label">Execution of Judgment Details</div>
+                <div class="field">
+                  <label>Assessment Form No. : <span class="req">*</span></label>
+                  <input name="exec_assessment_form" type="text" placeholder="Assessment form number" data-validate="alphanumeric" />
+                </div>
+                <div class="field">
+                  <label>Type of Transaction Paid : <span class="req">*</span></label>
+                  <input name="exec_txn_type_paid" type="text" placeholder="Brief description of transaction type" />
+                </div>
+                <div class="field">
+                  <label>Open-ended Field <small style="color:var(--muted); font-weight:300;">(remarks, comments, and others)</small> :</label>
+                  <textarea name="exec_remarks" placeholder="Enter any relevant remarks, comments, or additional information…"></textarea>
+                </div>
+              </div>
+
+              <!-- 7. FILING FEE AND INSPECTION COST -->
               <div class="extra-fields" id="extra-filing_fee">
                 <hr class="extra-divider">
-                <div class="extra-label">Filing / Inspection Details</div>
+                <div class="extra-label">Filing Fee / Inspection Details</div>
                 <div class="field">
-                  <label>Nature of Case / Application : <span class="req">*</span></label>
-                  <input name="case_type" type="text" placeholder="e.g. Conversion Application, DARAB Complaint" />
+                  <label>Assessment Form : <span class="req">*</span></label>
+                  <input name="filing_assessment_form" type="text" placeholder="Assessment form reference" data-validate="alphanumeric" />
                 </div>
                 <div class="field">
-                  <label>Filing Reference No. : <span class="req">*</span></label>
-                  <input name="filing_ref" type="text" placeholder="e.g. DARCO-2025-001" />
-                </div>
-              </div>
-
-              <div class="extra-fields" id="extra-fund_transfer">
-                <hr class="extra-divider">
-                <div class="extra-label">Fund Transfer Details</div>
-                <div class="field">
-                  <label>Fund Source / Program : <span class="req">*</span></label>
-                  <input name="fund_source" type="text" placeholder="e.g. APCP, ARCBP" />
-                </div>
-                <div class="field">
-                  <label>Transfer Reference No. : <span class="req">*</span></label>
-                  <input name="transfer_ref" type="text" placeholder="Reference number of the transfer" />
+                  <label>Open-ended Field <small style="color:var(--muted); font-weight:300;">(remarks, comments, and others)</small> :</label>
+                  <textarea name="filing_remarks" placeholder="Enter any relevant remarks, comments, or additional information…"></textarea>
                 </div>
               </div>
 
+              <!-- 8. INCOME FROM SALE OF UNSERVICEABLE PROPERTY -->
               <div class="extra-fields" id="extra-income_unserviceable">
                 <hr class="extra-divider">
                 <div class="extra-label">Unserviceable Property Details</div>
                 <div class="field">
-                  <label>Property Description : <span class="req">*</span></label>
-                  <input name="property_desc" type="text" placeholder="Brief description of property sold" />
+                  <label>RDC Resolution No. : <span class="req">*</span></label>
+                  <input name="rdc_resolution_no" type="text" placeholder="e.g. RDC-2025-001" data-validate="alphanumeric" />
                 </div>
                 <div class="field">
-                  <label>Inventory / Property No. :</label>
-                  <input name="inventory_no" type="text" placeholder="Property inventory number" />
+                  <label>Open-ended Field <small style="color:var(--muted); font-weight:300;">(remarks, comments, and others)</small> :</label>
+                  <textarea name="unserviceable_remarks" placeholder="Enter any relevant remarks, comments, or additional information…"></textarea>
                 </div>
               </div>
 
-              <div class="extra-fields" id="extra-luc_cash_bond">
+              <!-- 9. LEGAL RESEARCH -->
+              <div class="extra-fields" id="extra-legal_research">
                 <hr class="extra-divider">
-                <div class="extra-label">LUC Cash Bond Details</div>
+                <div class="extra-label">Legal Research Details</div>
                 <div class="field">
-                  <label>LUC Folder : <span class="req">*</span></label>
-                  <input name="luc_folder" type="text" placeholder="e.g. LUC" />
-                </div>
-                <div class="field">
-                  <label>Assessment Form No. : <span class="req">*</span></label>
-                  <input name="assessment_form" type="text" placeholder="e.g. 081823" />
+                  <label>Open-ended Field <small style="color:var(--muted); font-weight:300;">(remarks, comments, and others)</small> :</label>
+                  <textarea name="legal_research_remarks" placeholder="Enter any relevant remarks, comments, or additional information…"></textarea>
                 </div>
               </div>
 
+              <!-- 10. PERFORMANCE BOND -->
+              <div class="extra-fields" id="extra-performance_bond">
+                <hr class="extra-divider">
+                <div class="extra-label">Performance Bond Details</div>
+                <div class="field">
+                  <label>Total Area Applied for Conversion (in hectares) : <span class="req">*</span></label>
+                  <input name="pb_area_hectares" type="number" step="0.0001" min="0" placeholder="e.g. 2.5000" data-validate="numeric" />
+                </div>
+                <div class="field">
+                  <label>Zonal Value : <span class="req">*</span></label>
+                  <div class="amount-wrap"><span>₱</span><input name="pb_zonal_value" type="number" step="0.01" min="0" placeholder="0.00" data-validate="numeric" /></div>
+                </div>
+                <div class="field">
+                  <label>Location of Property / Landholding : <span class="req">*</span></label>
+                  <input name="pb_property_location" type="text" placeholder="e.g. Barangay, Municipality, Province" />
+                </div>
+                <div class="field">
+                  <label>Assessment Form : <span class="req">*</span></label>
+                  <input name="pb_assessment_form" type="text" placeholder="Assessment form reference" data-validate="alphanumeric" />
+                </div>
+                <div class="field">
+                  <label>Open-ended Field <small style="color:var(--muted); font-weight:300;">(remarks, comments, and others)</small> :</label>
+                  <textarea name="pb_remarks" placeholder="Enter any relevant remarks, comments, or additional information…"></textarea>
+                </div>
+              </div>
+
+              <!-- 11. REFUND OF CASH ADVANCES -->
+              <div class="extra-fields" id="extra-refund_cash_advances">
+                <hr class="extra-divider">
+                <div class="extra-label">Refund of Cash Advances Details</div>
+                <div class="field">
+                  <label>Check / LDDAP-ADA Number : <span class="req">*</span></label>
+                  <input name="check_lddap_ada" type="text" placeholder="Check or LDDAP-ADA number" data-validate="alphanumeric" />
+                </div>
+                <div class="field">
+                  <label>Date Cash Advance was Granted : <span class="req">*</span></label>
+                  <input name="cash_advance_date" type="date" />
+                </div>
+                <div class="field">
+                  <label>Division / Section of Payor : <span class="req">*</span></label>
+                  <input name="division_section" type="text" placeholder="e.g. Finance Division" />
+                </div>
+                <div class="field">
+                  <label>Open-ended Field <small style="color:var(--muted); font-weight:300;">(remarks, comments, and others)</small> :</label>
+                  <textarea name="cash_advance_remarks" placeholder="Enter any relevant remarks, comments, or additional information…"></textarea>
+                </div>
+              </div>
+
+              <!-- 12. REFUND OF OVERPAYMENT -->
               <div class="extra-fields" id="extra-refund_overpayment">
                 <hr class="extra-divider">
-                <div class="extra-label">Overpayment Refund Details</div>
+                <div class="extra-label">Refund of Overpayment Details</div>
                 <div class="field">
-                  <label>Original O.R. Number : <span class="req">*</span></label>
-                  <input name="orig_or" type="text" placeholder="O.R. number of the original payment" />
+                  <label>Division / Section of Payor : <span class="req">*</span></label>
+                  <input name="refund_division_section" type="text" placeholder="e.g. Finance Division" />
                 </div>
                 <div class="field">
-                  <label>Reason for Refund : <span class="req">*</span></label>
-                  <input name="refund_reason" type="text" placeholder="Brief explanation" />
-                </div>
-              </div>
-
-              <div class="extra-fields" id="extra-refund_lgu">
-                <hr class="extra-divider">
-                <div class="extra-label">LGU Transfer Refund Details</div>
-                <div class="field">
-                  <label>LGU Name : <span class="req">*</span></label>
-                  <input name="lgu_name" type="text" placeholder="e.g. Municipality of Bula, Camarines Sur" />
-                </div>
-                <div class="field">
-                  <label>Transfer Reference No. : <span class="req">*</span></label>
-                  <input name="lgu_transfer_ref" type="text" placeholder="Reference number" />
+                  <label>Open-ended Field <small style="color:var(--muted); font-weight:300;">(remarks, comments, and others)</small> :</label>
+                  <textarea name="refund_op_remarks" placeholder="Enter any relevant remarks, comments, or additional information…"></textarea>
                 </div>
               </div>
 
+              <!-- 13. SETTLEMENT OF NOTICE OF DISALLOWANCES -->
               <div class="extra-fields" id="extra-settlement_disallowances">
                 <hr class="extra-divider">
                 <div class="extra-label">Notice of Disallowance Details</div>
                 <div class="field">
-                  <label>COA Notice No. : <span class="req">*</span></label>
-                  <input name="coa_ref" type="text" placeholder="e.g. ND-2025-001" />
+                  <label>Notice of Disallowances No. : <span class="req">*</span></label>
+                  <input name="disallowance_no" type="text" placeholder="e.g. ND-2025-001" data-validate="alphanumeric" />
                 </div>
                 <div class="field">
-                  <label>Period Covered : <span class="req">*</span></label>
-                  <input name="disallowance_period" type="text" placeholder="e.g. January–June 2024" />
+                  <label>Open-ended Field <small style="color:var(--muted); font-weight:300;">(remarks, comments, and others)</small> :</label>
+                  <textarea name="disallowance_remarks" placeholder="Enter any relevant remarks, comments, or additional information…"></textarea>
+                </div>
+              </div>
+
+              <!-- 14. UNWITHHELD REMITTANCES -->
+              <div class="extra-fields" id="extra-unwithheld_remittances">
+                <hr class="extra-divider">
+                <div class="extra-label">Unwithheld Remittances Details</div>
+                <div class="field">
+                  <label>Type of Remittance : <span class="req">*</span></label>
+                  <div class="remit-check-group">
+                    <label class="remit-check-item" id="remit-gsis-wrap">
+                      <input type="checkbox" name="remit_type[]" value="GSIS" onchange="toggleCheckItem(this)"> GSIS
+                    </label>
+                    <label class="remit-check-item" id="remit-phic-wrap">
+                      <input type="checkbox" name="remit_type[]" value="PHIC" onchange="toggleCheckItem(this)"> PHIC — Philhealth
+                    </label>
+                    <label class="remit-check-item" id="remit-hdmf-wrap">
+                      <input type="checkbox" name="remit_type[]" value="HDMF" onchange="toggleCheckItem(this)"> HDMF — Pag-IBIG
+                    </label>
+                    <label class="remit-check-item" id="remit-other-wrap">
+                      <input type="checkbox" name="remit_type[]" value="Other" id="remit-other-chk" onchange="toggleCheckItem(this); toggleRemitOther(this)"> Other Payables
+                    </label>
+                  </div>
+                  <div class="remit-open-field" id="remit-other-field">
+                    <input name="remit_other_specify" type="text" placeholder="Please specify other payable…" style="margin-top:8px;" />
+                  </div>
+                </div>
+                <div class="field">
+                  <label>Open-ended Field <small style="color:var(--muted); font-weight:300;">(remarks, comments, and others)</small> :</label>
+                  <textarea name="remit_remarks" placeholder="Enter any relevant remarks, comments, or additional information…"></textarea>
                 </div>
               </div>
 
               <!-- Payment Mode -->
-              <div class="field" style="margin-top: 4px;">
+              <div class="field" style="margin-top:6px;">
                 <label>Payment Mode :</label>
                 <div class="sel-wrap">
                   <select name="payment_mode">
@@ -1261,10 +865,7 @@
                 </label>
               </div>
 
-              <p class="review-note">
-                <i class="bi bi-exclamation-circle-fill"></i>
-                Please review payment details above before clicking Continue.
-              </p>
+              <p class="review-note"><i class="bi bi-exclamation-circle-fill"></i> Please review payment details above before clicking Continue.</p>
 
               <button type="submit" class="btn-submit" id="submit-btn" disabled>
                 <i class="bi bi-arrow-right-circle me-2"></i> Continue
@@ -1272,97 +873,316 @@
 
             </form>
           </div>
-        </div>
+        </div><!-- /form-card -->
 
       </div><!-- /section-form -->
+    </div><!-- /main-inner -->
+    </main>
+  </div><!-- /flex col -->
+</div><!-- /outer-wrapper -->
 
-      </div><!-- /main-inner -->
-      </main>
-    </div><!-- /flex column wrapper -->
-  </div><!-- /outer-wrapper -->
+<!-- ════════════ TRANSACTIONS MODAL ════════════ -->
+<div class="modal-overlay" id="txn-modal-overlay" onclick="closeModalOutside(event)">
+  <div class="txn-modal">
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
+    <div class="modal-head">
+      <div class="modal-head-left">
+        <div class="modal-head-icon"><i class="bi bi-list-check"></i></div>
+        <div>
+          <div class="modal-head-title">Transactions List</div>
+          <div class="modal-head-sub">Approval Status Overview</div>
+        </div>
+      </div>
+      <button class="modal-close-btn" onclick="closeModal()"><i class="bi bi-x-lg"></i></button>
+    </div>
 
-    /* ── Fund selection ── */
-    let selectedFund     = null;
-    let selectedFundLabel = null;
+    <div class="modal-tabs">
+      <button class="modal-tab tab-all active" onclick="filterModal('all', this)">
+        All <span class="modal-tab-count" id="count-all">5</span>
+      </button>
+      <button class="modal-tab tab-approved" onclick="filterModal('approved', this)">
+        <i class="bi bi-check-circle" style="color:var(--green-accent);"></i> Approved <span class="modal-tab-count" id="count-approved">3</span>
+      </button>
+      <button class="modal-tab tab-waiting" onclick="filterModal('waiting', this)">
+        <i class="bi bi-hourglass-split" style="color:#a0700a;"></i> Waiting <span class="modal-tab-count" id="count-waiting">2</span>
+      </button>
+      <button class="modal-tab tab-rejected" onclick="filterModal('rejected', this)">
+        <i class="bi bi-x-circle" style="color:var(--red);"></i> Rejected <span class="modal-tab-count" id="count-rejected">0</span>
+      </button>
+    </div>
 
-    function selectFund(el) {
-      document.querySelectorAll('.fund-item').forEach(f => f.classList.remove('active'));
-      el.classList.add('active');
-      selectedFund      = el.dataset.fund;
-      selectedFundLabel = el.dataset.label;
+    <div class="modal-search-bar">
+      <div class="modal-search-inner">
+        <i class="bi bi-search"></i>
+        <input type="text" id="modal-search-input" placeholder="Search by name, type, or O.R. no…" oninput="searchModal(this.value)" />
+      </div>
+    </div>
 
-      const dot  = el.querySelector('.fund-dot').textContent;
-      document.getElementById('sidebar-selected-label').textContent = selectedFundLabel;
+    <div class="modal-list" id="modal-list">
+      <!-- Demo rows — replace with @@foreach ($transactions as $transaction) -->
+      <div class="modal-txn-row" data-status="approved" data-name="juan dela cruz filing fee 2025-0441">
+        <div class="modal-txn-icon mi-green"><i class="bi bi-file-earmark-text"></i></div>
+        <div class="modal-txn-main">
+          <div class="modal-txn-name">Juan Dela Cruz</div>
+          <div class="modal-txn-type">Filing Fee and Inspection Cost</div>
+          <div class="modal-txn-meta"><i class="bi bi-clock"></i> 8:14 AM · <i class="bi bi-hash"></i> F01-2026-01-0001 · Fund 01</div>
+        </div>
+        <div class="modal-txn-right">
+          <div class="modal-txn-amount">₱1,500.00</div>
+          <span class="modal-status-badge ms-approved"><i class="bi bi-check-circle-fill"></i> Approved</span>
+          <div class="modal-txn-or">O.R. #2025-0441</div>
+        </div>
+      </div>
+      <div class="modal-txn-row" data-status="waiting" data-name="maria santos certification 2025-0442">
+        <div class="modal-txn-icon mi-gold"><i class="bi bi-file-earmark-check"></i></div>
+        <div class="modal-txn-main">
+          <div class="modal-txn-name">Maria Santos</div>
+          <div class="modal-txn-type">Certification, Copy Fee and Reproduction Cost</div>
+          <div class="modal-txn-meta"><i class="bi bi-clock"></i> 9:02 AM · <i class="bi bi-hash"></i> F01-2026-01-0002 · Fund 03</div>
+        </div>
+        <div class="modal-txn-right">
+          <div class="modal-txn-amount">₱250.00</div>
+          <span class="modal-status-badge ms-waiting"><i class="bi bi-hourglass-split"></i> Waiting</span>
+          <div class="modal-txn-or">O.R. #2025-0442</div>
+        </div>
+      </div>
+      <div class="modal-txn-row" data-status="approved" data-name="pedro reyes cash bond 2025-0443">
+        <div class="modal-txn-icon mi-blue"><i class="bi bi-cash-stack"></i></div>
+        <div class="modal-txn-main">
+          <div class="modal-txn-name">Pedro Reyes</div>
+          <div class="modal-txn-type">Cash Bond</div>
+          <div class="modal-txn-meta"><i class="bi bi-clock"></i> 9:45 AM · <i class="bi bi-hash"></i> F01-2026-01-0003 · Fund 01</div>
+        </div>
+        <div class="modal-txn-right">
+          <div class="modal-txn-amount">₱5,000.00</div>
+          <span class="modal-status-badge ms-approved"><i class="bi bi-check-circle-fill"></i> Approved</span>
+          <div class="modal-txn-or">O.R. #2025-0443</div>
+        </div>
+      </div>
+      <div class="modal-txn-row" data-status="waiting" data-name="ana garcia appeal fee 2025-0444">
+        <div class="modal-txn-icon mi-red"><i class="bi bi-gavel"></i></div>
+        <div class="modal-txn-main">
+          <div class="modal-txn-name">Ana Garcia</div>
+          <div class="modal-txn-type">Appeal Fee</div>
+          <div class="modal-txn-meta"><i class="bi bi-clock"></i> 10:18 AM · <i class="bi bi-hash"></i> F01-2026-01-0004 · Fund 07</div>
+        </div>
+        <div class="modal-txn-right">
+          <div class="modal-txn-amount">₱3,200.00</div>
+          <span class="modal-status-badge ms-waiting"><i class="bi bi-hourglass-split"></i> Waiting</span>
+          <div class="modal-txn-or">O.R. #2025-0444</div>
+        </div>
+      </div>
+      <div class="modal-txn-row" data-status="approved" data-name="roberto luna refund overpayment 2025-0445">
+        <div class="modal-txn-icon mi-blue"><i class="bi bi-arrow-counterclockwise"></i></div>
+        <div class="modal-txn-main">
+          <div class="modal-txn-name">Roberto Luna</div>
+          <div class="modal-txn-type">Refund of Overpayment</div>
+          <div class="modal-txn-meta"><i class="bi bi-clock"></i> 11:00 AM · <i class="bi bi-hash"></i> F01-2026-01-0005 · Fund 01</div>
+        </div>
+        <div class="modal-txn-right">
+          <div class="modal-txn-amount">₱800.00</div>
+          <span class="modal-status-badge ms-approved"><i class="bi bi-check-circle-fill"></i> Approved</span>
+          <div class="modal-txn-or">O.R. #2025-0445</div>
+        </div>
+      </div>
+    </div><!-- /modal-list -->
 
-      const btn = document.getElementById('sidebar-proceed-btn');
-      btn.classList.add('enabled');
-    }
+    <div class="modal-foot">
+      <span class="modal-foot-info" id="modal-foot-info">Showing <strong>5</strong> of <strong>5</strong> transactions</span>
+    </div>
 
-    function proceedToForm() {
-      if (!selectedFund) return;
+  </div><!-- /txn-modal -->
+</div><!-- /modal-overlay -->
 
-      document.getElementById('hidden-fund-type').value = selectedFund;
+<script>
+  /* ── Fund selection ── */
+  let selectedFund = null;
 
-      const dot = document.querySelector('.fund-item.active .fund-dot').textContent;
-      document.getElementById('fund-banner-dot').textContent  = dot;
-      document.getElementById('fund-banner-name').textContent = selectedFundLabel;
-      document.getElementById('fund-banner-wrap').classList.add('show');
+  function selectFund(el) {
+    document.querySelectorAll('.fund-item').forEach(f => f.classList.remove('active'));
+    el.classList.add('active');
+    selectedFund = { code: el.dataset.fund, name: el.dataset.name, label: el.dataset.label, dot: el.querySelector('.fund-dot').textContent };
+    document.getElementById('sidebar-selected-label').textContent = selectedFund.name;
+    document.getElementById('sidebar-proceed-btn').classList.add('enabled');
+  }
 
-      document.getElementById('section-gate').style.display = 'none';
-      document.getElementById('section-form').style.display = 'block';
+  function proceedToForm() {
+    if (!selectedFund) return;
+    document.getElementById('hidden-fund-type').value = selectedFund.code;
+    document.getElementById('fund-banner-dot').textContent = selectedFund.dot;
+    document.getElementById('fund-banner-name').textContent = selectedFund.name + ' — ' + selectedFund.label;
+    document.getElementById('fund-banner-wrap').classList.add('show');
+    document.getElementById('section-gate').style.display = 'none';
+    document.getElementById('section-form').style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
 
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+  function changeFund() {
+    selectedFund = null;
+    document.querySelectorAll('.fund-item').forEach(f => f.classList.remove('active'));
+    document.getElementById('sidebar-selected-label').textContent = '—';
+    document.getElementById('sidebar-proceed-btn').classList.remove('enabled');
+    document.getElementById('section-form').style.display = 'none';
+    document.getElementById('section-gate').style.display = 'block';
+    document.getElementById('fund-banner-wrap').classList.remove('show');
+    document.getElementById('txn-select').value = '';
+    document.getElementById('form-card').classList.remove('visible');
+    document.querySelectorAll('.extra-fields').forEach(el => el.classList.remove('show'));
+    document.getElementById('agree_terms').checked = false;
+    document.getElementById('submit-btn').disabled = true;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
 
-    function changeFund() {
-      document.getElementById('section-form').style.display = 'none';
-      document.getElementById('section-gate').style.display = 'block';
-      document.getElementById('fund-banner-wrap').classList.remove('show');
+  /* ── Transaction type ── */
+  document.getElementById('txn-select').addEventListener('change', function () {
+    const val   = this.value;
+    const label = this.options[this.selectedIndex].text;
+    document.getElementById('hidden-txn-type').value = val;
+    document.getElementById('form-txn-name').textContent = label;
+    document.querySelectorAll('.extra-fields').forEach(el => el.classList.remove('show'));
+    const target = document.getElementById('extra-' + val);
+    if (target) target.classList.add('show');
+    document.getElementById('form-card').classList.add('visible');
+    document.getElementById('agree_terms').checked = false;
+    document.getElementById('submit-btn').disabled = true;
+    setTimeout(() => { document.getElementById('form-card').scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 80);
+  });
 
-      document.getElementById('txn-select').value = '';
-      document.getElementById('form-card').classList.remove('visible');
-      document.querySelectorAll('.extra-fields').forEach(el => el.classList.remove('show'));
-      document.getElementById('agree_terms').checked = false;
-      document.getElementById('submit-btn').disabled = true;
+  document.getElementById('agree_terms').addEventListener('change', function () {
+    document.getElementById('submit-btn').disabled = !this.checked;
+  });
 
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+  /* ── Checkbox styling ── */
+  function toggleCheckItem(el) {
+    el.closest('.check-item, .remit-check-item').classList.toggle('checked', el.checked);
+  }
 
-    /* ── Transaction type select ── */
-    const txnSelect   = document.getElementById('txn-select');
-    const formCard    = document.getElementById('form-card');
-    const formTxnName = document.getElementById('form-txn-name');
-    const hiddenType  = document.getElementById('hidden-txn-type');
-    const agreeChk    = document.getElementById('agree_terms');
-    const submitBtn   = document.getElementById('submit-btn');
+  function toggleRemitOther(el) {
+    document.getElementById('remit-other-field').classList.toggle('show', el.checked);
+  }
 
-    txnSelect.addEventListener('change', function () {
-      const val   = this.value;
-      const label = this.options[this.selectedIndex].text;
+  /* ── Modal ── */
+  function openModal() {
+    document.getElementById('txn-modal-overlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+    updateModalCounts();
+  }
 
-      hiddenType.value        = val;
-      formTxnName.textContent = label;
+  function closeModal() {
+    document.getElementById('txn-modal-overlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
 
-      document.querySelectorAll('.extra-fields').forEach(el => el.classList.remove('show'));
-      const target = document.getElementById('extra-' + val);
-      if (target) target.classList.add('show');
+  function closeModalOutside(e) {
+    if (e.target === document.getElementById('txn-modal-overlay')) closeModal();
+  }
 
-      formCard.classList.add('visible');
-      agreeChk.checked   = false;
-      submitBtn.disabled = true;
+  let currentFilter = 'all';
 
-      setTimeout(() => {
-        formCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 80);
+  function filterModal(status, btn) {
+    currentFilter = status;
+    document.querySelectorAll('.modal-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    applyModalFilter();
+  }
+
+  function searchModal(q) { applyModalFilter(q); }
+
+  function applyModalFilter(q) {
+    q = (q || document.getElementById('modal-search-input').value).toLowerCase();
+    const rows = document.querySelectorAll('#modal-list .modal-txn-row');
+    let visible = 0;
+    rows.forEach(row => {
+      const matchStatus = currentFilter === 'all' || row.dataset.status === currentFilter;
+      const matchSearch = !q || row.dataset.name.toLowerCase().includes(q);
+      const show = matchStatus && matchSearch;
+      row.style.display = show ? '' : 'none';
+      if (show) visible++;
     });
 
-    agreeChk.addEventListener('change', function () {
-      submitBtn.disabled = !this.checked;
-    });
+    // Empty state
+    let emp = document.getElementById('modal-empty-state');
+    if (visible === 0) {
+      if (!emp) {
+        emp = document.createElement('div');
+        emp.id = 'modal-empty-state';
+        emp.className = 'modal-empty';
+        emp.innerHTML = '<i class="bi bi-inbox"></i><p>No transactions match your filter.</p>';
+        document.getElementById('modal-list').appendChild(emp);
+      }
+    } else {
+      if (emp) emp.remove();
+    }
 
-  </script>
+    document.getElementById('modal-foot-info').innerHTML =
+      'Showing <strong>' + visible + '</strong> of <strong>' + rows.length + '</strong> transactions';
+  }
+
+  function updateModalCounts() {
+    const rows = document.querySelectorAll('#modal-list .modal-txn-row');
+    let approved = 0, waiting = 0, rejected = 0;
+    rows.forEach(r => {
+      if (r.dataset.status === 'approved') approved++;
+      else if (r.dataset.status === 'waiting') waiting++;
+      else if (r.dataset.status === 'rejected') rejected++;
+    });
+    document.getElementById('count-all').textContent = rows.length;
+    document.getElementById('count-approved').textContent = approved;
+    document.getElementById('count-waiting').textContent = waiting;
+    document.getElementById('count-rejected').textContent = rejected;
+    document.getElementById('hist-badge').textContent = rows.length;
+    document.getElementById('modal-foot-info').innerHTML =
+      'Showing <strong>' + rows.length + '</strong> of <strong>' + rows.length + '</strong> transactions';
+  }
+  /* ── Client-side validation for numeric / alphanumeric fields ── */
+  const __validators = {
+    numeric: v => /^\d+(?:\.\d+)?$/.test(String(v).trim()),
+    alphanumeric: v => /^[A-Za-z0-9\-\_\s]+$/.test(String(v).trim()),
+    tel: v => /^[0-9+\-\s()]+$/.test(String(v).trim())
+  };
+
+  function validateField(input) {
+    const rule = input.dataset.validate;
+    const field = input.closest('.field');
+    if (!rule) return true;
+    const val = String(input.value || '').trim();
+    let ok = true;
+    if (input.required && val === '') ok = false;
+    else if (val !== '') {
+      const fn = __validators[rule];
+      if (fn) ok = fn(val);
+    }
+
+    if (!ok) {
+      field.classList.add('invalid');
+      let em = field.querySelector('.error-msg');
+      if (!em) { em = document.createElement('div'); em.className = 'error-msg'; field.appendChild(em); }
+      em.textContent = (rule === 'numeric') ? 'This field requires a numeric value.' : (rule === 'alphanumeric') ? 'Only letters, numbers, spaces, dash and underscore are allowed.' : (rule === 'tel') ? 'Please enter a valid contact number.' : 'Invalid value.';
+    } else {
+      field.classList.remove('invalid');
+      const em = field.querySelector('.error-msg'); if (em) em.remove();
+    }
+    return ok;
+  }
+
+  // attach listeners
+  document.querySelectorAll('[data-validate]').forEach(inp => {
+    inp.addEventListener('input', () => validateField(inp));
+    inp.addEventListener('blur', () => validateField(inp));
+  });
+
+  // validate on submit
+  const paymentForm = document.getElementById('payment-form');
+  if (paymentForm) {
+    paymentForm.addEventListener('submit', function (e) {
+      const inputs = this.querySelectorAll('[data-validate]');
+      let firstInvalid = null;
+      inputs.forEach(i => { if (!validateField(i) && !firstInvalid) firstInvalid = i; });
+      if (firstInvalid) { e.preventDefault(); firstInvalid.focus(); }
+    });
+  }
+
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+</script>
 </body>
 </html>
