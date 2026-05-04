@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Payment;
 
 class DashboardController extends Controller
 {
@@ -12,6 +13,19 @@ class DashboardController extends Controller
     public function index()
     {
         return view('dashboard.dashboard');
+    }
+
+    // Show payment creation form (reuses payments.create view)
+    public function createPayment()
+    {
+        return view('payments.create');
+    }
+
+    // List saved payments
+    public function listPayments()
+    {
+        $payments = Payment::orderBy('created_at', 'desc')->paginate(25);
+        return view('payments.index', compact('payments'));
     }
 
     /**
@@ -30,8 +44,23 @@ class DashboardController extends Controller
             'agree_terms' => 'accepted',
         ]);
 
-        // TODO: implement actual processing / persistence.
-        // For now, flash a success message and redirect back to dashboard.
-        return redirect()->route('dashboard')->with('success', 'Payment submitted (stub).');
+        // persist to payments table
+        $meta = $request->except(['_token', 'transaction_type', 'fund_type', 'amount', 'name', 'contact', 'address', 'email', 'op_number', 'payment_mode', 'agree_terms']);
+
+        Payment::create([
+            'transaction_type' => $data['transaction_type'] ?? null,
+            'fund_type' => $request->input('fund_type'),
+            'amount' => $data['amount'],
+            'name' => $data['name'],
+            'contact' => $data['contact'],
+            'address' => $data['address'],
+            'email' => $data['email'],
+            'op_number' => $data['op_number'],
+            'payment_mode' => $request->input('payment_mode'),
+            'meta' => $meta,
+            'status' => 'waiting',
+        ]);
+
+        return redirect()->route('payments.index')->with('success', 'Payment saved.');
     }
 }

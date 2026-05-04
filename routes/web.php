@@ -18,4 +18,9 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard
 // Handle payment form submissions from the dashboard
 Route::post('/dashboard', [DashboardController::class, 'store'])->name('dashboard.store');
 
+// Payments flow (handled by DashboardController)
+Route::get('/payments', [DashboardController::class, 'listPayments'])->name('payments.index');
+Route::get('/payments/create', [DashboardController::class, 'createPayment'])->name('payments.create');
+Route::post('/payments', [DashboardController::class, 'store'])->name('payments.store');
+
 

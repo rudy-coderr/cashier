@@ -491,7 +491,7 @@
           <div class="required-note"><i class="bi bi-asterisk"></i> Fields with * are required/mandatory.</div>
 
           <div class="form-body">
-            <form method="POST" action="{{ route('dashboard.store') }}" id="payment-form">
+            <form method="POST" action="{{ route('dashboard.store') }}" id="payment-form" novalidate>
               @csrf
               <input type="hidden" name="transaction_type" id="hidden-txn-type" />
               <input type="hidden" name="fund_type" id="hidden-fund-type" />
@@ -973,9 +973,17 @@
     const label = this.options[this.selectedIndex].text;
     document.getElementById('hidden-txn-type').value = val;
     document.getElementById('form-txn-name').textContent = label;
-    document.querySelectorAll('.extra-fields').forEach(el => el.classList.remove('show'));
+    // hide all extra sections and disable their required fields so native validation won't block
+    document.querySelectorAll('.extra-fields').forEach(el => {
+      el.classList.remove('show');
+      el.querySelectorAll('input[required],textarea[required],select[required]').forEach(f => f.removeAttribute('required'));
+    });
     const target = document.getElementById('extra-' + val);
-    if (target) target.classList.add('show');
+    if (target) {
+      target.classList.add('show');
+      // restore required attributes for fields that originally were required
+      target.querySelectorAll('[data-orig-required="1"]').forEach(f => f.setAttribute('required',''));
+    }
     document.getElementById('form-card').classList.add('visible');
     document.getElementById('agree_terms').checked = false;
     document.getElementById('submit-btn').disabled = true;
@@ -994,6 +1002,9 @@
   function toggleRemitOther(el) {
     document.getElementById('remit-other-field').classList.toggle('show', el.checked);
   }
+
+  // Preserve original required state for fields inside extra sections
+  document.querySelectorAll('.extra-fields [required]').forEach(f => f.setAttribute('data-orig-required','1'));
 
   /* ── Modal ── */
   function openModal() {
@@ -1111,7 +1122,12 @@
     paymentForm.addEventListener('submit', function (e) {
       const inputs = this.querySelectorAll('[data-validate]');
       let firstInvalid = null;
-      inputs.forEach(i => { if (!validateField(i) && !firstInvalid) firstInvalid = i; });
+      inputs.forEach(i => {
+        // Skip validation for inputs that are inside extra-fields that are not shown
+        const extra = i.closest('.extra-fields');
+        if (extra && !extra.classList.contains('show')) return;
+        if (!validateField(i) && !firstInvalid) firstInvalid = i;
+      });
       if (firstInvalid) { e.preventDefault(); firstInvalid.focus(); }
     });
   }
