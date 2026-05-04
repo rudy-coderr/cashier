@@ -52,8 +52,8 @@
       width: 280px; flex-shrink: 0;
       background: var(--green-deep);
       border-right: 1px solid rgba(255,255,255,.07);
-      position: sticky; top: 56px;
-      height: calc(100vh - 56px);
+      position: sticky; top: 72px;
+      height: calc(100vh - 72px);
       display: flex; flex-direction: column;
       overflow: hidden;
     }
@@ -122,7 +122,7 @@
     .sidebar-view-all-btn:hover { background: rgba(255,255,255,.08); color: var(--cream); }
 
     /* ── STICKY FUND BANNER ── */
-    .fund-banner-sticky-wrap { display: none; position: sticky; top: 56px; z-index: 150; width: 100%; background: var(--green-deep); border-bottom: 1px solid rgba(255,255,255,.08); padding: 9px 32px; }
+    .fund-banner-sticky-wrap { display: none; position: sticky; top: 72px; z-index: 150; width: 100%; background: var(--green-deep); border-bottom: 1px solid rgba(255,255,255,.08); padding: 9px 32px; }
     .fund-banner-sticky-wrap.show { display: block; }
     .fund-banner { display: flex; align-items: center; gap: 12px; max-width: 640px; margin: 0 auto; }
     .fund-banner-icon { width: 34px; height: 34px; border-radius: 8px; background: var(--gold); display: flex; align-items: center; justify-content: center; font-size: .78rem; font-weight: 700; color: var(--green-deep); flex-shrink: 0; }
@@ -394,74 +394,8 @@
       </button>
     </div>
 
-    <!-- ── TRANSACTION HISTORY ── -->
+    <!-- ── TRANSACTION HISTORY ── (collapsed — only View All maintained) -->
     <div class="sidebar-history-wrap">
-      <div class="sidebar-history-head">
-        <div class="sidebar-history-title">
-          <i class="bi bi-clock-history"></i> Today's Transactions
-        </div>
-        <span class="sidebar-history-badge" id="hist-badge">5</span>
-      </div>
-
-      <div class="sidebar-history-list" id="sidebar-history-list">
-        <!-- Demo records — replace with @@foreach ($transactions as $transaction) -->
-        <div class="sidebar-txn-item">
-          <div class="sidebar-txn-icon ti-green"><i class="bi bi-receipt"></i></div>
-          <div class="sidebar-txn-body">
-            <div class="sidebar-txn-name">Juan Dela Cruz</div>
-            <div class="sidebar-txn-type">Filing Fee</div>
-          </div>
-          <div class="sidebar-txn-right">
-            <div class="sidebar-txn-amount">₱1,500</div>
-            <span class="sidebar-txn-status s-approved">Approved</span>
-          </div>
-        </div>
-        <div class="sidebar-txn-item">
-          <div class="sidebar-txn-icon ti-amber"><i class="bi bi-file-earmark-check"></i></div>
-          <div class="sidebar-txn-body">
-            <div class="sidebar-txn-name">Maria Santos</div>
-            <div class="sidebar-txn-type">Certification</div>
-          </div>
-          <div class="sidebar-txn-right">
-            <div class="sidebar-txn-amount">₱250</div>
-            <span class="sidebar-txn-status s-waiting">Waiting</span>
-          </div>
-        </div>
-        <div class="sidebar-txn-item">
-          <div class="sidebar-txn-icon ti-blue"><i class="bi bi-cash-stack"></i></div>
-          <div class="sidebar-txn-body">
-            <div class="sidebar-txn-name">Pedro Reyes</div>
-            <div class="sidebar-txn-type">Cash Bond</div>
-          </div>
-          <div class="sidebar-txn-right">
-            <div class="sidebar-txn-amount">₱5,000</div>
-            <span class="sidebar-txn-status s-approved">Approved</span>
-          </div>
-        </div>
-        <div class="sidebar-txn-item">
-          <div class="sidebar-txn-icon ti-green"><i class="bi bi-gavel"></i></div>
-          <div class="sidebar-txn-body">
-            <div class="sidebar-txn-name">Ana Garcia</div>
-            <div class="sidebar-txn-type">Appeal Fee</div>
-          </div>
-          <div class="sidebar-txn-right">
-            <div class="sidebar-txn-amount">₱3,200</div>
-            <span class="sidebar-txn-status s-waiting">Waiting</span>
-          </div>
-        </div>
-        <div class="sidebar-txn-item">
-          <div class="sidebar-txn-icon ti-blue"><i class="bi bi-arrow-counterclockwise"></i></div>
-          <div class="sidebar-txn-body">
-            <div class="sidebar-txn-name">Roberto Luna</div>
-            <div class="sidebar-txn-type">Refund of O.P.</div>
-          </div>
-          <div class="sidebar-txn-right">
-            <div class="sidebar-txn-amount">₱800</div>
-            <span class="sidebar-txn-status s-approved">Approved</span>
-          </div>
-        </div>
-      </div><!-- /sidebar-history-list -->
-
       <button class="sidebar-view-all-btn" onclick="openModal()">
         <i class="bi bi-list-ul"></i> View All Transactions
       </button>
@@ -599,7 +533,7 @@
                 <div class="extra-label">Appeal Fee Details</div>
                 <div class="field">
                   <label>Open-ended Field <small style="color:var(--muted); font-weight:300;">(remarks, comments, and others)</small> :</label>
-                  <textarea name="appeal_remarks" placeholder="Enter any relevant remarks, comments, or additional information…"></textarea>
+                  <textarea name="appeal_remarks" placeholder="Enter any relevant remarks, comments, or additional information…" required data-validate="text"></textarea>
                 </div>
               </div>
 
@@ -613,7 +547,7 @@
                 </div>
                 <div class="field">
                   <label>Open-ended Field <small style="color:var(--muted); font-weight:300;">(remarks, comments, and others)</small> :</label>
-                  <textarea name="bid_remarks" placeholder="Enter any relevant remarks, comments, or additional information…"></textarea>
+                  <textarea name="bid_remarks" placeholder="Enter any relevant remarks, comments, or additional information…" required data-validate="text"></textarea>
                 </div>
               </div>
 
@@ -639,7 +573,7 @@
                 </div>
                 <div class="field">
                   <label>Open-ended Field <small style="color:var(--muted); font-weight:300;">(remarks, comments, and others)</small> :</label>
-                  <textarea name="cash_bond_remarks" placeholder="Enter any relevant remarks, comments, or additional information…"></textarea>
+                  <textarea name="cash_bond_remarks" placeholder="Enter any relevant remarks, comments, or additional information…" required data-validate="text"></textarea>
                 </div>
               </div>
 
@@ -661,7 +595,7 @@
                 </div>
                 <div class="field">
                   <label>Open-ended Field <small style="color:var(--muted); font-weight:300;">(remarks, comments, and others)</small> :</label>
-                  <textarea name="cert_remarks" placeholder="Enter any relevant remarks, comments, or additional information…"></textarea>
+                  <textarea name="cert_remarks" placeholder="Enter any relevant remarks, comments, or additional information…" required data-validate="text"></textarea>
                 </div>
               </div>
 
@@ -679,7 +613,7 @@
                 </div>
                 <div class="field">
                   <label>Open-ended Field <small style="color:var(--muted); font-weight:300;">(remarks, comments, and others)</small> :</label>
-                  <textarea name="consignment_remarks" placeholder="Enter any relevant remarks, comments, or additional information…"></textarea>
+                  <textarea name="consignment_remarks" placeholder="Enter any relevant remarks, comments, or additional information…" required data-validate="text"></textarea>
                 </div>
               </div>
 
@@ -697,7 +631,7 @@
                 </div>
                 <div class="field">
                   <label>Open-ended Field <small style="color:var(--muted); font-weight:300;">(remarks, comments, and others)</small> :</label>
-                  <textarea name="exec_remarks" placeholder="Enter any relevant remarks, comments, or additional information…"></textarea>
+                  <textarea name="exec_remarks" placeholder="Enter any relevant remarks, comments, or additional information…" required data-validate="text"></textarea>
                 </div>
               </div>
 
@@ -711,7 +645,7 @@
                 </div>
                 <div class="field">
                   <label>Open-ended Field <small style="color:var(--muted); font-weight:300;">(remarks, comments, and others)</small> :</label>
-                  <textarea name="filing_remarks" placeholder="Enter any relevant remarks, comments, or additional information…"></textarea>
+                  <textarea name="filing_remarks" placeholder="Enter any relevant remarks, comments, or additional information…" required data-validate="text"></textarea>
                 </div>
               </div>
 
@@ -725,7 +659,7 @@
                 </div>
                 <div class="field">
                   <label>Open-ended Field <small style="color:var(--muted); font-weight:300;">(remarks, comments, and others)</small> :</label>
-                  <textarea name="unserviceable_remarks" placeholder="Enter any relevant remarks, comments, or additional information…"></textarea>
+                  <textarea name="unserviceable_remarks" placeholder="Enter any relevant remarks, comments, or additional information…" required data-validate="text"></textarea>
                 </div>
               </div>
 
@@ -735,7 +669,7 @@
                 <div class="extra-label">Legal Research Details</div>
                 <div class="field">
                   <label>Open-ended Field <small style="color:var(--muted); font-weight:300;">(remarks, comments, and others)</small> :</label>
-                  <textarea name="legal_research_remarks" placeholder="Enter any relevant remarks, comments, or additional information…"></textarea>
+                  <textarea name="legal_research_remarks" placeholder="Enter any relevant remarks, comments, or additional information…" required data-validate="text"></textarea>
                 </div>
               </div>
 
@@ -761,7 +695,7 @@
                 </div>
                 <div class="field">
                   <label>Open-ended Field <small style="color:var(--muted); font-weight:300;">(remarks, comments, and others)</small> :</label>
-                  <textarea name="pb_remarks" placeholder="Enter any relevant remarks, comments, or additional information…"></textarea>
+                  <textarea name="pb_remarks" placeholder="Enter any relevant remarks, comments, or additional information…" required data-validate="text"></textarea>
                 </div>
               </div>
 
@@ -783,7 +717,7 @@
                 </div>
                 <div class="field">
                   <label>Open-ended Field <small style="color:var(--muted); font-weight:300;">(remarks, comments, and others)</small> :</label>
-                  <textarea name="cash_advance_remarks" placeholder="Enter any relevant remarks, comments, or additional information…"></textarea>
+                  <textarea name="cash_advance_remarks" placeholder="Enter any relevant remarks, comments, or additional information…" required data-validate="text"></textarea>
                 </div>
               </div>
 
@@ -797,7 +731,7 @@
                 </div>
                 <div class="field">
                   <label>Open-ended Field <small style="color:var(--muted); font-weight:300;">(remarks, comments, and others)</small> :</label>
-                  <textarea name="refund_op_remarks" placeholder="Enter any relevant remarks, comments, or additional information…"></textarea>
+                  <textarea name="refund_op_remarks" placeholder="Enter any relevant remarks, comments, or additional information…" required data-validate="text"></textarea>
                 </div>
               </div>
 
@@ -811,7 +745,7 @@
                 </div>
                 <div class="field">
                   <label>Open-ended Field <small style="color:var(--muted); font-weight:300;">(remarks, comments, and others)</small> :</label>
-                  <textarea name="disallowance_remarks" placeholder="Enter any relevant remarks, comments, or additional information…"></textarea>
+                  <textarea name="disallowance_remarks" placeholder="Enter any relevant remarks, comments, or additional information…" required data-validate="text"></textarea>
                 </div>
               </div>
 
@@ -841,7 +775,7 @@
                 </div>
                 <div class="field">
                   <label>Open-ended Field <small style="color:var(--muted); font-weight:300;">(remarks, comments, and others)</small> :</label>
-                  <textarea name="remit_remarks" placeholder="Enter any relevant remarks, comments, or additional information…"></textarea>
+                  <textarea name="remit_remarks" placeholder="Enter any relevant remarks, comments, or additional information…" required data-validate="text"></textarea>
                 </div>
               </div>
 
