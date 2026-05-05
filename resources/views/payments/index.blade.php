@@ -276,7 +276,24 @@
               default    => 'bi-circle'
             };
             $initials  = strtoupper(substr($p->name, 0, 1)) . (str_contains($p->name, ' ') ? strtoupper(substr(strrchr($p->name,' '),1,1)) : '');
-            $txnLabel  = ucwords(str_replace('_',' ', $p->transaction_type ?? ''));
+            $txnNames = [
+              'appeal_fee'               => 'Appeal Fee',
+              'bidding_documents'        => 'Bidding Documents',
+              'cash_bond'                => 'Cash Bond',
+              'certification_copy_fee'   => 'Certification, Copy Fee and Reproduction Cost',
+              'consignment'              => 'Consignment',
+              'execution_judgment'       => 'Execution of Judgment Involving Money',
+              'filing_fee'               => 'Filing Fee and Inspection Cost',
+              'income_unserviceable'     => 'Income from Sale of Unserviceable Property',
+              'legal_research'           => 'Legal Research',
+              'performance_bond'         => 'Performance Bond',
+              'refund_cash_advances'     => 'Refund of Cash Advances',
+              'refund_overpayment'       => 'Refund of Overpayment',
+              'settlement_disallowances' => 'Settlement of Notice of Disallowances',
+              'unwithheld_remittances'   => 'Unwithheld Remittances',
+            ];
+            $rawTxn   = $p->transaction_type ?? '';
+            $txnLabel = $txnNames[$rawTxn] ?? ucwords(str_replace('_',' ', $rawTxn));
             $fundLabel = $p->fund_type ?? '—';
             $meta      = $p->meta ?? [];
             $details   = [];
@@ -483,12 +500,56 @@
     const d = __active;
     if (!d) return;
 
+    /* ── Abbreviation expansion map ── */
+    const abbrevMap = {
+      'txn':   'Transaction',
+      'exec':  'Execution',
+      'asmt':  'Assessment',
+      'amt':   'Amount',
+      'no':    'Number',
+      'num':   'Number',
+      'ref':   'Reference',
+      'dept':  'Department',
+      'div':   'Division',
+      'sec':   'Section',
+      'acct':  'Account',
+      'pymnt': 'Payment',
+      'pymt':  'Payment',
+      'pmt':   'Payment',
+      'rec':   'Record',
+      'yr':    'Year',
+      'mo':    'Month',
+      'lddap': 'LDDAP',
+      'ada':   'ADA',
+      'ors':   'ORS',
+      'bur':   'Bureau',
+      'rpt':   'Report',
+      'adv':   'Advance',
+    };
+
+    function expandLabel(raw) {
+      return raw
+        .replace(/_/g, ' ')
+        .replace(/([a-z])([A-Z])/g, '$1 $2')   // camelCase → words
+        .split(/\s+/)
+        .map(w => {
+          const low = w.toLowerCase();
+          return abbrevMap[low]
+            ? abbrevMap[low]
+            : w.charAt(0).toUpperCase() + w.slice(1).toLowerCase();
+        })
+        .join(' ');
+    }
+
     /* Build purpose string from txn type + extra fields */
     const purposeParts = [d.txn];
     if (d.details) {
       for (const [k, v] of Object.entries(d.details)) {
-        if (['Contact','Email','Payment Mode'].includes(k)) continue;
-        purposeParts.push(k.replace(/_/g,' ').replace(/\b\w/g, c => c.toUpperCase()) + ': ' + v);
+        // Skip these fields entirely from the purpose line
+        if (['Contact','Email','Payment Mode','Address'].includes(k)) continue;
+        // For remark-type keys, show value only (no label)
+        const isRemark = /remark/i.test(k);
+        purposeParts.push(isRemark ? v : expandLabel(k) + ': ' + v);
       }
     }
     const purpose    = esc(purposeParts.join('  |  '));

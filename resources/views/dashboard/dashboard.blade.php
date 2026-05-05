@@ -533,7 +533,7 @@
                 <div class="extra-label">Appeal Fee Details</div>
                 <div class="field">
                   <label>Open-ended Field <small style="color:var(--muted); font-weight:300;">(remarks, comments, and others)</small> :</label>
-                  <textarea name="appeal_remarks" placeholder="Enter any relevant remarks, comments, or additional information…" required data-validate="text"></textarea>
+                  <textarea name="appeal_remarks" placeholder="Enter any relevant remarks, comments, or additional information…" data-validate="text"></textarea>
                 </div>
               </div>
 
@@ -547,7 +547,7 @@
                 </div>
                 <div class="field">
                   <label>Open-ended Field <small style="color:var(--muted); font-weight:300;">(remarks, comments, and others)</small> :</label>
-                  <textarea name="bid_remarks" placeholder="Enter any relevant remarks, comments, or additional information…" required data-validate="text"></textarea>
+                  <textarea name="bid_remarks" placeholder="Enter any relevant remarks, comments, or additional information…" data-validate="text"></textarea>
                 </div>
               </div>
 
@@ -573,7 +573,7 @@
                 </div>
                 <div class="field">
                   <label>Open-ended Field <small style="color:var(--muted); font-weight:300;">(remarks, comments, and others)</small> :</label>
-                  <textarea name="cash_bond_remarks" placeholder="Enter any relevant remarks, comments, or additional information…" required data-validate="text"></textarea>
+                  <textarea name="cash_bond_remarks" placeholder="Enter any relevant remarks, comments, or additional information…" data-validate="text"></textarea>
                 </div>
               </div>
 
@@ -595,7 +595,7 @@
                 </div>
                 <div class="field">
                   <label>Open-ended Field <small style="color:var(--muted); font-weight:300;">(remarks, comments, and others)</small> :</label>
-                  <textarea name="cert_remarks" placeholder="Enter any relevant remarks, comments, or additional information…" required data-validate="text"></textarea>
+                  <textarea name="cert_remarks" placeholder="Enter any relevant remarks, comments, or additional information…" data-validate="text"></textarea>
                 </div>
               </div>
 
@@ -613,7 +613,7 @@
                 </div>
                 <div class="field">
                   <label>Open-ended Field <small style="color:var(--muted); font-weight:300;">(remarks, comments, and others)</small> :</label>
-                  <textarea name="consignment_remarks" placeholder="Enter any relevant remarks, comments, or additional information…" required data-validate="text"></textarea>
+                  <textarea name="consignment_remarks" placeholder="Enter any relevant remarks, comments, or additional information…" data-validate="text"></textarea>
                 </div>
               </div>
 
@@ -631,7 +631,7 @@
                 </div>
                 <div class="field">
                   <label>Open-ended Field <small style="color:var(--muted); font-weight:300;">(remarks, comments, and others)</small> :</label>
-                  <textarea name="exec_remarks" placeholder="Enter any relevant remarks, comments, or additional information…" required data-validate="text"></textarea>
+                  <textarea name="exec_remarks" placeholder="Enter any relevant remarks, comments, or additional information…" data-validate="text"></textarea>
                 </div>
               </div>
 
@@ -645,7 +645,7 @@
                 </div>
                 <div class="field">
                   <label>Open-ended Field <small style="color:var(--muted); font-weight:300;">(remarks, comments, and others)</small> :</label>
-                  <textarea name="filing_remarks" placeholder="Enter any relevant remarks, comments, or additional information…" required data-validate="text"></textarea>
+                  <textarea name="filing_remarks" placeholder="Enter any relevant remarks, comments, or additional information…" data-validate="text"></textarea>
                 </div>
               </div>
 
@@ -659,7 +659,7 @@
                 </div>
                 <div class="field">
                   <label>Open-ended Field <small style="color:var(--muted); font-weight:300;">(remarks, comments, and others)</small> :</label>
-                  <textarea name="unserviceable_remarks" placeholder="Enter any relevant remarks, comments, or additional information…" required data-validate="text"></textarea>
+                  <textarea name="unserviceable_remarks" placeholder="Enter any relevant remarks, comments, or additional information…" data-validate="text"></textarea>
                 </div>
               </div>
 
@@ -669,7 +669,7 @@
                 <div class="extra-label">Legal Research Details</div>
                 <div class="field">
                   <label>Open-ended Field <small style="color:var(--muted); font-weight:300;">(remarks, comments, and others)</small> :</label>
-                  <textarea name="legal_research_remarks" placeholder="Enter any relevant remarks, comments, or additional information…" required data-validate="text"></textarea>
+                  <textarea name="legal_research_remarks" placeholder="Enter any relevant remarks, comments, or additional information…" data-validate="text"></textarea>
                 </div>
               </div>
 
@@ -695,7 +695,7 @@
                 </div>
                 <div class="field">
                   <label>Open-ended Field <small style="color:var(--muted); font-weight:300;">(remarks, comments, and others)</small> :</label>
-                  <textarea name="pb_remarks" placeholder="Enter any relevant remarks, comments, or additional information…" required data-validate="text"></textarea>
+                  <textarea name="pb_remarks" placeholder="Enter any relevant remarks, comments, or additional information…" data-validate="text"></textarea>
                 </div>
               </div>
 
@@ -717,7 +717,7 @@
                 </div>
                 <div class="field">
                   <label>Open-ended Field <small style="color:var(--muted); font-weight:300;">(remarks, comments, and others)</small> :</label>
-                  <textarea name="cash_advance_remarks" placeholder="Enter any relevant remarks, comments, or additional information…" required data-validate="text"></textarea>
+                  <textarea name="cash_advance_remarks" placeholder="Enter any relevant remarks, comments, or additional information…" data-validate="text"></textarea>
                 </div>
               </div>
 
@@ -731,7 +731,7 @@
                 </div>
                 <div class="field">
                   <label>Open-ended Field <small style="color:var(--muted); font-weight:300;">(remarks, comments, and others)</small> :</label>
-                  <textarea name="refund_op_remarks" placeholder="Enter any relevant remarks, comments, or additional information…" required data-validate="text"></textarea>
+                  <textarea name="refund_op_remarks" placeholder="Enter any relevant remarks, comments, or additional information…" data-validate="text"></textarea>
                 </div>
               </div>
 
@@ -745,7 +745,7 @@
                 </div>
                 <div class="field">
                   <label>Open-ended Field <small style="color:var(--muted); font-weight:300;">(remarks, comments, and others)</small> :</label>
-                  <textarea name="disallowance_remarks" placeholder="Enter any relevant remarks, comments, or additional information…" required data-validate="text"></textarea>
+                  <textarea name="disallowance_remarks" placeholder="Enter any relevant remarks, comments, or additional information…" data-validate="text"></textarea>
                 </div>
               </div>
 
@@ -775,7 +775,7 @@
                 </div>
                 <div class="field">
                   <label>Open-ended Field <small style="color:var(--muted); font-weight:300;">(remarks, comments, and others)</small> :</label>
-                  <textarea name="remit_remarks" placeholder="Enter any relevant remarks, comments, or additional information…" required data-validate="text"></textarea>
+                  <textarea name="remit_remarks" placeholder="Enter any relevant remarks, comments, or additional information…" data-validate="text"></textarea>
                 </div>
               </div>
 
