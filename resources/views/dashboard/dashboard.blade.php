@@ -58,7 +58,6 @@
       overflow: hidden;
     }
 
-    /* Sidebar top scrollable zone */
     .sidebar-scroll { flex: 1; overflow-y: auto; padding: 24px 0 0; }
     .sidebar-scroll::-webkit-scrollbar { width: 3px; }
     .sidebar-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,.12); border-radius: 4px; }
@@ -83,7 +82,7 @@
     .fund-check { font-size: .85rem; color: var(--gold); opacity: 0; transition: opacity .15s; flex-shrink: 0; }
     .fund-item.active .fund-check { opacity: 1; }
 
-    /* Sidebar footer (proceed button) */
+    /* Sidebar footer */
     .sidebar-footer { padding: 14px 22px; border-top: 1px solid rgba(255,255,255,.07); flex-shrink: 0; }
     .sidebar-footer-label { font-size: .6rem; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(245,240,232,.3); margin-bottom: 3px; }
     .sidebar-footer-value { font-size: .78rem; font-weight: 600; color: var(--gold-light); min-height: 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -91,33 +90,8 @@
     .sidebar-proceed-btn.enabled { opacity: 1; pointer-events: all; }
     .sidebar-proceed-btn.enabled:hover { background: var(--gold-light); transform: translateY(-1px); }
 
-    /* ── SIDEBAR HISTORY ── */
+    /* Sidebar history */
     .sidebar-history-wrap { flex-shrink: 0; border-top: 1px solid rgba(255,255,255,.07); }
-    .sidebar-history-head { display: flex; align-items: center; justify-content: space-between; padding: 12px 22px 8px; }
-    .sidebar-history-title { display: flex; align-items: center; gap: 7px; font-size: .63rem; font-weight: 700; letter-spacing: 1.8px; text-transform: uppercase; color: rgba(245,240,232,.4); }
-    .sidebar-history-title i { font-size: .75rem; color: var(--gold); }
-    .sidebar-history-badge { font-size: .6rem; font-weight: 700; padding: 2px 7px; border-radius: 20px; background: rgba(201,153,42,.15); color: var(--gold-light); border: 1px solid rgba(201,153,42,.2); }
-
-    .sidebar-history-list { max-height: 210px; overflow-y: auto; }
-    .sidebar-history-list::-webkit-scrollbar { width: 3px; }
-    .sidebar-history-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,.1); border-radius: 4px; }
-
-    .sidebar-txn-item { display: flex; align-items: center; gap: 10px; padding: 8px 22px; cursor: pointer; transition: background .15s; }
-    .sidebar-txn-item:hover { background: rgba(255,255,255,.04); }
-    .sidebar-txn-icon { width: 28px; height: 28px; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: .72rem; flex-shrink: 0; }
-    .ti-green { background: rgba(45,122,79,.25); color: #5ec98a; }
-    .ti-amber { background: rgba(201,153,42,.2); color: var(--gold-light); }
-    .ti-blue  { background: rgba(60,100,200,.2); color: #7faee8; }
-    .sidebar-txn-body { flex: 1; min-width: 0; }
-    .sidebar-txn-name { font-size: .76rem; font-weight: 600; color: rgba(245,240,232,.8); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .sidebar-txn-type { font-size: .64rem; color: rgba(245,240,232,.3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .sidebar-txn-right { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; flex-shrink: 0; }
-    .sidebar-txn-amount { font-size: .73rem; font-weight: 700; color: rgba(245,240,232,.7); }
-    .sidebar-txn-status { font-size: .56rem; font-weight: 700; letter-spacing: .4px; text-transform: uppercase; padding: 2px 6px; border-radius: 20px; }
-    .s-approved { background: rgba(45,122,79,.3); color: #6dd49a; }
-    .s-waiting  { background: rgba(201,153,42,.2); color: var(--gold-light); }
-    .s-rejected { background: rgba(160,37,28,.25); color: #e88a82; }
-
     .sidebar-view-all-btn { display: flex; align-items: center; justify-content: center; gap: 6px; margin: 8px 22px 14px; padding: 8px; background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08); border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: .71rem; font-weight: 600; color: rgba(245,240,232,.45); cursor: pointer; transition: background .15s, color .15s; }
     .sidebar-view-all-btn:hover { background: rgba(255,255,255,.08); color: var(--cream); }
 
@@ -206,13 +180,11 @@
     .extra-divider { border: none; border-top: 1px solid var(--green-light); margin: 4px 0 14px; }
     .extra-label { font-size: .66rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--green-accent); margin-bottom: 13px; }
 
-    /* Checkboxes for type-of-transaction */
+    /* Checkboxes */
     .check-group { display: flex; flex-direction: column; gap: 8px; }
     .check-item { display: flex; align-items: center; gap: 9px; font-size: .85rem; color: var(--text-mid); cursor: pointer; padding: 8px 12px; border: 1.5px solid var(--border); border-radius: 8px; background: #faf8f4; transition: border-color .2s, background .2s; position: relative; padding-left: 44px; }
     .check-item:hover { border-color: var(--green-accent); background: #fff; }
-    /* visually hide native checkbox but keep it accessible */
     .check-item input[type="checkbox"] { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 20px; height: 20px; opacity: 0; margin: 0; cursor: pointer; }
-    /* custom box */
     .check-item::before { content: ''; position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 20px; height: 20px; border-radius: 6px; border: 2px solid var(--border); background: #faf8f4; }
     .check-item::after { content: ''; position: absolute; left: 17px; top: 50%; transform: translateY(-56%) rotate(45deg); width: 6px; height: 10px; border: solid white; border-width: 0 2px 2px 0; opacity: 0; }
     .check-item.checked { border-color: var(--green-accent); background: var(--green-light); }
@@ -304,9 +276,30 @@
     .modal-empty i { font-size: 2.2rem; color: var(--border); display: block; margin-bottom: 12px; }
     .modal-empty p { font-size: .82rem; color: var(--muted); }
 
-    .modal-foot { padding: 11px 22px; background: #faf8f4; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
-    .modal-foot-info { font-size: .73rem; color: var(--muted); }
+    /* ── PAGINATION FOOTER ── */
+    .modal-foot {
+      padding: 10px 22px; background: #faf8f4; border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      flex-shrink: 0; gap: 12px; flex-wrap: wrap;
+    }
+    .modal-foot-info { font-size: .72rem; color: var(--muted); white-space: nowrap; }
     .modal-foot-info strong { color: var(--text-mid); }
+    .modal-foot-right { display: flex; align-items: center; gap: 10px; }
+    .pg-per-page { display: flex; align-items: center; gap: 6px; font-size: .72rem; color: var(--muted); }
+    .pg-per-page select { padding: 4px 6px; border: 1.5px solid var(--border); border-radius: 6px; font-family: 'DM Sans', sans-serif; font-size: .72rem; color: var(--text-mid); background: var(--surface); outline: none; cursor: pointer; }
+    .pg-per-page select:focus { border-color: var(--green-accent); }
+    .pagination { display: flex; align-items: center; gap: 4px; }
+    .pg-btn {
+      min-width: 30px; height: 30px; padding: 0 8px; border-radius: 7px;
+      border: 1.5px solid var(--border); background: var(--surface); color: var(--text-mid);
+      font-family: 'DM Sans', sans-serif; font-size: .73rem; font-weight: 600;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: background .12s, border-color .12s, color .12s;
+    }
+    .pg-btn:hover:not(:disabled) { background: var(--green-light); border-color: var(--green-accent); color: var(--green-mid); }
+    .pg-btn:disabled { opacity: .35; cursor: not-allowed; }
+    .pg-btn.active { background: var(--green-mid); border-color: var(--green-mid); color: #fff; }
+    .pg-ellipsis { font-size: .78rem; color: var(--muted); padding: 0 2px; }
 
     /* ── RESPONSIVE ── */
     @media (max-width: 768px) {
@@ -319,9 +312,12 @@
       .fund-dot { width: 28px; height: 28px; font-size: .65rem; }
       .main-content { padding: 0 16px 48px; }
       .fund-banner-sticky-wrap { padding: 9px 16px; top: 0; }
+      .modal-foot { flex-direction: column; align-items: flex-start; gap: 8px; }
+      .modal-foot-right { width: 100%; justify-content: space-between; }
     }
     @media (max-width: 560px) {
       .field-row { grid-template-columns: 1fr; }
+      .pg-per-page { display: none; }
     }
   </style>
 </head>
@@ -337,7 +333,7 @@
   </div>
   <div class="header-sep"></div>
   <div class="header-page">New Transaction</div>
-  <a href="{{ url()->previous() }}" class="header-back">
+  <a href="#" class="header-back">
     <i class="bi bi-arrow-left"></i> Back
   </a>
 </header>
@@ -383,7 +379,7 @@
           <i class="bi bi-check-circle-fill fund-check"></i>
         </div>
       </div>
-    </div><!-- /sidebar-scroll -->
+    </div>
 
     <!-- Proceed button -->
     <div class="sidebar-footer">
@@ -394,12 +390,11 @@
       </button>
     </div>
 
-    <!-- ── TRANSACTION HISTORY ── (collapsed — only View All maintained) -->
     <div class="sidebar-history-wrap">
       <button class="sidebar-view-all-btn" onclick="openModal()">
         <i class="bi bi-list-ul"></i> View All Transactions
       </button>
-    </div><!-- /sidebar-history-wrap -->
+    </div>
 
   </aside>
 
@@ -498,7 +493,7 @@
 
               <div class="section-heading"><i class="bi bi-card-checklist"></i> Payment Details</div>
 
-              <!-- ── COMMON FIELDS (all types) ── -->
+              <!-- COMMON FIELDS -->
               <div class="field">
                 <label>Amount : <span class="req">*</span></label>
                 <div class="amount-wrap"><span>₱</span><input name="amount" type="number" min="0" step="0.01" placeholder="0.00" required data-validate="numeric" /></div>
@@ -812,7 +807,7 @@
       </div><!-- /section-form -->
     </div><!-- /main-inner -->
     </main>
-  </div><!-- /flex col -->
+  </div>
 </div><!-- /outer-wrapper -->
 
 <!-- ════════════ TRANSACTIONS MODAL ════════════ -->
@@ -831,16 +826,16 @@
     </div>
 
     <div class="modal-tabs">
-      <button class="modal-tab tab-all active" onclick="filterModal('all', this)">
-        All <span class="modal-tab-count" id="count-all">5</span>
+      <button class="modal-tab tab-all active" onclick="setModalFilter('all', this)">
+        All <span class="modal-tab-count" id="count-all">0</span>
       </button>
-      <button class="modal-tab tab-approved" onclick="filterModal('approved', this)">
-        <i class="bi bi-check-circle" style="color:var(--green-accent);"></i> Approved <span class="modal-tab-count" id="count-approved">3</span>
+      <button class="modal-tab tab-approved" onclick="setModalFilter('approved', this)">
+        <i class="bi bi-check-circle" style="color:var(--green-accent);"></i> Approved <span class="modal-tab-count" id="count-approved">0</span>
       </button>
-      <button class="modal-tab tab-waiting" onclick="filterModal('waiting', this)">
-        <i class="bi bi-hourglass-split" style="color:#a0700a;"></i> Waiting <span class="modal-tab-count" id="count-waiting">2</span>
+      <button class="modal-tab tab-waiting" onclick="setModalFilter('waiting', this)">
+        <i class="bi bi-hourglass-split" style="color:#a0700a;"></i> Waiting <span class="modal-tab-count" id="count-waiting">0</span>
       </button>
-      <button class="modal-tab tab-rejected" onclick="filterModal('rejected', this)">
+      <button class="modal-tab tab-rejected" onclick="setModalFilter('rejected', this)">
         <i class="bi bi-x-circle" style="color:var(--red);"></i> Rejected <span class="modal-tab-count" id="count-rejected">0</span>
       </button>
     </div>
@@ -848,94 +843,46 @@
     <div class="modal-search-bar">
       <div class="modal-search-inner">
         <i class="bi bi-search"></i>
-        <input type="text" id="modal-search-input" placeholder="Search by name, type, or O.R. no…" oninput="searchModal(this.value)" />
+        <input type="text" id="modal-search-input" placeholder="Search by name, type, or O.R. no…" oninput="onModalSearch()" />
       </div>
     </div>
 
-    <div class="modal-list" id="modal-list">
-      <!-- Demo rows — replace with @@foreach ($transactions as $transaction) -->
-      <div class="modal-txn-row" data-status="approved" data-name="juan dela cruz filing fee 2025-0441">
-        <div class="modal-txn-icon mi-green"><i class="bi bi-file-earmark-text"></i></div>
-        <div class="modal-txn-main">
-          <div class="modal-txn-name">Juan Dela Cruz</div>
-          <div class="modal-txn-type">Filing Fee and Inspection Cost</div>
-          <div class="modal-txn-meta"><i class="bi bi-clock"></i> 8:14 AM · <i class="bi bi-hash"></i> F01-2026-01-0001 · Fund 01</div>
-        </div>
-        <div class="modal-txn-right">
-          <div class="modal-txn-amount">₱1,500.00</div>
-          <span class="modal-status-badge ms-approved"><i class="bi bi-check-circle-fill"></i> Approved</span>
-          <div class="modal-txn-or">O.R. #2025-0441</div>
-        </div>
-      </div>
-      <div class="modal-txn-row" data-status="waiting" data-name="maria santos certification 2025-0442">
-        <div class="modal-txn-icon mi-gold"><i class="bi bi-file-earmark-check"></i></div>
-        <div class="modal-txn-main">
-          <div class="modal-txn-name">Maria Santos</div>
-          <div class="modal-txn-type">Certification, Copy Fee and Reproduction Cost</div>
-          <div class="modal-txn-meta"><i class="bi bi-clock"></i> 9:02 AM · <i class="bi bi-hash"></i> F01-2026-01-0002 · Fund 03</div>
-        </div>
-        <div class="modal-txn-right">
-          <div class="modal-txn-amount">₱250.00</div>
-          <span class="modal-status-badge ms-waiting"><i class="bi bi-hourglass-split"></i> Waiting</span>
-          <div class="modal-txn-or">O.R. #2025-0442</div>
-        </div>
-      </div>
-      <div class="modal-txn-row" data-status="approved" data-name="pedro reyes cash bond 2025-0443">
-        <div class="modal-txn-icon mi-blue"><i class="bi bi-cash-stack"></i></div>
-        <div class="modal-txn-main">
-          <div class="modal-txn-name">Pedro Reyes</div>
-          <div class="modal-txn-type">Cash Bond</div>
-          <div class="modal-txn-meta"><i class="bi bi-clock"></i> 9:45 AM · <i class="bi bi-hash"></i> F01-2026-01-0003 · Fund 01</div>
-        </div>
-        <div class="modal-txn-right">
-          <div class="modal-txn-amount">₱5,000.00</div>
-          <span class="modal-status-badge ms-approved"><i class="bi bi-check-circle-fill"></i> Approved</span>
-          <div class="modal-txn-or">O.R. #2025-0443</div>
-        </div>
-      </div>
-      <div class="modal-txn-row" data-status="waiting" data-name="ana garcia appeal fee 2025-0444">
-        <div class="modal-txn-icon mi-red"><i class="bi bi-gavel"></i></div>
-        <div class="modal-txn-main">
-          <div class="modal-txn-name">Ana Garcia</div>
-          <div class="modal-txn-type">Appeal Fee</div>
-          <div class="modal-txn-meta"><i class="bi bi-clock"></i> 10:18 AM · <i class="bi bi-hash"></i> F01-2026-01-0004 · Fund 07</div>
-        </div>
-        <div class="modal-txn-right">
-          <div class="modal-txn-amount">₱3,200.00</div>
-          <span class="modal-status-badge ms-waiting"><i class="bi bi-hourglass-split"></i> Waiting</span>
-          <div class="modal-txn-or">O.R. #2025-0444</div>
-        </div>
-      </div>
-      <div class="modal-txn-row" data-status="approved" data-name="roberto luna refund overpayment 2025-0445">
-        <div class="modal-txn-icon mi-blue"><i class="bi bi-arrow-counterclockwise"></i></div>
-        <div class="modal-txn-main">
-          <div class="modal-txn-name">Roberto Luna</div>
-          <div class="modal-txn-type">Refund of Overpayment</div>
-          <div class="modal-txn-meta"><i class="bi bi-clock"></i> 11:00 AM · <i class="bi bi-hash"></i> F01-2026-01-0005 · Fund 01</div>
-        </div>
-        <div class="modal-txn-right">
-          <div class="modal-txn-amount">₱800.00</div>
-          <span class="modal-status-badge ms-approved"><i class="bi bi-check-circle-fill"></i> Approved</span>
-          <div class="modal-txn-or">O.R. #2025-0445</div>
-        </div>
-      </div>
-    </div><!-- /modal-list -->
+    <div class="modal-list" id="modal-list"></div>
 
+    <!-- ── PAGINATION FOOTER ── -->
     <div class="modal-foot">
-      <span class="modal-foot-info" id="modal-foot-info">Showing <strong>5</strong> of <strong>5</strong> transactions</span>
+      <span class="modal-foot-info" id="modal-foot-info">—</span>
+      <div class="modal-foot-right">
+        <div class="pg-per-page">
+          Rows:
+          <select id="per-page-sel" onchange="onPerPageChange()">
+            <option value="5" selected>5</option>
+            <option value="10">10</option>
+            <option value="25">25</option>
+          </select>
+        </div>
+        <div class="pagination" id="pagination-controls"></div>
+      </div>
     </div>
 
-  </div><!-- /txn-modal -->
-</div><!-- /modal-overlay -->
+  </div>
+</div>
 
 <script>
-  /* ── Fund selection ── */
+  /* ════════════════════════════════════════
+     FUND SELECTION
+  ════════════════════════════════════════ */
   let selectedFund = null;
 
   function selectFund(el) {
     document.querySelectorAll('.fund-item').forEach(f => f.classList.remove('active'));
     el.classList.add('active');
-    selectedFund = { code: el.dataset.fund, name: el.dataset.name, label: el.dataset.label, dot: el.querySelector('.fund-dot').textContent };
+    selectedFund = {
+      code:  el.dataset.fund,
+      name:  el.dataset.name,
+      label: el.dataset.label,
+      dot:   el.querySelector('.fund-dot').textContent
+    };
     document.getElementById('sidebar-selected-label').textContent = selectedFund.name;
     document.getElementById('sidebar-proceed-btn').classList.add('enabled');
   }
@@ -967,34 +914,41 @@
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  /* ── Transaction type ── */
+  /* ════════════════════════════════════════
+     TRANSACTION TYPE SELECT
+  ════════════════════════════════════════ */
   document.getElementById('txn-select').addEventListener('change', function () {
     const val   = this.value;
     const label = this.options[this.selectedIndex].text;
     document.getElementById('hidden-txn-type').value = val;
     document.getElementById('form-txn-name').textContent = label;
-    // hide all extra sections and disable their required fields so native validation won't block
+
     document.querySelectorAll('.extra-fields').forEach(el => {
       el.classList.remove('show');
       el.querySelectorAll('input[required],textarea[required],select[required]').forEach(f => f.removeAttribute('required'));
     });
+
     const target = document.getElementById('extra-' + val);
     if (target) {
       target.classList.add('show');
-      // restore required attributes for fields that originally were required
-      target.querySelectorAll('[data-orig-required="1"]').forEach(f => f.setAttribute('required',''));
+      target.querySelectorAll('[data-orig-required="1"]').forEach(f => f.setAttribute('required', ''));
     }
+
     document.getElementById('form-card').classList.add('visible');
     document.getElementById('agree_terms').checked = false;
     document.getElementById('submit-btn').disabled = true;
-    setTimeout(() => { document.getElementById('form-card').scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 80);
+    setTimeout(() => {
+      document.getElementById('form-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 80);
   });
 
   document.getElementById('agree_terms').addEventListener('change', function () {
     document.getElementById('submit-btn').disabled = !this.checked;
   });
 
-  /* ── Checkbox styling ── */
+  /* ════════════════════════════════════════
+     CHECKBOX STYLING
+  ════════════════════════════════════════ */
   function toggleCheckItem(el) {
     el.closest('.check-item, .remit-check-item').classList.toggle('checked', el.checked);
   }
@@ -1003,14 +957,247 @@
     document.getElementById('remit-other-field').classList.toggle('show', el.checked);
   }
 
-  // Preserve original required state for fields inside extra sections
-  document.querySelectorAll('.extra-fields [required]').forEach(f => f.setAttribute('data-orig-required','1'));
+  // Preserve original required state
+  document.querySelectorAll('.extra-fields [required]').forEach(f => f.setAttribute('data-orig-required', '1'));
 
-  /* ── Modal ── */
+  /* ════════════════════════════════════════
+     MODAL — STATE
+  ════════════════════════════════════════ */
+  let _allTransactions = [];  // raw data from server (or demo)
+  let _modalFilter     = 'all';
+  let _modalQuery      = '';
+  let _modalPage       = 1;
+  let _modalPerPage    = 5;
+
+  /* ── Demo data (used when /payments.json is unavailable) ── */
+  const DEMO_DATA = [
+    { name:'Juan Dela Cruz',    transaction_type:'Filing Fee and Inspection Cost',                  status:'approved', created_at:'8:14 AM',  op_number:'F01-2026-01-0001', fund_type:'Fund 01', amount:'1,500.00' },
+    { name:'Maria Santos',      transaction_type:'Certification, Copy Fee and Reproduction Cost',   status:'waiting',  created_at:'9:02 AM',  op_number:'F01-2026-01-0002', fund_type:'Fund 03', amount:'250.00' },
+    { name:'Pedro Reyes',       transaction_type:'Cash Bond',                                       status:'approved', created_at:'9:45 AM',  op_number:'F01-2026-01-0003', fund_type:'Fund 01', amount:'5,000.00' },
+    { name:'Ana Garcia',        transaction_type:'Appeal Fee',                                      status:'waiting',  created_at:'10:18 AM', op_number:'F01-2026-01-0004', fund_type:'Fund 07', amount:'3,200.00' },
+    { name:'Roberto Luna',      transaction_type:'Refund of Overpayment',                           status:'approved', created_at:'11:00 AM', op_number:'F01-2026-01-0005', fund_type:'Fund 01', amount:'800.00' },
+    { name:'Liza Reyes',        transaction_type:'Legal Research',                                  status:'approved', created_at:'11:22 AM', op_number:'F01-2026-01-0006', fund_type:'Fund 01', amount:'150.00' },
+    { name:'Carlo Mendoza',     transaction_type:'Performance Bond',                                status:'waiting',  created_at:'11:45 AM', op_number:'F01-2026-01-0007', fund_type:'Fund 03', amount:'12,000.00' },
+    { name:'Sofia Torres',      transaction_type:'Settlement of Notice of Disallowances',           status:'approved', created_at:'1:05 PM',  op_number:'F01-2026-01-0008', fund_type:'Fund 07', amount:'4,400.00' },
+    { name:'Renato Flores',     transaction_type:'Consignment',                                     status:'waiting',  created_at:'1:30 PM',  op_number:'F01-2026-01-0009', fund_type:'Fund 01', amount:'900.00' },
+    { name:'Grace Villanueva',  transaction_type:'Bidding Documents',                               status:'approved', created_at:'2:00 PM',  op_number:'F01-2026-01-0010', fund_type:'Fund 01', amount:'500.00' },
+    { name:'Marco Bautista',    transaction_type:'Unwithheld Remittances',                          status:'approved', created_at:'2:30 PM',  op_number:'F01-2026-01-0011', fund_type:'Fund 03', amount:'2,100.00' },
+    { name:'Hazel Dela Torre',  transaction_type:'Income from Sale of Unserviceable Property',      status:'rejected', created_at:'3:00 PM',  op_number:'F01-2026-01-0012', fund_type:'Fund 01', amount:'7,800.00' },
+  ];
+
+  /* ── Helpers ── */
+  function escapeHtml(s) {
+    return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  function capitalize(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : ''; }
+
+  function iconForType(type) {
+    type = (type || '').toLowerCase();
+    if (type.includes('cash bond') || type.includes('cash'))          return { icon:'bi-cash-stack',            cls:'mi-blue' };
+    if (type.includes('appeal'))                                       return { icon:'bi-gavel',                  cls:'mi-red' };
+    if (type.includes('bidding'))                                      return { icon:'bi-file-ruled',             cls:'mi-green' };
+    if (type.includes('certification') || type.includes('copy'))       return { icon:'bi-file-earmark-check',    cls:'mi-gold' };
+    if (type.includes('consignment'))                                  return { icon:'bi-box-seam',               cls:'mi-blue' };
+    if (type.includes('execution') || type.includes('judgment'))       return { icon:'bi-balance-scale',         cls:'mi-red' };
+    if (type.includes('filing'))                                       return { icon:'bi-file-earmark-text',     cls:'mi-green' };
+    if (type.includes('unserviceable') || type.includes('income'))     return { icon:'bi-tag',                   cls:'mi-gold' };
+    if (type.includes('legal'))                                        return { icon:'bi-book',                  cls:'mi-green' };
+    if (type.includes('performance'))                                  return { icon:'bi-shield-check',          cls:'mi-blue' };
+    if (type.includes('refund') || type.includes('overpayment'))       return { icon:'bi-arrow-counterclockwise',cls:'mi-blue' };
+    if (type.includes('advance'))                                      return { icon:'bi-wallet2',               cls:'mi-gold' };
+    if (type.includes('disallowance') || type.includes('settlement'))  return { icon:'bi-receipt',              cls:'mi-gold' };
+    if (type.includes('remittance'))                                   return { icon:'bi-send',                  cls:'mi-gold' };
+    return { icon:'bi-file-earmark', cls:'mi-green' };
+  }
+
+  /* ── Filtered dataset ── */
+  function getFiltered() {
+    return _allTransactions.filter(t => {
+      const matchF = _modalFilter === 'all' || t.status === _modalFilter;
+      const matchQ = !_modalQuery || (
+        (t.name || '') + ' ' + (t.transaction_type || '') + ' ' + (t.op_number || '')
+      ).toLowerCase().includes(_modalQuery);
+      return matchF && matchQ;
+    });
+  }
+
+  /* ── Render list + pagination ── */
+  function renderModal() {
+    const data  = getFiltered();
+    const total = data.length;
+    const totalPages = Math.max(1, Math.ceil(total / _modalPerPage));
+    if (_modalPage > totalPages) _modalPage = totalPages;
+
+    const start = (_modalPage - 1) * _modalPerPage;
+    const slice = data.slice(start, start + _modalPerPage);
+
+    /* List */
+    const list = document.getElementById('modal-list');
+    if (slice.length === 0) {
+      list.innerHTML = '<div class="modal-empty"><i class="bi bi-inbox"></i><p>No transactions match your filter.</p></div>';
+    } else {
+      list.innerHTML = slice.map(p => {
+        const status   = p.status || 'waiting';
+        const badgeCls = status === 'approved' ? 'ms-approved' : status === 'rejected' ? 'ms-rejected' : 'ms-waiting';
+        const badgeIco = status === 'approved' ? 'bi-check-circle-fill' : status === 'rejected' ? 'bi-x-circle-fill' : 'bi-hourglass-split';
+        const { icon, cls } = iconForType(p.transaction_type);
+        const amount   = p.amount ? '₱' + p.amount : '₱0.00';
+        const nameSafe = escapeHtml(p.name || '—');
+        const typeSafe = escapeHtml(p.transaction_type || '—');
+        const timeSafe = escapeHtml(p.created_at || '');
+        const opSafe   = escapeHtml(p.op_number || '—');
+        const fundSafe = escapeHtml(p.fund_type || '—');
+
+        return `<div class="modal-txn-row">
+          <div class="modal-txn-icon ${cls}"><i class="bi ${icon}"></i></div>
+          <div class="modal-txn-main">
+            <div class="modal-txn-name">${nameSafe}</div>
+            <div class="modal-txn-type">${typeSafe}</div>
+            <div class="modal-txn-meta"><i class="bi bi-clock"></i> ${timeSafe} &nbsp;·&nbsp; <i class="bi bi-hash"></i> ${opSafe} &nbsp;·&nbsp; ${fundSafe}</div>
+          </div>
+          <div class="modal-txn-right">
+            <div class="modal-txn-amount">${escapeHtml(amount)}</div>
+            <span class="modal-status-badge ${badgeCls}"><i class="bi ${badgeIco}"></i> ${capitalize(status)}</span>
+            <div class="modal-txn-or">O.R. #${opSafe}</div>
+          </div>
+        </div>`;
+      }).join('');
+    }
+
+    /* Footer info */
+    const from = total === 0 ? 0 : start + 1;
+    const to   = Math.min(start + _modalPerPage, total);
+    document.getElementById('modal-foot-info').innerHTML =
+      total === 0
+        ? 'No results'
+        : `Showing <strong>${from}–${to}</strong> of <strong>${total}</strong> transactions`;
+
+    /* Pagination */
+    renderPaginationControls(totalPages);
+
+    /* Tab counts */
+    updateTabCounts();
+  }
+
+  /* ── Pagination button builder ── */
+  function pagerRange(current, total) {
+    if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
+    const pages = [];
+    if (current <= 4) {
+      for (let i = 1; i <= 5; i++) pages.push(i);
+      pages.push('…');
+      pages.push(total);
+    } else if (current >= total - 3) {
+      pages.push(1);
+      pages.push('…');
+      for (let i = total - 4; i <= total; i++) pages.push(i);
+    } else {
+      pages.push(1);
+      pages.push('…');
+      pages.push(current - 1);
+      pages.push(current);
+      pages.push(current + 1);
+      pages.push('…');
+      pages.push(total);
+    }
+    return pages;
+  }
+
+  function renderPaginationControls(totalPages) {
+    const pg = document.getElementById('pagination-controls');
+    let html = '';
+
+    /* Prev button */
+    html += `<button class="pg-btn" onclick="goModalPage(${_modalPage - 1})" ${_modalPage <= 1 ? 'disabled' : ''} aria-label="Previous page">
+               <i class="bi bi-chevron-left" style="font-size:.7rem;"></i>
+             </button>`;
+
+    /* Page number buttons */
+    pagerRange(_modalPage, totalPages).forEach(p => {
+      if (p === '…') {
+        html += `<span class="pg-ellipsis">…</span>`;
+      } else {
+        html += `<button class="pg-btn${p === _modalPage ? ' active' : ''}" onclick="goModalPage(${p})" aria-label="Page ${p}">${p}</button>`;
+      }
+    });
+
+    /* Next button */
+    html += `<button class="pg-btn" onclick="goModalPage(${_modalPage + 1})" ${_modalPage >= totalPages ? 'disabled' : ''} aria-label="Next page">
+               <i class="bi bi-chevron-right" style="font-size:.7rem;"></i>
+             </button>`;
+
+    pg.innerHTML = html;
+  }
+
+  function goModalPage(p) {
+    const total = Math.ceil(getFiltered().length / _modalPerPage);
+    if (p < 1 || p > total) return;
+    _modalPage = p;
+    renderModal();
+  }
+
+  function updateTabCounts() {
+    const counts = { all: 0, approved: 0, waiting: 0, rejected: 0 };
+    _allTransactions.forEach(t => {
+      counts.all++;
+      if (counts[t.status] !== undefined) counts[t.status]++;
+    });
+    document.getElementById('count-all').textContent      = counts.all;
+    document.getElementById('count-approved').textContent = counts.approved;
+    document.getElementById('count-waiting').textContent  = counts.waiting;
+    document.getElementById('count-rejected').textContent = counts.rejected;
+  }
+
+  /* ── Modal controls ── */
+  function setModalFilter(status, btn) {
+    _modalFilter = status;
+    _modalPage   = 1;
+    document.querySelectorAll('.modal-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    renderModal();
+  }
+
+  function onModalSearch() {
+    _modalQuery = document.getElementById('modal-search-input').value.toLowerCase().trim();
+    _modalPage  = 1;
+    renderModal();
+  }
+
+  function onPerPageChange() {
+    _modalPerPage = parseInt(document.getElementById('per-page-sel').value);
+    _modalPage    = 1;
+    renderModal();
+  }
+
   function openModal() {
     document.getElementById('txn-modal-overlay').classList.add('open');
     document.body.style.overflow = 'hidden';
-    updateModalCounts();
+
+    // Reset state
+    _modalFilter = 'all';
+    _modalQuery  = '';
+    _modalPage   = 1;
+    document.getElementById('modal-search-input').value = '';
+    document.querySelectorAll('.modal-tab').forEach(t => t.classList.remove('active'));
+    document.querySelector('.modal-tab.tab-all').classList.add('active');
+
+    // Show loading
+    document.getElementById('modal-list').innerHTML =
+      '<div class="modal-empty"><i class="bi bi-hourglass-split" style="animation:spin 1s linear infinite;"></i><p>Loading transactions…</p></div>';
+    document.getElementById('pagination-controls').innerHTML = '';
+    document.getElementById('modal-foot-info').textContent = '—';
+
+    // Fetch from server; fall back to demo data
+    fetch('/payments.json')
+      .then(r => r.ok ? r.json() : Promise.reject(r))
+      .then(payments => {
+        _allTransactions = Array.isArray(payments) ? payments : [];
+        renderModal();
+      })
+      .catch(() => {
+        _allTransactions = DEMO_DATA;
+        renderModal();
+      });
   }
 
   function closeModal() {
@@ -1022,72 +1209,19 @@
     if (e.target === document.getElementById('txn-modal-overlay')) closeModal();
   }
 
-  let currentFilter = 'all';
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
-  function filterModal(status, btn) {
-    currentFilter = status;
-    document.querySelectorAll('.modal-tab').forEach(t => t.classList.remove('active'));
-    btn.classList.add('active');
-    applyModalFilter();
-  }
-
-  function searchModal(q) { applyModalFilter(q); }
-
-  function applyModalFilter(q) {
-    q = (q || document.getElementById('modal-search-input').value).toLowerCase();
-    const rows = document.querySelectorAll('#modal-list .modal-txn-row');
-    let visible = 0;
-    rows.forEach(row => {
-      const matchStatus = currentFilter === 'all' || row.dataset.status === currentFilter;
-      const matchSearch = !q || row.dataset.name.toLowerCase().includes(q);
-      const show = matchStatus && matchSearch;
-      row.style.display = show ? '' : 'none';
-      if (show) visible++;
-    });
-
-    // Empty state
-    let emp = document.getElementById('modal-empty-state');
-    if (visible === 0) {
-      if (!emp) {
-        emp = document.createElement('div');
-        emp.id = 'modal-empty-state';
-        emp.className = 'modal-empty';
-        emp.innerHTML = '<i class="bi bi-inbox"></i><p>No transactions match your filter.</p>';
-        document.getElementById('modal-list').appendChild(emp);
-      }
-    } else {
-      if (emp) emp.remove();
-    }
-
-    document.getElementById('modal-foot-info').innerHTML =
-      'Showing <strong>' + visible + '</strong> of <strong>' + rows.length + '</strong> transactions';
-  }
-
-  function updateModalCounts() {
-    const rows = document.querySelectorAll('#modal-list .modal-txn-row');
-    let approved = 0, waiting = 0, rejected = 0;
-    rows.forEach(r => {
-      if (r.dataset.status === 'approved') approved++;
-      else if (r.dataset.status === 'waiting') waiting++;
-      else if (r.dataset.status === 'rejected') rejected++;
-    });
-    document.getElementById('count-all').textContent = rows.length;
-    document.getElementById('count-approved').textContent = approved;
-    document.getElementById('count-waiting').textContent = waiting;
-    document.getElementById('count-rejected').textContent = rejected;
-    document.getElementById('hist-badge').textContent = rows.length;
-    document.getElementById('modal-foot-info').innerHTML =
-      'Showing <strong>' + rows.length + '</strong> of <strong>' + rows.length + '</strong> transactions';
-  }
-  /* ── Client-side validation for numeric / alphanumeric fields ── */
+  /* ════════════════════════════════════════
+     CLIENT-SIDE VALIDATION
+  ════════════════════════════════════════ */
   const __validators = {
-    numeric: v => /^\d+(?:\.\d+)?$/.test(String(v).trim()),
-    alphanumeric: v => /^[A-Za-z0-9\-\_\s]+$/.test(String(v).trim()),
-    tel: v => /^[0-9+\-\s()]+$/.test(String(v).trim())
+    numeric:     v => /^\d+(?:\.\d+)?$/.test(String(v).trim()),
+    alphanumeric:v => /^[A-Za-z0-9\-\_\s]+$/.test(String(v).trim()),
+    tel:         v => /^[0-9+\-\s()]+$/.test(String(v).trim())
   };
 
   function validateField(input) {
-    const rule = input.dataset.validate;
+    const rule  = input.dataset.validate;
     const field = input.closest('.field');
     if (!rule) return true;
     const val = String(input.value || '').trim();
@@ -1097,12 +1231,14 @@
       const fn = __validators[rule];
       if (fn) ok = fn(val);
     }
-
     if (!ok) {
       field.classList.add('invalid');
       let em = field.querySelector('.error-msg');
       if (!em) { em = document.createElement('div'); em.className = 'error-msg'; field.appendChild(em); }
-      em.textContent = (rule === 'numeric') ? 'This field requires a numeric value.' : (rule === 'alphanumeric') ? 'Only letters, numbers, spaces, dash and underscore are allowed.' : (rule === 'tel') ? 'Please enter a valid contact number.' : 'Invalid value.';
+      em.textContent =
+        rule === 'numeric'      ? 'This field requires a numeric value.' :
+        rule === 'alphanumeric' ? 'Only letters, numbers, spaces, dash and underscore are allowed.' :
+        rule === 'tel'          ? 'Please enter a valid contact number.' : 'Invalid value.';
     } else {
       field.classList.remove('invalid');
       const em = field.querySelector('.error-msg'); if (em) em.remove();
@@ -1110,20 +1246,16 @@
     return ok;
   }
 
-  // attach listeners
   document.querySelectorAll('[data-validate]').forEach(inp => {
     inp.addEventListener('input', () => validateField(inp));
-    inp.addEventListener('blur', () => validateField(inp));
+    inp.addEventListener('blur',  () => validateField(inp));
   });
 
-  // validate on submit
   const paymentForm = document.getElementById('payment-form');
   if (paymentForm) {
     paymentForm.addEventListener('submit', function (e) {
-      const inputs = this.querySelectorAll('[data-validate]');
       let firstInvalid = null;
-      inputs.forEach(i => {
-        // Skip validation for inputs that are inside extra-fields that are not shown
+      this.querySelectorAll('[data-validate]').forEach(i => {
         const extra = i.closest('.extra-fields');
         if (extra && !extra.classList.contains('show')) return;
         if (!validateField(i) && !firstInvalid) firstInvalid = i;
@@ -1132,7 +1264,10 @@
     });
   }
 
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+  /* spin animation for loading icon */
+  const spinStyle = document.createElement('style');
+  spinStyle.textContent = '@keyframes spin { to { transform: rotate(360deg); } }';
+  document.head.appendChild(spinStyle);
 </script>
 </body>
 </html>

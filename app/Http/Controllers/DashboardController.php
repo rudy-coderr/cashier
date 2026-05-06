@@ -29,6 +29,32 @@ class DashboardController extends Controller
     }
 
     /**
+     * Return recent payments as JSON for AJAX consumption.
+     */
+    public function paymentsJson()
+    {
+        $payments = Payment::orderBy('created_at', 'desc')->take(200)->get();
+
+        $data = $payments->map(function ($p) {
+            return [
+                'id' => $p->id,
+                'name' => $p->name,
+                'email' => $p->email,
+                'contact' => $p->contact,
+                'amount' => number_format($p->amount, 2),
+                'amountRaw' => (float) $p->amount,
+                'transaction_type' => $p->transaction_type,
+                'fund_type' => $p->fund_type,
+                'op_number' => $p->op_number,
+                'status' => $p->status ?? 'waiting',
+                'created_at' => $p->created_at ? $p->created_at->toDateTimeString() : null,
+            ];
+        });
+
+        return response()->json($data);
+    }
+
+    /**
      * Handle dashboard form submissions (payment processing stub).
      */
     public function store(Request $request)

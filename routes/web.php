@@ -20,6 +20,8 @@ Route::post('/dashboard', [DashboardController::class, 'store'])->name('dashboar
 
 // Payments flow (handled by DashboardController)
 Route::get('/payments', [DashboardController::class, 'listPayments'])->name('payments.index');
+// JSON endpoint for AJAX requests
+Route::get('/payments.json', [DashboardController::class, 'paymentsJson'])->name('payments.json');
 Route::get('/payments/create', [DashboardController::class, 'createPayment'])->name('payments.create');
 Route::post('/payments', [DashboardController::class, 'store'])->name('payments.store');
 
