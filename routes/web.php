@@ -41,4 +41,8 @@ Route::get('/admin', [AdminController::class, 'index'])->name('admin');
 // Reviewer route
 Route::get('/reviewer', [ReviewerController::class, 'index'])->name('reviewer');
 
+// Reviewer actions for payments (approve / reject)
+Route::post('/payments/{id}/approve', [ReviewerController::class, 'approve'])->name('payments.approve');
+Route::post('/payments/{id}/reject', [ReviewerController::class, 'reject'])->name('payments.reject');
+
 
