@@ -44,6 +44,11 @@ class LoginController extends Controller
             $request->session()->regenerate();
             RateLimiter::clear($throttleKey);
 
+            $user = Auth::user();
+            if ($user && strtolower($user->position ?? '') === 'accountant') {
+                return redirect()->intended(route('accountant.approval'));
+            }
+
             return redirect()->intended(route('dashboard'));
         }
 

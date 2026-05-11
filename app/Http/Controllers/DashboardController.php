@@ -12,20 +12,20 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        return view('dashboard.dashboard');
+        return view('cashier.cashier.cashier');
     }
 
     // Show payment creation form (reuses payments.create view)
     public function createPayment()
     {
-        return view('payments.create');
+        return view('cashier.payments.payments');
     }
 
     // List saved payments
     public function listPayments()
     {
         $payments = Payment::orderBy('created_at', 'desc')->paginate(25);
-        return view('payments.index', compact('payments'));
+        return view('cashier.payments.payments', compact('payments'));
     }
 
     /**

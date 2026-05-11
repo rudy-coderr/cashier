@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\AccountantController;
 
 Route::get('/', function () {
 	return view('landingpage.landingpage');
@@ -24,5 +25,9 @@ Route::get('/payments', [DashboardController::class, 'listPayments'])->name('pay
 Route::get('/payments.json', [DashboardController::class, 'paymentsJson'])->name('payments.json');
 Route::get('/payments/create', [DashboardController::class, 'createPayment'])->name('payments.create');
 Route::post('/payments', [DashboardController::class, 'store'])->name('payments.store');
+
+
+// Accountant routes
+Route::get('/accountant/approval', [AccountantController::class, 'approval'])->name('accountant.approval');
 
 
