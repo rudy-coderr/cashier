@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AccountantController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ReviewerController;
 
 Route::get('/', function () {
 	return view('landingpage.landingpage');
@@ -31,5 +33,12 @@ Route::post('/payments', [DashboardController::class, 'store'])->name('payments.
 Route::get('/accountant/approval', [AccountantController::class, 'approval'])->name('accountant.approval');
 Route::post('/accountant/approval/{id}/approve', [AccountantController::class, 'approve'])->name('accountant.approve');
 Route::post('/accountant/approval/{id}/reject', [AccountantController::class, 'reject'])->name('accountant.reject');
+
+
+// Admin route
+Route::get('/admin', [AdminController::class, 'index'])->name('admin');
+
+// Reviewer route
+Route::get('/reviewer', [ReviewerController::class, 'index'])->name('reviewer');
 
 

@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
+use App\Models\Payment;
 
 class LoginController extends Controller
 {
@@ -45,8 +47,31 @@ class LoginController extends Controller
             RateLimiter::clear($throttleKey);
 
             $user = Auth::user();
-            if ($user && strtolower($user->position ?? '') === 'accountant') {
+
+            // Resolve role name from relation if present, fall back to `position` column.
+            $roleName = null;
+            if (! empty($user->role_id)) {
+                $roleName = DB::table('roles')->where('id', $user->role_id)->value('name');
+            }
+
+            $role = strtolower($roleName ?? '');
+            $position = strtolower($user->position ?? '');
+
+            // Redirect based on role or position.
+            if ($role === 'accountant' || $position === 'accountant') {
                 return redirect()->intended(route('accountant.approval'));
+            }
+
+            if ($role === 'maker' || $position === 'maker') {
+                return redirect()->intended(route('dashboard'));
+            }
+
+            if ($role === 'admin' || $position === 'admin') {
+                return redirect()->intended(route('admin'));
+            }
+
+            if ($role === 'reviewer' || $position === 'reviewer') {
+                return redirect()->intended(route('reviewer'));
             }
 
             return redirect()->intended(route('dashboard'));

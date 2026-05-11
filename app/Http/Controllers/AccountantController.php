@@ -13,7 +13,7 @@ class AccountantController extends Controller
     public function approval()
     {
         $payments = Payment::orderBy('created_at', 'desc')->paginate(25);
-        return view('accountant.approval', compact('payments'));
+        return view('accountant.accountant', compact('payments'));
     }
 
     /**

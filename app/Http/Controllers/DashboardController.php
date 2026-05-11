@@ -12,7 +12,7 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        return view('cashier.cashier.cashier');
+        return view('maker.maker.maker');
     }
 
     // Show payment creation form (reuses payments.create view)
