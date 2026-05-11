@@ -29,5 +29,7 @@ Route::post('/payments', [DashboardController::class, 'store'])->name('payments.
 
 // Accountant routes
 Route::get('/accountant/approval', [AccountantController::class, 'approval'])->name('accountant.approval');
+Route::post('/accountant/approval/{id}/approve', [AccountantController::class, 'approve'])->name('accountant.approve');
+Route::post('/accountant/approval/{id}/reject', [AccountantController::class, 'reject'])->name('accountant.reject');
 
 

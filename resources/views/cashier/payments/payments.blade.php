@@ -200,28 +200,28 @@
     <div class="stat-card">
       <div class="stat-icon si-green"><i class="bi bi-receipt"></i></div>
       <div class="stat-info">
-        <div class="stat-value">{{ $payments->total() ?? count($payments) }}</div>
+        <div id="stat-total-count" class="stat-value">{{ $payments->total() ?? count($payments) }}</div>
         <div class="stat-label">Total Transactions</div>
       </div>
     </div>
     <div class="stat-card">
       <div class="stat-icon si-gold"><i class="bi bi-cash-coin"></i></div>
       <div class="stat-info">
-        <div class="stat-value">₱{{ number_format($payments->sum('amount'), 2) }}</div>
+        <div id="stat-total-amount" class="stat-value">₱{{ number_format($payments->sum('amount'), 2) }}</div>
         <div class="stat-label">Total Amount Collected</div>
       </div>
     </div>
     <div class="stat-card">
       <div class="stat-icon si-amber"><i class="bi bi-hourglass-split"></i></div>
       <div class="stat-info">
-        <div class="stat-value">{{ $payments->where('status', 'waiting')->count() }}</div>
+        <div id="stat-awaiting-count" class="stat-value">{{ $payments->where('status', 'waiting')->count() }}</div>
         <div class="stat-label">Awaiting Approval</div>
       </div>
     </div>
     <div class="stat-card">
       <div class="stat-icon si-green"><i class="bi bi-check-circle"></i></div>
       <div class="stat-info">
-        <div class="stat-value">{{ $payments->where('status', 'approved')->count() }}</div>
+        <div id="stat-approved-count" class="stat-value">{{ $payments->where('status', 'approved')->count() }}</div>
         <div class="stat-label">Approved</div>
       </div>
     </div>
@@ -308,7 +308,7 @@
               }
             }
           @endphp
-          <tr data-search="{{ strtolower($p->name.' '.($p->op_number??'').' '.($p->transaction_type??'')) }}"
+            <tr data-id="{{ $p->id }}" data-search="{{ strtolower($p->name.' '.($p->op_number??'').' '.($p->transaction_type??'')) }}"
               data-status="{{ $status }}" data-fund="{{ $p->fund_type??'' }}"
               onclick="openDrawer({{ $p->id }})">
             <td><span class="row-id">{{ $p->id }}</span></td>
@@ -761,6 +761,65 @@
     if (!s) return '';
     return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
+</script>
+
+<script>
+  // Poll server for payment status updates and refresh table badges and counts
+  (function pollPayments(){
+    async function refresh(){
+      try{
+        const res = await fetch('{{ route('payments.json') }}', {cache:'no-store'});
+        if (!res.ok) return;
+        const list = await res.json();
+        const byId = {};
+        list.forEach(p => byId[p.id] = p);
+
+        // update rows
+        document.querySelectorAll('#table-body tr[data-id]').forEach(tr => {
+          const id = tr.getAttribute('data-id');
+          const d = byId[id];
+          if (!d) return;
+          // update status badge
+          const sb = tr.querySelector('.status-badge');
+          if (sb) {
+            let cls = 'sb-default';
+            let icon = 'bi-circle';
+            const st = (d.status||'waiting').toLowerCase();
+            if (st === 'approved') { cls = 'sb-approved'; icon = 'bi-check-circle-fill'; }
+            else if (st === 'rejected') { cls = 'sb-rejected'; icon = 'bi-x-circle-fill'; }
+            else if (st === 'waiting') { cls = 'sb-waiting'; icon = 'bi-hourglass-split'; }
+            sb.className = 'status-badge ' + cls;
+            sb.innerHTML = '<i class="bi '+icon+'"></i> ' + (st.charAt(0).toUpperCase()+st.slice(1));
+          }
+        });
+
+        // update summary counts
+        const total = list.length;
+        const sum = list.reduce((s,it)=> s + (parseFloat(it.amountRaw||it.amount||0)||0), 0);
+        const awaiting = list.filter(it=> (it.status||'waiting') === 'waiting').length;
+        const approved = list.filter(it=> (it.status||'waiting') === 'approved').length;
+
+        const elTotal = document.getElementById('stat-total-count');
+        if (elTotal) elTotal.textContent = total;
+        const elAmount = document.getElementById('stat-total-amount');
+        if (elAmount) elAmount.textContent = '₱' + sum.toFixed(2);
+        const elAwait = document.getElementById('stat-awaiting-count');
+        if (elAwait) elAwait.textContent = awaiting;
+        const elApp = document.getElementById('stat-approved-count');
+        if (elApp) elApp.textContent = approved;
+
+        const rc = document.getElementById('record-count');
+        if (rc) rc.textContent = total + ' record' + (total !== 1 ? 's' : '');
+
+        const footer = document.getElementById('footer-info');
+        if (footer) footer.innerHTML = 'Showing <strong>'+ document.querySelectorAll('#table-body tr[data-id]:not([style*="display: none"])').length +'</strong>' + (total? ' of <strong>'+total+'</strong>':'') + ' records';
+      }catch(e){ /* ignore */ }
+    }
+    // initial
+    refresh();
+    // poll every 8 seconds
+    setInterval(refresh, 8000);
+  })();
 </script>
 
 </body>

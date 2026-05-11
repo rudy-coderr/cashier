@@ -333,9 +333,12 @@
   </div>
   <div class="header-sep"></div>
   <div class="header-page">New Transaction</div>
-  <a href="#" class="header-back">
-    <i class="bi bi-arrow-left"></i> Back
-  </a>
+  <form method="POST" action="{{ route('logout') }}" class="header-back">
+    @csrf
+    <button type="submit" style="background:none;border:none;color:inherit;font-size:inherit;cursor:pointer;padding:0;display:flex;align-items:center;gap:6px;">
+      <i class="bi bi-box-arrow-right"></i> Logout
+    </button>
+  </form>
 </header>
 
 <div class="outer-wrapper">
