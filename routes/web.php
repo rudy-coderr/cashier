@@ -7,6 +7,8 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AccountantController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ReviewerController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 Route::get('/', function () {
 	return view('landingpage.landingpage');
@@ -17,6 +19,52 @@ Route::post('/login', [LoginController::class, 'login'])->name('login.attempt');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+// Simple profile route used by admin views
+Route::get('/profile', function () {
+	return view('admin.profile');
+})->name('profile');
+
+// Update profile (basic fields)
+Route::patch('/profile', function (Request $request) {
+	$user = $request->user();
+	$data = $request->validate([
+		'first_name' => 'sometimes|string|max:191',
+		'middle_name' => 'sometimes|string|max:191|nullable',
+		'last_name' => 'sometimes|string|max:191',
+		'email' => 'required|email|max:191|unique:users,email,'.$user->id,
+		'phone_number' => 'sometimes|string|nullable',
+		'address' => 'sometimes|string|nullable',
+	]);
+
+	$user->first_name = $request->input('first_name', $user->first_name);
+	$user->middle_name = $request->input('middle_name', $user->middle_name);
+	$user->last_name = $request->input('last_name', $user->last_name);
+	$user->email = $request->input('email', $user->email);
+	$user->phone_number = $request->input('phone_number', $user->phone_number);
+	$user->address = $request->input('address', $user->address);
+	$user->save();
+
+	return redirect()->route('profile')->with('success', 'Profile updated.');
+})->name('profile.update')->middleware('auth');
+
+// Change password
+Route::patch('/profile/password', function (Request $request) {
+	$user = $request->user();
+	$data = $request->validate([
+		'current_password' => 'required',
+		'password' => 'required|string|min:8|confirmed',
+	]);
+
+	if (!Hash::check($request->input('current_password'), $user->password)) {
+		return redirect()->route('profile')->with('error', 'Current password is incorrect.');
+	}
+
+	$user->password = Hash::make($request->input('password'));
+	$user->save();
+
+	return redirect()->route('profile')->with('success', 'Password updated.');
+})->name('profile.password')->middleware('auth');
 
 // Handle payment form submissions from the dashboard
 Route::post('/dashboard', [DashboardController::class, 'store'])->name('dashboard.store')->middleware(\App\Http\Middleware\LogUserActivity::class);

@@ -772,6 +772,10 @@
           <div class="nav-icon"><i class="bi bi-people-fill"></i></div>
           <span class="nav-label">Users</span>
         </a>
+        <a class="nav-item" href="{{ route('profile') }}">
+          <div class="nav-icon"><i class="bi bi-person-circle"></i></div>
+          <span class="nav-label">My Profile</span>
+        </a>
 
         <div class="nav-section-label" style="margin-top:16px;">Monitoring</div>
         <a class="nav-item active" href="{{ route('admin.auditlogs') }}">

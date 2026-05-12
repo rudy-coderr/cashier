@@ -729,6 +729,10 @@
           <div class="nav-icon"><i class="bi bi-people-fill"></i></div>
           <span class="nav-label">Users</span>
         </a>
+        <a class="nav-item" href="{{ route('profile') }}">
+          <div class="nav-icon"><i class="bi bi-person-circle"></i></div>
+          <span class="nav-label">My Profile</span>
+        </a>
 
         <div class="nav-section-label" style="margin-top:16px;">Monitoring</div>
         <a class="nav-item" href="{{ route('admin.auditlogs') }}">
@@ -739,6 +743,8 @@
           <div class="nav-icon"><i class="bi bi-receipt"></i></div>
           <span class="nav-label">Transaction History</span>
         </a>
+
+        <div class="nav-section-label" style="margin-top:16px;">Account</div>
 
       </div>
 
@@ -827,7 +833,7 @@
             </div>
           </div>
           <div class="dash-card-body">
-              <table class="data-table">
+            <table class="data-table">
               <thead>
                 <tr>
                   <th>OP #</th>
