@@ -24,10 +24,15 @@ class AdminController extends Controller
 		$totalTransactions = Payment::count();
 		$pendingApprovals = Payment::where('status', 'pending')->count();
 		$totalCollected = Payment::where('status', 'approved')->sum('amount');
-		$recentPayments = Payment::orderBy('created_at', 'desc')->limit(6)->get();
+		// show most-recently updated payments so approvals/rejections surface immediately
+		$recentPayments = Payment::orderBy('updated_at', 'desc')->limit(6)->get();
 		$recentUsers = User::orderBy('created_at', 'desc')->limit(6)->get();
-		$approvedCount = Payment::whereDate('created_at', today())->where('status','approved')->count();
-		$rejectedCount = Payment::whereDate('created_at', today())->where('status','rejected')->count();
+		// Count approvals/rejections by updated_at so actions performed today are counted
+		$approvedCount = Payment::whereDate('updated_at', today())->where('status','approved')->count();
+		// consider both standard 'rejected' and 'accountant_rejected' statuses
+		$rejectedCount = Payment::whereDate('updated_at', today())
+			->whereIn('status', ['rejected', 'accountant_rejected'])
+			->count();
 		$activeUsers = User::where('status','active')->count();
 		// audit_logs table may not exist on all installs — check first
 		if (Schema::hasTable('audit_logs')) {

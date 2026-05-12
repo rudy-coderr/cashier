@@ -845,12 +845,18 @@
                     <td>{{ $p->name }}</td>
                     <td>₱{{ number_format($p->amount, 2) }}</td>
                     <td>{{ $p->fund_type }}</td>
+                    @php
+                      $rawStatus = $p->status ?? '';
+                      $statusSlug = strtolower($rawStatus);
+                      if ($statusSlug === 'accountant_rejected') $statusSlug = 'rejected';
+                      $statusLabel = $statusSlug === 'rejected' ? 'Rejected' : ucwords(str_replace('_', ' ', $rawStatus));
+                    @endphp
                     <td>
-                      <span class="badge-status badge-{{ strtolower($p->status) }}">
-                        {{ ucfirst($p->status) }}
+                      <span class="badge-status badge-{{ $statusSlug }}">
+                        {{ $statusLabel }}
                       </span>
                     </td>
-                    <td>{{ $p->created_at->diffForHumans() }}</td>
+                    <td>{{ optional($p->updated_at)->diffForHumans() }}</td>
                   </tr>
                 @empty
                   <tr class="empty-row">
