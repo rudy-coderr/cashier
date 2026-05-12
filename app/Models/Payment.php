@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\OpNumberHistory;
 
 class Payment extends Model
 {
@@ -48,6 +49,15 @@ class Payment extends Model
                 }
 
                 $payment->op_number = sprintf('%s-%s-%s-%04d', $prefix, $year, $month, $seq);
+            }
+        });
+        // After a payment is created, persist the OP number into history for the fund type
+        static::created(function ($payment) {
+            if (!empty($payment->op_number)) {
+                OpNumberHistory::updateOrCreate(
+                    ['payment_id' => $payment->id, 'fund_type' => $payment->fund_type],
+                    ['op_number' => $payment->op_number]
+                );
             }
         });
     }
