@@ -36,6 +36,18 @@ class DashboardController extends Controller
         $payments = Payment::orderBy('created_at', 'desc')->take(200)->get();
 
         $data = $payments->map(function ($p) {
+            // Normalize various internal statuses into the UI buckets used by the modal
+            // Modal expects one of: 'approved', 'waiting', 'rejected'
+            $raw = $p->status ?? 'waiting';
+            if (in_array($raw, ['approved'])) {
+                $status = 'approved';
+            } elseif (in_array($raw, ['rejected', 'accountant_rejected'])) {
+                $status = 'rejected';
+            } else {
+                // submitted, under_review, forwarded, etc. => waiting
+                $status = 'waiting';
+            }
+
             return [
                 'id' => $p->id,
                 'name' => $p->name,
@@ -46,7 +58,7 @@ class DashboardController extends Controller
                 'transaction_type' => $p->transaction_type,
                 'fund_type' => $p->fund_type,
                 'op_number' => $p->op_number,
-                'status' => $p->status ?? 'waiting',
+                'status' => $status,
                 'created_at' => $p->created_at ? $p->created_at->toDateTimeString() : null,
             ];
         });
