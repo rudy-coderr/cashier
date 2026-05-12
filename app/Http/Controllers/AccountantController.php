@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Payment;
+use App\Models\AuditLog;
+use Illuminate\Support\Facades\Auth;
 
 class AccountantController extends Controller
 {
@@ -28,6 +30,16 @@ class AccountantController extends Controller
         $p->status = 'approved';
         $p->save();
 
+        // Log approval with clear description
+        try {
+            AuditLog::create([
+                'user_id' => Auth::id(),
+                'action' => 'approve',
+                'description' => 'Approved payment #' . $p->id,
+                'ip_address' => request()->ip(),
+            ]);
+        } catch (\Throwable $e) { /* ignore */ }
+
         return redirect()->route('accountant.approval')->with('success', 'Payment approved.');
     }
 
@@ -45,6 +57,15 @@ class AccountantController extends Controller
         if ($remarks) $meta['accountant_remarks'] = $remarks;
         $p->meta = $meta;
         $p->save();
+
+        try {
+            AuditLog::create([
+                'user_id' => Auth::id(),
+                'action' => 'reject',
+                'description' => 'Rejected payment #' . $p->id . (isset($remarks) ? (': ' . substr($remarks,0,200)) : ''),
+                'ip_address' => request()->ip(),
+            ]);
+        } catch (\Throwable $e) { /* ignore */ }
 
         return redirect()->route('accountant.approval')->with('success', 'Payment rejected and returned to Reviewer.');
     }

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use App\Models\Payment;
+use App\Models\AuditLog;
 
 class LoginController extends Controller
 {
@@ -48,6 +49,16 @@ class LoginController extends Controller
 
             $user = Auth::user();
 
+            // Log successful login
+            try {
+                AuditLog::create([
+                    'user_id' => $user->id,
+                    'action' => 'login',
+                    'description' => 'User logged in',
+                    'ip_address' => $request->ip(),
+                ]);
+            } catch (\Throwable $e) { /* silent */ }
+
             // Resolve role name from relation if present, fall back to `position` column.
             $roleName = null;
             if (! empty($user->role_id)) {
@@ -67,7 +78,7 @@ class LoginController extends Controller
             }
 
             if ($role === 'admin' || $position === 'admin') {
-                return redirect()->intended(route('admin'));
+                return redirect()->intended(route('admin.dashboard'));
             }
 
             if ($role === 'reviewer' || $position === 'reviewer') {
@@ -100,6 +111,20 @@ class LoginController extends Controller
      */
     public function logout(Request $request)
     {
+        $user = Auth::user();
+        try {
+            if ($user) {
+                AuditLog::create([
+                    'user_id' => $user->id,
+                    'action' => 'logout',
+                    'description' => 'User logged out',
+                    'ip_address' => $request->ip(),
+                ]);
+            }
+        } catch (\Throwable $e) {
+            // ignore
+        }
+
         Auth::logout();
 
         $request->session()->invalidate();

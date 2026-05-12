@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Payment;
+use App\Models\AuditLog;
+use Illuminate\Support\Facades\Auth;
 
 class ReviewerController extends Controller
 {
@@ -30,6 +32,18 @@ class ReviewerController extends Controller
         unset($meta['accountant_remarks']);
         $payment->meta = $meta;
         $payment->save();
+
+        // Log the forward action with a clear description
+        try {
+            AuditLog::create([
+                'user_id' => Auth::id(),
+                'action' => 'forward',
+                'description' => 'Forwarded payment #' . $payment->id . ' to Accountant',
+                'ip_address' => $request->ip(),
+            ]);
+        } catch (\Throwable $e) {
+            // ignore logging errors
+        }
         return redirect()->route('reviewer')->with('success', 'Payment forwarded.');
     }
 	/**
