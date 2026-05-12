@@ -19,30 +19,30 @@ class ReviewerController extends Controller
 	/**
 	 * Approve a payment.
 	 */
-	public function approve($id)
-	{
-		$payment = Payment::findOrFail($id);
-		$payment->status = 'approved';
-		$payment->save();
-		return redirect()->route('reviewer')->with('success', 'Payment approved.');
-	}
-
-	/**
-	 * Reject a payment.
-	 */
-	public function reject($id)
-	{
-		$payment = Payment::findOrFail($id);
-		$payment->status = 'rejected';
-		$payment->save();
-		return redirect()->route('reviewer')->with('success', 'Payment rejected.');
-	}
+    // Reviewer no longer performs final approve/reject.
+    // Reviewer forwards to accountant for final decision.
+    public function forward(Request $request, $id)
+    {
+        $payment = Payment::findOrFail($id);
+        $payment->status = 'forwarded';
+        // clear any previous accountant remarks when forwarding again
+        $meta = $payment->meta ?? [];
+        unset($meta['accountant_remarks']);
+        $payment->meta = $meta;
+        $payment->save();
+        return redirect()->route('reviewer')->with('success', 'Payment forwarded.');
+    }
 	/**
  * Update a payment record (Reviewer modify).
  */
 public function update(Request $request, $id)
 {
     $payment = Payment::findOrFail($id);
+
+    // Prevent modifying payments that have been approved by Accountant
+    if (($payment->status ?? '') === 'approved') {
+        return redirect()->route('reviewer')->with('error', 'Approved payments cannot be modified.');
+    }
 
     $oldFund = $payment->fund_type;
     $newFund = $request->input('fund_type');
@@ -55,7 +55,8 @@ public function update(Request $request, $id)
     $payment->transaction_type = $request->input('transaction_type');
     $payment->fund_type        = $newFund;
     $payment->payment_mode     = $request->input('payment_mode');
-    $payment->status           = $request->input('status');
+    // When reviewer updates a record, mark it as under review
+    $payment->status           = 'under_review';
 
     // Regenerate OP number if fund type changed or OP number was manually cleared
     if ($oldFund !== $newFund || empty($request->input('op_number'))) {

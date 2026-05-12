@@ -499,6 +499,11 @@
   function printOrderOfPayment() {
     const d = __active;
     if (!d) return;
+    const st = (d.rawStatus || d.status || '').toLowerCase();
+    if (st !== 'approved') {
+      alert('Only approved transactions can generate an Order of Payment.');
+      return;
+    }
 
     /* ── Abbreviation expansion map ── */
     const abbrevMap = {
@@ -786,18 +791,19 @@
             let icon = 'bi-circle';
             const st = (d.status||'waiting').toLowerCase();
             if (st === 'approved') { cls = 'sb-approved'; icon = 'bi-check-circle-fill'; }
-            else if (st === 'rejected') { cls = 'sb-rejected'; icon = 'bi-x-circle-fill'; }
-            else if (st === 'waiting') { cls = 'sb-waiting'; icon = 'bi-hourglass-split'; }
+            else if (st === 'accountant_rejected' || st === 'rejected') { cls = 'sb-rejected'; icon = 'bi-x-circle-fill'; }
+            else if (['waiting','submitted','under_review','forwarded'].includes(st)) { cls = 'sb-waiting'; icon = 'bi-hourglass-split'; }
             sb.className = 'status-badge ' + cls;
-            sb.innerHTML = '<i class="bi '+icon+'"></i> ' + (st.charAt(0).toUpperCase()+st.slice(1));
+            const pretty = (s) => String(s||'').replace(/_/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
+            sb.innerHTML = '<i class="bi '+icon+'"></i> ' + pretty(st);
           }
         });
 
         // update summary counts
         const total = list.length;
         const sum = list.reduce((s,it)=> s + (parseFloat(it.amountRaw||it.amount||0)||0), 0);
-        const awaiting = list.filter(it=> (it.status||'waiting') === 'waiting').length;
-        const approved = list.filter(it=> (it.status||'waiting') === 'approved').length;
+        const awaiting = list.filter(it=> ['waiting','submitted','under_review','forwarded'].includes((it.status||'waiting')) ).length;
+        const approved = list.filter(it=> (it.status||'') === 'approved').length;
 
         const elTotal = document.getElementById('stat-total-count');
         if (elTotal) elTotal.textContent = total;

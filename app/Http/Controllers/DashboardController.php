@@ -82,7 +82,8 @@ class DashboardController extends Controller
             'email' => $data['email'],
             'payment_mode' => $request->input('payment_mode'),
             'meta' => $meta,
-            'status' => 'waiting',
+            // New workflow: newly created transactions are marked as 'submitted'
+            'status' => 'submitted',
         ]);
 
         // If the form was submitted from the dashboard page, return there.

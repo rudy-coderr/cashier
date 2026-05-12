@@ -219,9 +219,12 @@
   {{-- ── STAT CARDS ── --}}
   @php
     $total    = $payments->total() ?? count($payments);
-    $waiting  = $payments->where('status', 'waiting')->count();
-    $approved = $payments->where('status', 'approved')->count();
-    $rejected = $payments->where('status', 'rejected')->count();
+    // Awaiting approval for accountant are those forwarded or previously rejected by accountant
+    $waiting  = $payments->whereIn('status', ['forwarded', 'accountant_rejected'])->count();
+    $approved = 
+        // approved counts across all payments table (use model query to be accurate)
+        \App\Models\Payment::where('status', 'approved')->count();
+    $rejected = \App\Models\Payment::where('status', 'accountant_rejected')->count();
   @endphp
 
   <div class="stat-row">
@@ -291,7 +294,6 @@
     <table class="approvals-table" id="approvals-table">
       <thead>
         <tr>
-          <th>#</th>
           <th>Payor</th>
           <th>Amount</th>
           <th>Fund</th>
@@ -304,12 +306,20 @@
       <tbody id="table-body">
         @forelse($payments as $p)
           @php
-            $status    = $p->status ?? 'waiting';
-            $statusMap = ['approved' => 'sb-approved', 'waiting' => 'sb-waiting', 'rejected' => 'sb-rejected'];
+            $status    = $p->status ?? 'submitted';
+            // map various workflow statuses to badge classes
+            $statusMap = [
+              'approved' => 'sb-approved',
+              'forwarded' => 'sb-waiting',
+              'under_review' => 'sb-waiting',
+              'submitted' => 'sb-waiting',
+              'accountant_rejected' => 'sb-rejected',
+              'rejected' => 'sb-rejected',
+            ];
             $statusCls = $statusMap[$status] ?? 'sb-waiting';
             $statusIcon = match($status) {
               'approved' => 'bi-check-circle-fill',
-              'rejected' => 'bi-x-circle-fill',
+              'accountant_rejected', 'rejected' => 'bi-x-circle-fill',
               default    => 'bi-hourglass-split',
             };
             $nameParts = explode(' ', trim($p->name));
@@ -321,8 +331,6 @@
             data-status="{{ $status }}"
             data-fund="{{ $p->fund_type ?? '' }}"
           >
-            <td><span class="row-id">{{ $p->id }}</span></td>
-
             <td>
               <div class="payor-cell">
                 <div class="payor-avatar">{{ $initials }}</div>
@@ -346,7 +354,7 @@
 
             <td>
               <span class="status-badge {{ $statusCls }}">
-                <i class="bi {{ $statusIcon }}"></i> {{ ucfirst($status) }}
+                <i class="bi {{ $statusIcon }}"></i> {{ ucwords(str_replace('_',' ',$status)) }}
               </span>
             </td>
 
@@ -365,13 +373,19 @@
                   </form>
                 @endif
 
-                @if($status !== 'rejected')
+                @if($status !== 'accountant_rejected')
                   <form
                     method="POST"
                     action="{{ route('accountant.reject', $p->id) }}"
-                    onsubmit="return confirm('Reject payment from {{ addslashes($p->name) }} (₱{{ number_format($p->amount, 2) }})?')"
+                    onsubmit="
+                      var r = prompt('Enter rejection remarks (optional):');
+                      if (r === null) return false;
+                      this.querySelector('input[name=remarks]').value = r;
+                      return confirm('Reject payment from {{ addslashes($p->name) }} (₱{{ number_format($p->amount, 2) }})?');
+                    "
                   >
                     @csrf
+                    <input type="hidden" name="remarks" value="" />
                     <button type="submit" class="btn-reject">
                       <i class="bi bi-x-lg"></i> Reject
                     </button>
@@ -383,7 +397,7 @@
 
         @empty
           <tr class="empty-row">
-            <td colspan="8">
+            <td colspan="7">
               <div class="empty-icon"><i class="bi bi-inbox"></i></div>
               <div class="empty-text">No payment records found.</div>
             </td>

@@ -12,7 +12,10 @@ class AccountantController extends Controller
      */
     public function approval()
     {
-        $payments = Payment::orderBy('created_at', 'desc')->paginate(25);
+        // Show only transactions forwarded to accountant or previously rejected by accountant
+        $payments = Payment::whereIn('status', ['forwarded', 'accountant_rejected'])
+            ->orderBy('created_at', 'desc')
+            ->paginate(25);
         return view('accountant.accountant', compact('payments'));
     }
 
@@ -34,9 +37,15 @@ class AccountantController extends Controller
     public function reject($id)
     {
         $p = Payment::findOrFail($id);
-        $p->status = 'rejected';
+        // Mark as accountant_rejected and allow reviewer to edit/resend
+        $p->status = 'accountant_rejected';
+        // capture optional remarks
+        $remarks = request()->input('remarks');
+        $meta = $p->meta ?? [];
+        if ($remarks) $meta['accountant_remarks'] = $remarks;
+        $p->meta = $meta;
         $p->save();
 
-        return redirect()->route('accountant.approval')->with('success', 'Payment rejected.');
+        return redirect()->route('accountant.approval')->with('success', 'Payment rejected and returned to Reviewer.');
     }
 }

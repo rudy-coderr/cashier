@@ -110,14 +110,14 @@
 
     /* Column width distribution — 9 columns totaling 100% */
     .payments-table col.col-id     { width: 4%; }
-    .payments-table col.col-payor  { width: 16%; }
-    .payments-table col.col-amount { width: 9%; }
-    .payments-table col.col-txn    { width: 17%; }
-    .payments-table col.col-fund   { width: 6%; }
-    .payments-table col.col-op     { width: 11%; }
-    .payments-table col.col-date   { width: 9%; }
-    .payments-table col.col-status { width: 8%; }
-    .payments-table col.col-act    { width: 20%; }
+.payments-table col.col-payor  { width: 15%; }
+.payments-table col.col-amount { width: 8%; }
+.payments-table col.col-txn    { width: 15%; }
+.payments-table col.col-fund   { width: 6%; }
+.payments-table col.col-op     { width: 11%; }
+.payments-table col.col-date   { width: 9%; }
+.payments-table col.col-status { width: 12%; }
+.payments-table col.col-act    { width: 20%; }
 
     .payments-table tbody tr { border-bottom: 1px solid var(--border); transition: background .13s; cursor: pointer; }
     .payments-table tbody tr:last-child { border-bottom: none; }
@@ -329,7 +329,7 @@
     <div class="stat-card">
       <div class="stat-icon si-amber"><i class="bi bi-hourglass-split"></i></div>
       <div class="stat-info">
-        <div id="stat-awaiting-count" class="stat-value">{{ $payments->where('status', 'waiting')->count() }}</div>
+        <div id="stat-awaiting-count" class="stat-value">{{ $payments->whereIn('status', ['submitted','under_review','accountant_rejected','waiting'])->count() }}</div>
         <div class="stat-label">Awaiting Review</div>
       </div>
     </div>
@@ -373,7 +373,6 @@
 
     <table class="payments-table" id="payments-table">
       <colgroup>
-        <col class="col-id">
         <col class="col-payor">
         <col class="col-amount">
         <col class="col-txn">
@@ -385,7 +384,6 @@
       </colgroup>
       <thead>
         <tr>
-          <th>#</th>
           <th>Payor</th>
           <th>Amount</th>
           <th>Transaction Type</th>
@@ -448,8 +446,6 @@
               data-fund="{{ $p->fund_type ?? '' }}"
               onclick="openDrawer({{ $p->id }})">
 
-            <td><span class="row-id">{{ $p->id }}</span></td>
-
             <td>
               <div class="payor-cell">
                 <div class="payor-avatar">{{ $initials }}</div>
@@ -488,45 +484,44 @@
                   <i class="bi bi-eye"></i>
                 </a>
 
-                {{-- Approve --}}
-                @if($status !== 'approved')
-                  <form method="POST" action="{{ route('payments.approve', $p->id) }}"
-                        onsubmit="return confirm('Approve payment from {{ addslashes($p->name) }} (₱{{ number_format($p->amount,2) }})?')">
+                {{-- Forward to Accountant (Reviewer action) --}}
+                @if($status !== 'forwarded' && $status !== 'approved')
+                  <form method="POST" action="{{ route('payments.forward', $p->id) }}"
+                        onsubmit="return confirm('Forward payment from {{ addslashes($p->name) }} (₱{{ number_format($p->amount,2) }}) to Accountant?')">
                     @csrf
                     <button type="submit" class="btn-row-approve">
-                      <i class="bi bi-check-lg"></i> Approve
+                      <i class="bi bi-arrow-right-circle"></i> Forward
                     </button>
                   </form>
-                @endif
-
-                {{-- Reject --}}
-                @if($status !== 'rejected')
-                  <form method="POST" action="{{ route('payments.reject', $p->id) }}"
-                        onsubmit="return confirm('Reject payment from {{ addslashes($p->name) }} (₱{{ number_format($p->amount,2) }})?')">
-                    @csrf
-                    <button type="submit" class="btn-row-reject">
-                      <i class="bi bi-x-lg"></i> Reject
-                    </button>
-                  </form>
+                @else
+                  <button type="button" class="btn-row-approve" disabled style="opacity:.6;cursor:not-allowed;">
+                    <i class="bi bi-arrow-right-circle"></i> Forward
+                  </button>
                 @endif
 
                 {{-- Modify --}}
-                <button type="button" class="btn-row-modify"
-                  onclick="openModifyModal({
-                    id:               {{ $p->id }},
-                    name:             '{{ addslashes($p->name) }}',
-                    email:            '{{ addslashes($p->email ?? '') }}',
-                    contact:          '{{ addslashes($p->contact ?? '') }}',
-                    address:          '{{ addslashes($p->address ?? '') }}',
-                    amount:           '{{ $p->amount }}',
-                    transaction_type: '{{ addslashes($rawTxn) }}',
-                    fund_type:        '{{ addslashes($p->fund_type ?? '') }}',
-                    op_number:        '{{ addslashes($p->op_number ?? '') }}',
-                    payment_mode:     '{{ addslashes($p->payment_mode ?? '') }}',
-                    status:           '{{ $status }}'
-                  })">
-                  <i class="bi bi-pencil"></i> Modify
-                </button>
+                @if($status === 'forwarded' || $status === 'approved')
+                  <button type="button" class="btn-row-modify" disabled style="opacity:.6;cursor:not-allowed;">
+                    <i class="bi bi-pencil"></i> Modify
+                  </button>
+                @else
+                  <button type="button" class="btn-row-modify"
+                    onclick="openModifyModal({
+                      id:               {{ $p->id }},
+                      name:             '{{ addslashes($p->name) }}',
+                      email:            '{{ addslashes($p->email ?? '') }}',
+                      contact:          '{{ addslashes($p->contact ?? '') }}',
+                      address:          '{{ addslashes($p->address ?? '') }}',
+                      amount:           '{{ $p->amount }}',
+                      transaction_type: '{{ addslashes($rawTxn) }}',
+                      fund_type:        '{{ addslashes($p->fund_type ?? '') }}',
+                      op_number:        '{{ addslashes($p->op_number ?? '') }}',
+                      payment_mode:     '{{ addslashes($p->payment_mode ?? '') }}',
+                      status:           '{{ $status }}'
+                    })">
+                    <i class="bi bi-pencil"></i> Modify
+                  </button>
+                @endif
 
               </div>
             </td>
@@ -558,8 +553,7 @@
               meta:       @json($p->meta ?? []),
               dateShort:  @json($p->created_at->format('m/d/Y')),
               details:    @json($details),
-              approveUrl: @json(route('payments.approve', $p->id)),
-              rejectUrl:  @json(route('payments.reject', $p->id)),
+              forwardUrl: @json(route('payments.forward', $p->id)),
               modifyData: {
                 id:               {{ $p->id }},
                 name:             @json($p->name),
@@ -579,7 +573,7 @@
 
         @empty
           <tr class="empty-row">
-            <td colspan="9">
+            <td colspan="8">
               <div class="empty-icon"><i class="bi bi-inbox"></i></div>
               <div class="empty-text">No payment records found.</div>
             </td>
@@ -1075,19 +1069,12 @@
     h += `<div class="status-badge ${d.statusCls}" style="margin-bottom:16px;font-size:.75rem;padding:6px 14px;"><i class="bi ${d.statusIcon}"></i> ${d.status}</div>`;
 
     h += `<div class="drawer-actions">`;
-    if (d.rawStatus !== 'approved') {
-      h += `<form method="POST" action="${d.approveUrl}" onsubmit="return confirm('Approve payment from ${esc(d.name)} (${esc(d.amount)})?')" style="flex:1;">
+    // Reviewer: provide forward action to Accountant and modify
+    if (!['forwarded_to_accountant','approved'].includes(d.rawStatus)) {
+      h += `<form method="POST" action="${d.forwardUrl}" onsubmit="return confirm('Forward payment from ${esc(d.name)} (${esc(d.amount)}) to Accountant?')" style="flex:1;">
         <input type="hidden" name="_token" value="{{ csrf_token() }}">
         <button type="submit" class="drawer-action-approve" style="width:100%;">
-          <i class="bi bi-check-circle-fill"></i> Approve
-        </button>
-      </form>`;
-    }
-    if (d.rawStatus !== 'rejected') {
-      h += `<form method="POST" action="${d.rejectUrl}" onsubmit="return confirm('Reject payment from ${esc(d.name)} (${esc(d.amount)})?')" style="flex:1;">
-        <input type="hidden" name="_token" value="{{ csrf_token() }}">
-        <button type="submit" class="drawer-action-reject" style="width:100%;">
-          <i class="bi bi-x-circle-fill"></i> Reject
+          <i class="bi bi-arrow-right-circle"></i> Forward to Accountant
         </button>
       </form>`;
     }
@@ -1287,6 +1274,12 @@
   function printOrderOfPayment() {
     const d = __active;
     if (!d) return;
+    // Only approved transactions can print OP
+    const st = (d.rawStatus || d.status || '').toLowerCase();
+    if (st !== 'approved') {
+      alert('Only approved transactions can generate an Order of Payment.');
+      return;
+    }
     const abbrevMap = {
       'txn':'Transaction','exec':'Execution','asmt':'Assessment','amt':'Amount',
       'no':'Number','num':'Number','ref':'Reference','dept':'Department',
@@ -1440,17 +1433,17 @@
           if (sb) {
             let cls = 'sb-default', icon = 'bi-circle';
             const st = (d.status||'waiting').toLowerCase();
-            if (st === 'approved') { cls = 'sb-approved'; icon = 'bi-check-circle-fill'; }
-            else if (st === 'rejected') { cls = 'sb-rejected'; icon = 'bi-x-circle-fill'; }
-            else if (st === 'waiting') { cls = 'sb-waiting'; icon = 'bi-hourglass-split'; }
+                  if (st === 'approved') { cls = 'sb-approved'; icon = 'bi-check-circle-fill'; }
+                  else if (st === 'accountant_rejected' || st === 'rejected') { cls = 'sb-rejected'; icon = 'bi-x-circle-fill'; }
+                  else if (['waiting','submitted','under_review','forwarded_to_accountant'].includes(st)) { cls = 'sb-waiting'; icon = 'bi-hourglass-split'; }
             sb.className = 'status-badge ' + cls;
             sb.innerHTML = '<i class="bi '+icon+'"></i> ' + (st.charAt(0).toUpperCase()+st.slice(1));
           }
         });
         const total = list.length;
         const sum = list.reduce((s,it)=> s + (parseFloat(it.amount||0)||0), 0);
-        const awaiting = list.filter(it=> (it.status||'waiting') === 'waiting').length;
-        const approved = list.filter(it=> (it.status||'waiting') === 'approved').length;
+        const awaiting = list.filter(it=> ['submitted','under_review','accountant_rejected','waiting'].includes((it.status||'waiting')) ).length;
+        const approved = list.filter(it=> (it.status||'') === 'approved').length;
         const elTotal = document.getElementById('stat-total-count');  if (elTotal) elTotal.textContent = total;
         const elAmt   = document.getElementById('stat-total-amount'); if (elAmt)   elAmt.textContent = '₱' + sum.toLocaleString('en-PH',{minimumFractionDigits:2,maximumFractionDigits:2});
         const elAwait = document.getElementById('stat-awaiting-count'); if (elAwait) elAwait.textContent = awaiting;
