@@ -85,6 +85,12 @@ class DashboardController extends Controller
             'status' => 'waiting',
         ]);
 
+        // If the form was submitted from the dashboard page, return there.
+        $routeName = $request->route() ? $request->route()->getName() : null;
+        if ($routeName === 'dashboard.store') {
+            return redirect()->route('dashboard')->with('success', 'Payment saved.');
+        }
+
         return redirect()->route('payments.index')->with('success', 'Payment saved.');
     }
 }

@@ -52,7 +52,7 @@ class Payment extends Model
         });
     }
 
-    protected static function mapPrefix(?string $fundCode): string
+    public static function mapPrefix(?string $fundCode): string
     {
         $map = [
             'F01' => 'F01',

@@ -555,6 +555,7 @@
               statusCls:  @json($statusCls),
               statusIcon: @json($statusIcon),
               date:       @json($p->created_at->format('F d, Y — h:i A')),
+              meta:       @json($p->meta ?? []),
               dateShort:  @json($p->created_at->format('m/d/Y')),
               details:    @json($details),
               approveUrl: @json(route('payments.approve', $p->id)),
@@ -571,6 +572,7 @@
                 op_number:        @json($p->op_number ?? ''),
                 payment_mode:     @json($p->payment_mode ?? 'cash'),
                 status:           @json($status),
+                meta:             @json($p->meta ?? []),  
               }
             };
           </script>
@@ -622,7 +624,7 @@
 
 <!-- ── MODIFY MODAL ── -->
 <div class="modal-overlay" id="modify-modal" onclick="handleModifyOverlayClick(event)">
-  <div class="modal-box">
+  <div class="modal-box" style="max-width:700px;">
     <div class="modal-header">
       <div class="modal-title">
         <i class="bi bi-pencil-square"></i> Modify Payment Record
@@ -643,6 +645,7 @@
           You are modifying this record as a <strong>Reviewer</strong>. All field changes are permitted. Use the Remarks field to document the reason for any modification.
         </div>
 
+        {{-- ── COMMON FIELDS ── --}}
         <div class="modal-grid">
 
           <div class="modal-field full">
@@ -672,12 +675,13 @@
 
           <div class="modal-field">
             <label for="mod-op">O.P. Number</label>
-            <input type="text" id="mod-op" name="op_number" placeholder="e.g. OP-2024-001" />
+            <input type="text" id="mod-op" name="op_number" readonly
+  style="background:#f0f0eb;color:var(--muted);cursor:not-allowed;" />
           </div>
 
           <div class="modal-field">
             <label for="mod-txn">Transaction Type</label>
-            <select id="mod-txn" name="transaction_type">
+            <select id="mod-txn" name="transaction_type" onchange="onModifyTxnChange(this.value)">
               <option value="">— Select Type —</option>
               <option value="appeal_fee">Appeal Fee</option>
               <option value="bidding_documents">Bidding Documents</option>
@@ -698,7 +702,7 @@
 
           <div class="modal-field">
             <label for="mod-fund">Fund Type</label>
-            <select id="mod-fund" name="fund_type">
+            <select id="mod-fund" name="fund_type" onchange="updateModOpNumber()">
               <option value="">— Select Fund —</option>
               <option value="F01">Fund 01 — Regular</option>
               <option value="F03">Fund 03 — ARF</option>
@@ -727,18 +731,306 @@
             </select>
           </div>
 
+        </div>{{-- /modal-grid --}}
+
+        {{-- ── TRANSACTION-TYPE EXTRA FIELDS ── --}}
+
+        {{-- 1. Appeal Fee --}}
+        <div class="mod-extra" id="mod-extra-appeal_fee" style="display:none;">
+          <hr style="border:none;border-top:1px solid var(--border);margin:18px 0 14px;">
+          <div style="font-size:.65rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--green-accent);margin-bottom:12px;">Appeal Fee Details</div>
+          <div class="modal-field full">
+            <label>Remarks / Comments</label>
+            <textarea name="appeal_remarks" id="mod-appeal_remarks" placeholder="Enter any relevant remarks…"></textarea>
+          </div>
+        </div>
+
+        {{-- 2. Bidding Documents --}}
+        <div class="mod-extra" id="mod-extra-bidding_documents" style="display:none;">
+          <hr style="border:none;border-top:1px solid var(--border);margin:18px 0 14px;">
+          <div style="font-size:.65rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--green-accent);margin-bottom:12px;">Bidding Document Details</div>
+          <div class="modal-grid">
+            <div class="modal-field full">
+              <label>Details of the Availed Bid</label>
+              <input type="text" name="bid_details" id="mod-bid_details" placeholder="e.g. Bid title, project name" />
+            </div>
+            <div class="modal-field full">
+              <label>Remarks / Comments</label>
+              <textarea name="bid_remarks" id="mod-bid_remarks" placeholder="Enter any relevant remarks…"></textarea>
+            </div>
+          </div>
+        </div>
+
+        {{-- 3. Cash Bond --}}
+        <div class="mod-extra" id="mod-extra-cash_bond" style="display:none;">
+          <hr style="border:none;border-top:1px solid var(--border);margin:18px 0 14px;">
+          <div style="font-size:.65rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--green-accent);margin-bottom:12px;">Cash Bond Details</div>
+          <div class="modal-grid">
+            <div class="modal-field">
+              <label>Total Area (hectares)</label>
+              <input type="number" step="0.0001" min="0" name="area_hectares" id="mod-area_hectares" placeholder="e.g. 2.5000" />
+            </div>
+            <div class="modal-field">
+              <label>Zonal Value (₱)</label>
+              <input type="number" step="0.01" min="0" name="zonal_value" id="mod-zonal_value" placeholder="0.00" />
+            </div>
+            <div class="modal-field full">
+              <label>Location of Property / Landholding</label>
+              <input type="text" name="property_location" id="mod-property_location" placeholder="Barangay, Municipality, Province" />
+            </div>
+            <div class="modal-field full">
+              <label>Assessment Form</label>
+              <input type="text" name="assessment_form" id="mod-assessment_form" placeholder="Assessment form reference" />
+            </div>
+            <div class="modal-field full">
+              <label>Remarks / Comments</label>
+              <textarea name="cash_bond_remarks" id="mod-cash_bond_remarks" placeholder="Enter any relevant remarks…"></textarea>
+            </div>
+          </div>
+        </div>
+
+        {{-- 4. Certification, Copy Fee --}}
+        <div class="mod-extra" id="mod-extra-certification_copy_fee" style="display:none;">
+          <hr style="border:none;border-top:1px solid var(--border);margin:18px 0 14px;">
+          <div style="font-size:.65rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--green-accent);margin-bottom:12px;">Certification / Copy Fee Details</div>
+          <div class="modal-grid">
+            <div class="modal-field full">
+              <label>Letter Request</label>
+              <input type="text" name="letter_request" id="mod-letter_request" placeholder="Reference to the letter request" />
+            </div>
+            <div class="modal-field full">
+              <label>Type of Transaction Paid</label>
+              <div style="display:flex;flex-direction:column;gap:7px;">
+                <label style="display:flex;align-items:center;gap:8px;font-size:.85rem;font-weight:400;text-transform:none;letter-spacing:0;color:var(--text-mid);">
+                  <input type="checkbox" name="cert_type[]" id="mod-cert_certification" value="certification"> Certification
+                </label>
+                <label style="display:flex;align-items:center;gap:8px;font-size:.85rem;font-weight:400;text-transform:none;letter-spacing:0;color:var(--text-mid);">
+                  <input type="checkbox" name="cert_type[]" id="mod-cert_copy_fee" value="copy_fee"> Copy Fee
+                </label>
+                <label style="display:flex;align-items:center;gap:8px;font-size:.85rem;font-weight:400;text-transform:none;letter-spacing:0;color:var(--text-mid);">
+                  <input type="checkbox" name="cert_type[]" id="mod-cert_reproduction_cost" value="reproduction_cost"> Reproduction Cost
+                </label>
+              </div>
+            </div>
+            <div class="modal-field full">
+              <label>Remarks / Comments</label>
+              <textarea name="cert_remarks" id="mod-cert_remarks" placeholder="Enter any relevant remarks…"></textarea>
+            </div>
+          </div>
+        </div>
+
+        {{-- 5. Consignment --}}
+        <div class="mod-extra" id="mod-extra-consignment" style="display:none;">
+          <hr style="border:none;border-top:1px solid var(--border);margin:18px 0 14px;">
+          <div style="font-size:.65rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--green-accent);margin-bottom:12px;">Consignment Details</div>
+          <div class="modal-grid">
+            <div class="modal-field">
+              <label>Assessment Form No.</label>
+              <input type="text" name="consignment_assessment_form" id="mod-consignment_assessment_form" placeholder="Assessment form number" />
+            </div>
+            <div class="modal-field">
+              <label>Case No.</label>
+              <input type="text" name="consignment_case_no" id="mod-consignment_case_no" placeholder="e.g. DARAB Case No. 001-2025" />
+            </div>
+            <div class="modal-field full">
+              <label>Remarks / Comments</label>
+              <textarea name="consignment_remarks" id="mod-consignment_remarks" placeholder="Enter any relevant remarks…"></textarea>
+            </div>
+          </div>
+        </div>
+
+        {{-- 6. Execution of Judgment --}}
+        <div class="mod-extra" id="mod-extra-execution_judgment" style="display:none;">
+          <hr style="border:none;border-top:1px solid var(--border);margin:18px 0 14px;">
+          <div style="font-size:.65rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--green-accent);margin-bottom:12px;">Execution of Judgment Details</div>
+          <div class="modal-grid">
+            <div class="modal-field">
+              <label>Assessment Form No.</label>
+              <input type="text" name="exec_assessment_form" id="mod-exec_assessment_form" placeholder="Assessment form number" />
+            </div>
+            <div class="modal-field">
+              <label>Type of Transaction Paid</label>
+              <input type="text" name="exec_txn_type_paid" id="mod-exec_txn_type_paid" placeholder="Brief description" />
+            </div>
+            <div class="modal-field full">
+              <label>Remarks / Comments</label>
+              <textarea name="exec_remarks" id="mod-exec_remarks" placeholder="Enter any relevant remarks…"></textarea>
+            </div>
+          </div>
+        </div>
+
+        {{-- 7. Filing Fee --}}
+        <div class="mod-extra" id="mod-extra-filing_fee" style="display:none;">
+          <hr style="border:none;border-top:1px solid var(--border);margin:18px 0 14px;">
+          <div style="font-size:.65rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--green-accent);margin-bottom:12px;">Filing Fee / Inspection Details</div>
+          <div class="modal-grid">
+            <div class="modal-field full">
+              <label>Assessment Form</label>
+              <input type="text" name="filing_assessment_form" id="mod-filing_assessment_form" placeholder="Assessment form reference" />
+            </div>
+            <div class="modal-field full">
+              <label>Remarks / Comments</label>
+              <textarea name="filing_remarks" id="mod-filing_remarks" placeholder="Enter any relevant remarks…"></textarea>
+            </div>
+          </div>
+        </div>
+
+        {{-- 8. Income Unserviceable --}}
+        <div class="mod-extra" id="mod-extra-income_unserviceable" style="display:none;">
+          <hr style="border:none;border-top:1px solid var(--border);margin:18px 0 14px;">
+          <div style="font-size:.65rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--green-accent);margin-bottom:12px;">Unserviceable Property Details</div>
+          <div class="modal-grid">
+            <div class="modal-field full">
+              <label>RDC Resolution No.</label>
+              <input type="text" name="rdc_resolution_no" id="mod-rdc_resolution_no" placeholder="e.g. RDC-2025-001" />
+            </div>
+            <div class="modal-field full">
+              <label>Remarks / Comments</label>
+              <textarea name="unserviceable_remarks" id="mod-unserviceable_remarks" placeholder="Enter any relevant remarks…"></textarea>
+            </div>
+          </div>
+        </div>
+
+        {{-- 9. Legal Research --}}
+        <div class="mod-extra" id="mod-extra-legal_research" style="display:none;">
+          <hr style="border:none;border-top:1px solid var(--border);margin:18px 0 14px;">
+          <div style="font-size:.65rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--green-accent);margin-bottom:12px;">Legal Research Details</div>
+          <div class="modal-field full">
+            <label>Remarks / Comments</label>
+            <textarea name="legal_research_remarks" id="mod-legal_research_remarks" placeholder="Enter any relevant remarks…"></textarea>
+          </div>
+        </div>
+
+        {{-- 10. Performance Bond --}}
+        <div class="mod-extra" id="mod-extra-performance_bond" style="display:none;">
+          <hr style="border:none;border-top:1px solid var(--border);margin:18px 0 14px;">
+          <div style="font-size:.65rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--green-accent);margin-bottom:12px;">Performance Bond Details</div>
+          <div class="modal-grid">
+            <div class="modal-field">
+              <label>Total Area (hectares)</label>
+              <input type="number" step="0.0001" min="0" name="pb_area_hectares" id="mod-pb_area_hectares" placeholder="e.g. 2.5000" />
+            </div>
+            <div class="modal-field">
+              <label>Zonal Value (₱)</label>
+              <input type="number" step="0.01" min="0" name="pb_zonal_value" id="mod-pb_zonal_value" placeholder="0.00" />
+            </div>
+            <div class="modal-field full">
+              <label>Location of Property / Landholding</label>
+              <input type="text" name="pb_property_location" id="mod-pb_property_location" placeholder="Barangay, Municipality, Province" />
+            </div>
+            <div class="modal-field full">
+              <label>Assessment Form</label>
+              <input type="text" name="pb_assessment_form" id="mod-pb_assessment_form" placeholder="Assessment form reference" />
+            </div>
+            <div class="modal-field full">
+              <label>Remarks / Comments</label>
+              <textarea name="pb_remarks" id="mod-pb_remarks" placeholder="Enter any relevant remarks…"></textarea>
+            </div>
+          </div>
+        </div>
+
+        {{-- 11. Refund of Cash Advances --}}
+        <div class="mod-extra" id="mod-extra-refund_cash_advances" style="display:none;">
+          <hr style="border:none;border-top:1px solid var(--border);margin:18px 0 14px;">
+          <div style="font-size:.65rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--green-accent);margin-bottom:12px;">Refund of Cash Advances Details</div>
+          <div class="modal-grid">
+            <div class="modal-field">
+              <label>Check / LDDAP-ADA Number</label>
+              <input type="text" name="check_lddap_ada" id="mod-check_lddap_ada" placeholder="Check or LDDAP-ADA number" />
+            </div>
+            <div class="modal-field">
+              <label>Date Cash Advance was Granted</label>
+              <input type="date" name="cash_advance_date" id="mod-cash_advance_date" />
+            </div>
+            <div class="modal-field full">
+              <label>Division / Section of Payor</label>
+              <input type="text" name="division_section" id="mod-division_section" placeholder="e.g. Finance Division" />
+            </div>
+            <div class="modal-field full">
+              <label>Remarks / Comments</label>
+              <textarea name="cash_advance_remarks" id="mod-cash_advance_remarks" placeholder="Enter any relevant remarks…"></textarea>
+            </div>
+          </div>
+        </div>
+
+        {{-- 12. Refund of Overpayment --}}
+        <div class="mod-extra" id="mod-extra-refund_overpayment" style="display:none;">
+          <hr style="border:none;border-top:1px solid var(--border);margin:18px 0 14px;">
+          <div style="font-size:.65rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--green-accent);margin-bottom:12px;">Refund of Overpayment Details</div>
+          <div class="modal-grid">
+            <div class="modal-field full">
+              <label>Division / Section of Payor</label>
+              <input type="text" name="refund_division_section" id="mod-refund_division_section" placeholder="e.g. Finance Division" />
+            </div>
+            <div class="modal-field full">
+              <label>Remarks / Comments</label>
+              <textarea name="refund_op_remarks" id="mod-refund_op_remarks" placeholder="Enter any relevant remarks…"></textarea>
+            </div>
+          </div>
+        </div>
+
+        {{-- 13. Settlement of Disallowances --}}
+        <div class="mod-extra" id="mod-extra-settlement_disallowances" style="display:none;">
+          <hr style="border:none;border-top:1px solid var(--border);margin:18px 0 14px;">
+          <div style="font-size:.65rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--green-accent);margin-bottom:12px;">Notice of Disallowance Details</div>
+          <div class="modal-grid">
+            <div class="modal-field full">
+              <label>Notice of Disallowances No.</label>
+              <input type="text" name="disallowance_no" id="mod-disallowance_no" placeholder="e.g. ND-2025-001" />
+            </div>
+            <div class="modal-field full">
+              <label>Remarks / Comments</label>
+              <textarea name="disallowance_remarks" id="mod-disallowance_remarks" placeholder="Enter any relevant remarks…"></textarea>
+            </div>
+          </div>
+        </div>
+
+        {{-- 14. Unwithheld Remittances --}}
+        <div class="mod-extra" id="mod-extra-unwithheld_remittances" style="display:none;">
+          <hr style="border:none;border-top:1px solid var(--border);margin:18px 0 14px;">
+          <div style="font-size:.65rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--green-accent);margin-bottom:12px;">Unwithheld Remittances Details</div>
+          <div class="modal-grid">
+            <div class="modal-field full">
+              <label>Type of Remittance</label>
+              <div style="display:flex;flex-direction:column;gap:7px;">
+                <label style="display:flex;align-items:center;gap:8px;font-size:.85rem;font-weight:400;text-transform:none;letter-spacing:0;color:var(--text-mid);">
+                  <input type="checkbox" name="remit_type[]" id="mod-remit_gsis" value="GSIS"> GSIS
+                </label>
+                <label style="display:flex;align-items:center;gap:8px;font-size:.85rem;font-weight:400;text-transform:none;letter-spacing:0;color:var(--text-mid);">
+                  <input type="checkbox" name="remit_type[]" id="mod-remit_phic" value="PHIC"> PHIC — Philhealth
+                </label>
+                <label style="display:flex;align-items:center;gap:8px;font-size:.85rem;font-weight:400;text-transform:none;letter-spacing:0;color:var(--text-mid);">
+                  <input type="checkbox" name="remit_type[]" id="mod-remit_hdmf" value="HDMF"> HDMF — Pag-IBIG
+                </label>
+                <label style="display:flex;align-items:center;gap:8px;font-size:.85rem;font-weight:400;text-transform:none;letter-spacing:0;color:var(--text-mid);">
+                  <input type="checkbox" name="remit_type[]" id="mod-remit_other" value="Other" onchange="document.getElementById('mod-remit-other-wrap').style.display=this.checked?'block':'none'"> Other Payables
+                </label>
+                <div id="mod-remit-other-wrap" style="display:none;margin-top:4px;">
+                  <input type="text" name="remit_other_specify" id="mod-remit_other_specify" placeholder="Please specify other payable…" />
+                </div>
+              </div>
+            </div>
+            <div class="modal-field full">
+              <label>Remarks / Comments</label>
+              <textarea name="remit_remarks" id="mod-remit_remarks" placeholder="Enter any relevant remarks…"></textarea>
+            </div>
+          </div>
+        </div>
+
+        {{-- ── REVIEWER REMARKS (always shown at bottom) ── --}}
+        <div style="margin-top:18px;">
           <div class="modal-field full">
             <label style="display:flex;align-items:center;gap:6px;">
               Reviewer Remarks
               <span class="remark-label-tag"><i class="bi bi-shield-check"></i> Reviewer Only</span>
             </label>
             <div class="field-remark-wrap">
-              <textarea id="mod-remarks" name="reviewer_remarks" placeholder="Optional: document your reason for this modification (e.g. corrected O.P. number, updated amount per OR)…"></textarea>
+              <textarea id="mod-remarks" name="reviewer_remarks" placeholder="Document your reason for this modification…"></textarea>
             </div>
           </div>
-
         </div>
-      </div>
+
+      </div>{{-- /modal-body --}}
 
       <div class="modal-footer">
         <button type="button" class="btn-modal-cancel" onclick="closeModifyModal()">Cancel</button>
@@ -834,19 +1126,111 @@
   }
 
   /* ── Modify Modal ── */
+  const MOD_META_FIELDS = {
+    appeal_fee:               ['appeal_remarks'],
+    bidding_documents:        ['bid_details','bid_remarks'],
+    cash_bond:                ['area_hectares','zonal_value','property_location','assessment_form','cash_bond_remarks'],
+    certification_copy_fee:   ['letter_request','cert_remarks'],
+    consignment:              ['consignment_assessment_form','consignment_case_no','consignment_remarks'],
+    execution_judgment:       ['exec_assessment_form','exec_txn_type_paid','exec_remarks'],
+    filing_fee:               ['filing_assessment_form','filing_remarks'],
+    income_unserviceable:     ['rdc_resolution_no','unserviceable_remarks'],
+    legal_research:           ['legal_research_remarks'],
+    performance_bond:         ['pb_area_hectares','pb_zonal_value','pb_property_location','pb_assessment_form','pb_remarks'],
+    refund_cash_advances:     ['check_lddap_ada','cash_advance_date','division_section','cash_advance_remarks'],
+    refund_overpayment:       ['refund_division_section','refund_op_remarks'],
+    settlement_disallowances: ['disallowance_no','disallowance_remarks'],
+    unwithheld_remittances:   ['remit_other_specify','remit_remarks'],
+  };
+
+  let __currentModifyId = null;
+
+  const FUND_PREFIX_MAP = {
+    'F01':     'F01',
+    'F03':     'F03-ARF',
+    'F07':     'F07-TRUST',
+    'F02-LP':  'F02-LP',
+    'F02-GOP': 'F02-GOP',
+  };
+
+  function onModifyTxnChange(val) {
+    document.querySelectorAll('.mod-extra').forEach(el => el.style.display = 'none');
+    const target = document.getElementById('mod-extra-' + val);
+    if (target) target.style.display = 'block';
+  }
+
+  function updateModOpNumber() {
+    const fundVal = document.getElementById('mod-fund').value;
+    if (!fundVal) return;
+
+    fetch(`/payments/next-op?fund=${encodeURIComponent(fundVal)}&exclude=${__currentModifyId || ''}`)
+      .then(r => r.ok ? r.json() : Promise.reject())
+      .then(data => {
+        document.getElementById('mod-op').value = data.op_number;
+      })
+      .catch(() => {
+        const prefix = FUND_PREFIX_MAP[fundVal] || fundVal;
+        const now    = new Date();
+        const year   = now.getFullYear();
+        const month  = String(now.getMonth() + 1).padStart(2, '0');
+        document.getElementById('mod-op').value = `${prefix}-${year}-${month}-????`;
+      });
+  }
+
   function openModifyModal(data) {
-    document.getElementById('modify-form').action = '{{ url("payments") }}/' + data.id;
-    document.getElementById('mod-name').value    = data.name            || '';
-    document.getElementById('mod-email').value   = data.email           || '';
-    document.getElementById('mod-contact').value = data.contact         || '';
-    document.getElementById('mod-address').value = data.address         || '';
-    document.getElementById('mod-amount').value  = data.amount          || '';
-    document.getElementById('mod-op').value      = data.op_number       || '';
-    document.getElementById('mod-txn').value     = data.transaction_type|| '';
-    document.getElementById('mod-fund').value    = data.fund_type       || '';
-    document.getElementById('mod-mode').value    = data.payment_mode    || 'cash';
-    document.getElementById('mod-status').value  = data.status          || 'waiting';
+    // Set form action using a relative path to avoid host/domain mismatches
+    document.getElementById('modify-form').action = '/payments/' + encodeURIComponent(data.id);
+    __currentModifyId = data.id;
+    
+
+    // Common fields
+    document.getElementById('mod-name').value    = data.name             || '';
+    document.getElementById('mod-email').value   = data.email            || '';
+    document.getElementById('mod-contact').value = data.contact          || '';
+    document.getElementById('mod-address').value = data.address          || '';
+    document.getElementById('mod-amount').value  = data.amount           || '';
+    document.getElementById('mod-op').value      = data.op_number        || '';
+    document.getElementById('mod-txn').value     = data.transaction_type || '';
+    document.getElementById('mod-fund').value    = data.fund_type        || '';
+    document.getElementById('mod-mode').value    = data.payment_mode     || 'cash';
+    document.getElementById('mod-status').value  = data.status           || 'waiting';
     document.getElementById('mod-remarks').value = '';
+
+    // Show the correct extra section, hide all others
+    onModifyTxnChange(data.transaction_type || '');
+
+    // Populate meta fields
+    const meta   = data.meta || {};
+    const txn    = data.transaction_type || '';
+    const fields = MOD_META_FIELDS[txn] || [];
+
+    fields.forEach(key => {
+      const el = document.getElementById('mod-' + key);
+      if (el) el.value = (meta[key] !== undefined && meta[key] !== null) ? meta[key] : '';
+    });
+
+    // cert_type checkboxes
+    if (txn === 'certification_copy_fee') {
+      const saved = Array.isArray(meta.cert_type) ? meta.cert_type : [];
+      ['certification', 'copy_fee', 'reproduction_cost'].forEach(v => {
+        const cb = document.getElementById('mod-cert_' + v);
+        if (cb) cb.checked = saved.includes(v);
+      });
+    }
+
+    // remit_type checkboxes
+    if (txn === 'unwithheld_remittances') {
+      const saved = Array.isArray(meta.remit_type) ? meta.remit_type : [];
+      ['GSIS','PHIC','HDMF','Other'].forEach(v => {
+        const cb = document.getElementById('mod-remit_' + v.toLowerCase());
+        if (cb) cb.checked = saved.includes(v);
+      });
+      const otherWrap = document.getElementById('mod-remit-other-wrap');
+      if (otherWrap) otherWrap.style.display = saved.includes('Other') ? 'block' : 'none';
+      const otherSpec = document.getElementById('mod-remit_other_specify');
+      if (otherSpec) otherSpec.value = meta.remit_other_specify || '';
+    }
+
     document.getElementById('modify-modal').classList.add('open');
     document.body.style.overflow = 'hidden';
   }

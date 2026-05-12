@@ -40,9 +40,10 @@ Route::get('/admin', [AdminController::class, 'index'])->name('admin');
 
 // Reviewer route
 Route::get('/reviewer', [ReviewerController::class, 'index'])->name('reviewer');
-
+Route::put('/payments/{id}', [ReviewerController::class, 'update'])->name('payments.update');
 // Reviewer actions for payments (approve / reject)
 Route::post('/payments/{id}/approve', [ReviewerController::class, 'approve'])->name('payments.approve');
 Route::post('/payments/{id}/reject', [ReviewerController::class, 'reject'])->name('payments.reject');
+Route::get('/payments/next-op', [ReviewerController::class, 'nextOpNumber'])->name('payments.next-op');
 
 
