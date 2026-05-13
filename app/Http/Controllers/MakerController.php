@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Payment;
 
-class DashboardController extends Controller
+class MakerController extends Controller
 {
     /**
      * Show the dashboard view.
@@ -36,15 +36,12 @@ class DashboardController extends Controller
         $payments = Payment::orderBy('created_at', 'desc')->take(200)->get();
 
         $data = $payments->map(function ($p) {
-            // Normalize various internal statuses into the UI buckets used by the modal
-            // Modal expects one of: 'approved', 'waiting', 'rejected'
             $raw = $p->status ?? 'waiting';
             if (in_array($raw, ['approved'])) {
                 $status = 'approved';
             } elseif (in_array($raw, ['rejected', 'accountant_rejected'])) {
                 $status = 'rejected';
             } else {
-                // submitted, under_review, forwarded, etc. => waiting
                 $status = 'waiting';
             }
 
@@ -81,7 +78,6 @@ class DashboardController extends Controller
             'agree_terms' => 'accepted',
         ]);
 
-        // persist to payments table
         $meta = $request->except(['_token', 'transaction_type', 'fund_type', 'amount', 'name', 'contact', 'address', 'email', 'payment_mode', 'agree_terms']);
 
         Payment::create([
@@ -94,11 +90,9 @@ class DashboardController extends Controller
             'email' => $data['email'],
             'payment_mode' => $request->input('payment_mode'),
             'meta' => $meta,
-            // New workflow: newly created transactions are marked as 'submitted'
             'status' => 'submitted',
         ]);
 
-        // If the form was submitted from the dashboard page, return there.
         $routeName = $request->route() ? $request->route()->getName() : null;
         if ($routeName === 'dashboard.store') {
             return redirect()->route('dashboard')->with('success', 'Payment saved.');

@@ -9,6 +9,10 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use App\Models\Payment;
 use App\Models\AuditLog;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\OneTimePassword;
+use Illuminate\Support\Facades\Log;
 
 class LoginController extends Controller
 {
@@ -44,48 +48,30 @@ class LoginController extends Controller
         }
 
         if (Auth::attempt($credentials, $request->filled('remember'))) {
-            $request->session()->regenerate();
-            RateLimiter::clear($throttleKey);
-
+            // Credentials correct — create OTP, email it, and ask user to verify.
             $user = Auth::user();
 
-            // Log successful login
+            // generate 6-digit numeric OTP
+            $otp = str_pad((string) random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+
+            // store OTP in cache keyed by user id for 5 minutes
+            Cache::put('login_otp_'.$user->id, $otp, now()->addMinutes(5));
+
+            // store pending user id and remember flag in session
+            session(['pending_login_user' => $user->id, 'pending_login_remember' => $request->filled('remember')]);
+
             try {
-                AuditLog::create([
-                    'user_id' => $user->id,
-                    'action' => 'login',
-                    'description' => 'User logged in',
-                    'ip_address' => $request->ip(),
-                ]);
-            } catch (\Throwable $e) { /* silent */ }
-
-            // Resolve role name from relation if present, fall back to `position` column.
-            $roleName = null;
-            if (! empty($user->role_id)) {
-                $roleName = DB::table('roles')->where('id', $user->role_id)->value('name');
+                Log::info('Attempting to send OTP email', ['email' => $user->email, 'user_id' => $user->id]);
+                Mail::to($user->email)->send(new OneTimePassword($otp, $user));
+                Log::info('OTP email sent', ['email' => $user->email, 'user_id' => $user->id]);
+            } catch (\Throwable $e) {
+                Log::error('Failed to send OTP email: '.$e->getMessage(), ['user_id' => $user->id]);
             }
 
-            $role = strtolower($roleName ?? '');
-            $position = strtolower($user->position ?? '');
+            // logout temporary authentication so full login waits for OTP
+            Auth::logout();
 
-            // Redirect based on role or position.
-            if ($role === 'accountant' || $position === 'accountant') {
-                return redirect()->intended(route('accountant.approval'));
-            }
-
-            if ($role === 'maker' || $position === 'maker') {
-                return redirect()->intended(route('dashboard'));
-            }
-
-            if ($role === 'admin' || $position === 'admin') {
-                return redirect()->intended(route('admin.dashboard'));
-            }
-
-            if ($role === 'reviewer' || $position === 'reviewer') {
-                return redirect()->intended(route('reviewer'));
-            }
-
-            return redirect()->intended(route('dashboard'));
+            return redirect()->route('auth.otp.show');
         }
 
         // increment attempts
@@ -131,5 +117,76 @@ class LoginController extends Controller
         $request->session()->regenerateToken();
 
         return redirect('/login')->with('success', 'You have been logged out.');
+    }
+
+
+    /**
+     * Show OTP verification form.
+     */
+    public function showOtpForm()
+    {
+        return view('auth.otp');
+    }
+
+    /**
+     * Verify submitted OTP and finalize login.
+     */
+    public function verifyOtp(Request $request)
+    {
+        $data = $request->validate([
+            'otp' => 'required|string|size:6',
+        ]);
+
+        $userId = session('pending_login_user');
+        $remember = session('pending_login_remember', false);
+
+        if (! $userId) {
+            return redirect()->route('login')->with('error', 'No pending login found.');
+        }
+
+        $cached = Cache::get('login_otp_'.$userId);
+        if (! $cached || $cached !== $data['otp']) {
+            return back()->withErrors(['otp' => 'Invalid or expired code.'])->withInput();
+        }
+
+        // OTP valid — remove it and authenticate the user
+        Cache::forget('login_otp_'.$userId);
+        session()->forget(['pending_login_user','pending_login_remember']);
+
+        Auth::loginUsingId($userId, $remember);
+
+        // Log successful login
+        try {
+            $user = Auth::user();
+            AuditLog::create([
+                'user_id' => $user->id,
+                'action' => 'login',
+                'description' => 'User logged in (OTP)',
+                'ip_address' => $request->ip(),
+            ]);
+        } catch (\Throwable $e) { /* silent */ }
+
+        // redirect based on role/position (reuse same logic as login)
+        $roleName = null;
+        if (! empty(Auth::user()->role_id)) {
+            $roleName = DB::table('roles')->where('id', Auth::user()->role_id)->value('name');
+        }
+        $role = strtolower($roleName ?? '');
+        $position = strtolower(Auth::user()->position ?? '');
+
+        if ($role === 'accountant' || $position === 'accountant') {
+            return redirect()->intended(route('accountant.approval'));
+        }
+        if ($role === 'maker' || $position === 'maker') {
+            return redirect()->intended(route('dashboard'));
+        }
+        if ($role === 'admin' || $position === 'admin') {
+            return redirect()->intended(route('admin.dashboard'));
+        }
+        if ($role === 'reviewer' || $position === 'reviewer') {
+            return redirect()->intended(route('reviewer'));
+        }
+
+        return redirect()->intended(route('dashboard'));
     }
 }

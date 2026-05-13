@@ -11,6 +11,10 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
 use App\Models\AuditLog;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\NewUserCredentials;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class AdminController extends Controller
 {
@@ -194,7 +198,8 @@ class AdminController extends Controller
 		$user->last_name = $request->input('last_name', '');
 		$user->username = $request->input('username');
 		$user->email = $request->input('email');
-		$user->password = Hash::make($request->input('password', Str::random(12)));
+		$plainPassword = $request->filled('password') ? $request->input('password') : $this->generatePassword(8);
+		$user->password = Hash::make($plainPassword);
 		$user->phone_number = $request->input('phone_number');
 		$user->address = $request->input('address');
 		$user->position = $request->input('position');
@@ -208,7 +213,46 @@ class AdminController extends Controller
 		$user->status = $request->input('status', 'active');
 		$user->save();
 
+		// send credentials email (best-effort, don't block user creation on failure)
+		try {
+			if ($user->email) {
+				Log::info('Attempting to send new user credentials email', ['email' => $user->email, 'user_id' => $user->id]);
+				Mail::to($user->email)->send(new NewUserCredentials($user, $plainPassword));
+				Log::info('Sent new user credentials email', ['email' => $user->email, 'user_id' => $user->id]);
+			}
+		} catch (\Exception $e) {
+			Log::error('Failed to send new user credentials email: ' . $e->getMessage());
+		}
+
 		return redirect()->route('admin.users')->with('success', 'User created.');
+	}
+
+	/**
+	 * Generate a secure password containing at least one uppercase,
+	 * one lowercase, one digit and one special character.
+	 * Allowed special characters: ! @ # $ % ^ & *
+	 */
+	private function generatePassword(int $length = 8): string
+	{
+		$upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+		$lower = 'abcdefghijklmnopqrstuvwxyz';
+		$digits = '0123456789';
+		$special = '!@#$%^&*';
+		$all = $upper . $lower . $digits . $special;
+
+		$password = [];
+		$password[] = $upper[random_int(0, strlen($upper) - 1)];
+		$password[] = $lower[random_int(0, strlen($lower) - 1)];
+		$password[] = $digits[random_int(0, strlen($digits) - 1)];
+		$password[] = $special[random_int(0, strlen($special) - 1)];
+
+		for ($i = 4; $i < $length; $i++) {
+			$password[] = $all[random_int(0, strlen($all) - 1)];
+		}
+
+		shuffle($password);
+
+		return implode('', $password);
 	}
 
 	/**
@@ -247,6 +291,74 @@ class AdminController extends Controller
 		}
 		$user->role = isset($user->role_id) && $user->role_id ? DB::table('roles')->where('id', $user->role_id)->value('name') : ($user->position ?? null);
 		return view('admin.user_show', compact('user'));
+	}
+
+	/**
+	 * Show simple profile view.
+	 */
+	public function profile(Request $request)
+	{
+		return view('admin.profile');
+	}
+
+	/**
+	 * Update basic profile fields for the current user.
+	 */
+	public function updateProfile(Request $request)
+	{
+		$user = $request->user();
+		$data = $request->validate([
+			'first_name' => 'sometimes|string|max:191',
+			'middle_name' => 'sometimes|string|max:191|nullable',
+			'last_name' => 'sometimes|string|max:191',
+			'username' => 'sometimes|string|max:191|nullable|unique:users,username,'.$user->id,
+			'email' => 'required|email|max:191|unique:users,email,'.$user->id,
+			'phone_number' => 'sometimes|string|nullable',
+			'address' => 'sometimes|string|nullable',
+			'profile_picture' => 'sometimes|image|mimes:jpg,jpeg,png,gif,webp|max:2048',
+		]);
+
+		$user->first_name = $request->input('first_name', $user->first_name);
+		$user->middle_name = $request->input('middle_name', $user->middle_name);
+		$user->last_name = $request->input('last_name', $user->last_name);
+		$user->email = $request->input('email', $user->email);
+		$user->username = $request->input('username', $user->username);
+		$user->phone_number = $request->input('phone_number', $user->phone_number);
+		$user->address = $request->input('address', $user->address);
+
+		if ($request->hasFile('profile_picture')) {
+			$file = $request->file('profile_picture');
+			$path = $file->store('avatars', 'public');
+			if (!empty($user->profile_picture) && Storage::disk('public')->exists($user->profile_picture)) {
+				Storage::disk('public')->delete($user->profile_picture);
+			}
+			$user->profile_picture = $path;
+		}
+ 
+		$user->save();
+
+		return redirect()->route('profile')->with('success', 'Profile updated.');
+	}
+
+	/**
+	 * Change current user's password.
+	 */
+	public function updatePassword(Request $request)
+	{
+		$user = $request->user();
+		$data = $request->validate([
+			'current_password' => 'required',
+			'password' => 'required|string|min:8|confirmed',
+		]);
+
+		if (!Hash::check($request->input('current_password'), $user->password)) {
+			return redirect()->route('profile')->with('error', 'Current password is incorrect.');
+		}
+
+		$user->password = Hash::make($request->input('password'));
+		$user->save();
+
+		return redirect()->route('profile')->with('success', 'Password updated.');
 	}
 
 	/**

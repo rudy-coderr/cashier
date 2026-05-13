@@ -577,27 +577,12 @@
         {{-- SECTION 3: Security --}}
         <div class="section-block">
           <div class="section-label"><i class="bi bi-shield-lock-fill"></i> Security</div>
-          <div class="field-grid">
-            <div class="form-field">
-              <label>Password <span class="req">*</span></label>
-              <div class="pw-wrap">
-                <input type="password" name="password" id="add-pw" placeholder="Min. 8 characters" required />
-                <button type="button" class="pw-toggle" onclick="togglePw('add-pw', this)" tabindex="-1">
-                  <i class="bi bi-eye"></i>
-                </button>
-              </div>
-            </div>
-            <div class="form-field">
-              <label>Confirm Password <span class="req">*</span></label>
-              <div class="pw-wrap">
-                <input type="password" name="password_confirmation" id="add-pw-confirm" placeholder="Re-enter password" required />
-                <button type="button" class="pw-toggle" onclick="togglePw('add-pw-confirm', this)" tabindex="-1">
-                  <i class="bi bi-eye"></i>
-                </button>
-              </div>
-            </div>
+          <div style="padding:10px 4px;">
+            <p style="font-size:.9rem;color:var(--muted);margin:0;">
+              <i class="bi bi-info-circle" style="margin-right:6px;"></i>
+              A secure password will be auto-generated and emailed to the user. They can change it after first login.
+            </p>
           </div>
-          <p style="font-size:.72rem;color:var(--muted);margin-top:8px;"><i class="bi bi-info-circle" style="margin-right:4px;"></i>Password must be at least 8 characters long.</p>
         </div>
 
       </div>{{-- /modal-body --}}
