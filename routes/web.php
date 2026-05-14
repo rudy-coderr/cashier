@@ -51,7 +51,12 @@ Route::post('/payments', [MakerController::class, 'store'])->name('payments.stor
 
 // Accountant routes (require authenticated accountant)
 Route::middleware(['auth', \App\Http\Middleware\RequireRole::class . ':accountant'])->group(function () {
+    Route::get('/accountant/approved', [AccountantController::class, 'approved'])->name('accountant.approved');
 	Route::get('/accountant/approval', [AccountantController::class, 'approval'])->name('accountant.approval');
+	// Accountant profile
+	Route::get('/accountant/profile', [AccountantController::class, 'profile'])->name('accountant.profile');
+	Route::patch('/accountant/profile', [AccountantController::class, 'updateProfile'])->name('accountant.profile.update');
+	Route::patch('/accountant/profile/password', [AccountantController::class, 'updatePassword'])->name('accountant.profile.password');
 	Route::post('/accountant/approval/{id}/approve', [AccountantController::class, 'approve'])->name('accountant.approve');
 	Route::post('/accountant/approval/{id}/reject', [AccountantController::class, 'reject'])->name('accountant.reject');
 });

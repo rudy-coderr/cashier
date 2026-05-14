@@ -163,6 +163,15 @@
     .table-footer-info strong { color: var(--text-mid); }
     .pagination-wrap { display: flex; align-items: center; gap: 4px; }
 
+    /* Pagination styles */
+    .pagination-wrap { display:flex; align-items:center; gap:8px; margin-left:auto; }
+    .page-link, .page-number { padding:6px 10px; border-radius:8px; text-decoration:none; font-weight:700; color:var(--green-accent); border:1px solid transparent; background:transparent; }
+    .page-link.disabled { opacity:0.5; pointer-events:none; color:var(--muted); }
+    .page-number { color:var(--text-dark); border:1px solid transparent; }
+    .page-number:hover { background:#f2faf5; border-color:var(--border); }
+    .page-number.active { background:var(--gold); color:var(--green-deep); border-color:var(--gold); }
+    
+
     /* DRAWER */
     .drawer-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 500; }
     .drawer-overlay.open { display: block; }
@@ -583,16 +592,31 @@
     </table>
 
     <div class="table-footer">
-      <span class="table-footer-info" id="footer-info">
-        Showing <strong>{{ count($payments) }}</strong>
-        @if(method_exists($payments, 'total') && $payments->total() > count($payments))
-          of <strong>{{ $payments->total() }}</strong>
+        @if(method_exists($payments, 'lastPage'))
+          <div class="pagination-wrap" aria-label="Pagination">
+            @if($payments->onFirstPage())
+              <span class="page-link disabled">« Previous</span>
+            @else
+              <a class="page-link" href="{{ $payments->previousPageUrl() }}">« Previous</a>
+            @endif
+
+            @for($i = 1; $i <= $payments->lastPage(); $i++)
+              @if($i == $payments->currentPage())
+                <span class="page-number active">{{ $i }}</span>
+              @else
+                <a class="page-number" href="{{ $payments->url($i) }}">{{ $i }}</a>
+              @endif
+            @endfor
+
+            @if($payments->hasMorePages())
+              <a class="page-link" href="{{ $payments->nextPageUrl() }}">Next »</a>
+            @else
+              <span class="page-link disabled">Next »</span>
+            @endif
+
+            
+          </div>
         @endif
-        records
-      </span>
-      @if(method_exists($payments,'links'))
-        <div class="pagination-wrap">{{ $payments->links() }}</div>
-      @endif
     </div>
   </div>
 

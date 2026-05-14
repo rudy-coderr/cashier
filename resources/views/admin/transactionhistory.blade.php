@@ -872,8 +872,7 @@
               <i class="bi bi-clock-history"></i> All Transactions
             </div>
             <div class="dash-card-meta">
-              Showing {{ $transactions->firstItem() ?? 0 }}–{{ $transactions->lastItem() ?? 0 }}
-              of {{ $transactions->total() ?? 0 }} records
+              Total {{ $transactions->total() ?? $transactions->count() ?? 0 }} records
             </div>
           </div>
 
@@ -924,36 +923,6 @@
               @endforelse
             </tbody>
           </table>
-
-          <!-- Pagination -->
-          <div class="pagination-row">
-            <div class="pagination-info">
-              Showing
-              <strong>{{ $transactions->firstItem() ?? 0 }}</strong>–<strong>{{ $transactions->lastItem() ?? 0 }}</strong>
-              of <strong>{{ $transactions->total() ?? 0 }}</strong> transactions
-            </div>
-            <div class="pagination-controls">
-              @if($transactions->onFirstPage())
-                <span class="page-btn disabled"><i class="bi bi-chevron-left"></i></span>
-              @else
-                <a class="page-btn" href="{{ $transactions->previousPageUrl() }}"><i class="bi bi-chevron-left"></i></a>
-              @endif
-
-              @foreach($transactions->getUrlRange(max(1, $transactions->currentPage()-2), min($transactions->lastPage(), $transactions->currentPage()+2)) as $page => $url)
-                @if($page == $transactions->currentPage())
-                  <span class="page-btn active">{{ $page }}</span>
-                @else
-                  <a class="page-btn" href="{{ $url }}">{{ $page }}</a>
-                @endif
-              @endforeach
-
-              @if($transactions->hasMorePages())
-                <a class="page-btn" href="{{ $transactions->nextPageUrl() }}"><i class="bi bi-chevron-right"></i></a>
-              @else
-                <span class="page-btn disabled"><i class="bi bi-chevron-right"></i></span>
-              @endif
-            </div>
-          </div>
 
         </div><!-- /.dash-card -->
 
