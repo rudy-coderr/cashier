@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\MakerController;
 use App\Http\Controllers\AccountantController;
 use App\Http\Controllers\AdminController;
@@ -17,6 +18,11 @@ Route::get('/', function () {
 
 Route::get('/login', [LoginController::class, 'index'])->name('login');
 Route::post('/login', [LoginController::class, 'login'])->name('login.attempt');
+// Password reset (forgot password) routes
+Route::get('/forgot-password', [PasswordResetController::class, 'showLinkRequestForm'])->name('password.request');
+Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLinkEmail'])->name('password.email');
+Route::get('/reset-password/{token}', [PasswordResetController::class, 'showResetForm'])->name('password.reset');
+Route::post('/reset-password', [PasswordResetController::class, 'reset'])->name('password.update');
 Route::get('/login/otp', [App\Http\Controllers\LoginController::class, 'showOtpForm'])->name('auth.otp.show');
 Route::post('/login/otp', [App\Http\Controllers\LoginController::class, 'verifyOtp'])->name('auth.otp.verify');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
