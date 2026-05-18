@@ -16,7 +16,8 @@ class ReviewerController extends Controller
     public function index()
     {
         $payments = Payment::orderBy('created_at', 'desc')->paginate(10);
-        return view('reviewer.reviewer', compact('payments'));
+        $openFunds = request()->query('open_funds') ? true : false;
+        return view('reviewer.reviewer', compact('payments', 'openFunds'));
     }
 
     /**

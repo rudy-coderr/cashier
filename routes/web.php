@@ -105,6 +105,11 @@ Route::middleware(['auth', \App\Http\Middleware\RequireRole::class . ':reviewer'
 	// Reviewer forwards payments to Accountant for final approval
 	Route::post('/payments/{id}/forward', [ReviewerController::class, 'forward'])->name('payments.forward');
 	Route::get('/payments/next-op', [ReviewerController::class, 'nextOpNumber'])->name('payments.next-op');
+
+	// Allow Reviewers to open Maker's payment create page and submit (reuses MakerController)
+	Route::get('/reviewer/payments/create', [MakerController::class, 'createForReviewer'])->name('reviewer.payments.create');
+	Route::post('/reviewer/payments', [MakerController::class, 'store'])->name('reviewer.payments.store')->middleware(\App\Http\Middleware\LogUserActivity::class);
+	Route::get('/reviewer/payments', [MakerController::class, 'listPayments'])->name('reviewer.payments.index');
 });
 
 
