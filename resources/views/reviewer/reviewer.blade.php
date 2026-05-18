@@ -93,38 +93,38 @@
     .sidebar-inner { display: flex; flex-direction: column; height: 100%; padding: 20px 0 0; }
 
     /* Nav links */
-    .sidebar-nav { display: flex; flex-direction: column; gap: 2px; padding: 0 10px; }
+    .sidebar-nav { display: flex; flex-direction: column; gap: 6px; padding: 0 10px; }
     .app-nav-link {
-      display: flex; align-items: center; gap: 10px; padding: 10px 13px;
-      color: rgba(245,240,232,.75); text-decoration: none; border-radius: 9px;
-      font-size: .82rem; font-weight: 500; transition: background .15s, color .15s;
+      display: flex; align-items: center; gap: 12px; padding: 12px 16px;
+      color: rgba(245,240,232,.95); text-decoration: none; border-radius: 10px;
+      font-size: 1rem; font-weight: 700; transition: background .15s, color .15s;
       border-left: 3px solid transparent;
     }
-    .app-nav-link .nav-icon { width: 30px; text-align: center; color: var(--gold); font-size: .95rem; flex-shrink: 0; }
-    .app-nav-link:hover { background: rgba(255,255,255,.04); color: var(--cream); }
-    .app-nav-link.active { background: rgba(45,122,79,.15); border-left-color: var(--gold); color: var(--cream); font-weight: 600; }
+    .app-nav-link .nav-icon { width: 36px; text-align: center; color: var(--gold); font-size: 1.05rem; flex-shrink: 0; }
+    .app-nav-link:hover { background: rgba(255,255,255,.06); color: var(--cream); }
+    .app-nav-link.active { background: rgba(45,122,79,.16); border-left-color: var(--gold); color: var(--cream); font-weight: 800; }
 
     /* Fund panel inside sidebar */
     .fund-panel { padding: 10px 10px 0; }
     .fund-panel-title { font-size: .63rem; color: rgba(255,255,255,.45); font-weight: 700; letter-spacing: 1.8px; text-transform: uppercase; margin-bottom: 10px; padding-left: 4px; }
 
-    .fund-list { display: flex; flex-direction: column; gap: 2px; }
+    .fund-list { display: flex; flex-direction: column; gap: 8px; }
     .fund-item {
-      display: flex; align-items: center; gap: 10px; padding: 9px 12px;
-      border-radius: 8px; cursor: pointer; border-left: 3px solid transparent;
+      display: flex; align-items: center; gap: 12px; padding: 10px 12px;
+      border-radius: 10px; cursor: pointer; border-left: 3px solid transparent;
       transition: background .15s;
     }
     .fund-item:hover { background: rgba(255,255,255,.04); }
-    .fund-item.active { background: rgba(45,122,79,.18); border-left-color: var(--gold); }
+    .fund-item.active { background: rgba(45,122,79,.14); border-left-color: var(--gold); }
     .fund-dot {
-      width: 32px; height: 32px; border-radius: 8px;
-      background: rgba(255,255,255,.07); color: rgba(245,240,232,.6);
+      width: 36px; height: 36px; border-radius: 8px;
+      background: rgba(255,255,255,.06); color: rgba(245,240,232,.75);
       display: flex; align-items: center; justify-content: center;
-      font-size: .66rem; font-weight: 700; flex-shrink: 0;
+      font-size: .68rem; font-weight: 700; line-height: 1; padding: 2px; text-align: center; flex-shrink: 0;
       transition: background .15s, color .15s;
     }
     .fund-item.active .fund-dot { background: var(--gold); color: var(--green-deep); }
-    .fund-name { font-size: .78rem; font-weight: 600; color: rgba(245,240,232,.8); }
+    .fund-name { font-size: .9rem; font-weight: 600; color: rgba(245,240,232,.92); }
     .fund-item.active .fund-name { color: var(--cream); }
     .fund-check { margin-left: auto; color: var(--gold); font-size: .82rem; opacity: 0; transition: opacity .15s; }
     .fund-item.active .fund-check { opacity: 1; }
@@ -554,6 +554,26 @@
             <div class="fund-name">Fund 01 — REGULAR</div>
             <i class="bi bi-check-circle-fill fund-check"></i>
           </div>
+          <div class="fund-item" data-fund="F03" onclick="selectReviewerFund(this)">
+            <div class="fund-dot">F03</div>
+            <div class="fund-name">Fund 03 — ARF</div>
+            <i class="bi bi-check-circle-fill fund-check"></i>
+          </div>
+          <div class="fund-item" data-fund="F07" onclick="selectReviewerFund(this)">
+            <div class="fund-dot">F07</div>
+            <div class="fund-name">Fund 07 — TRUST</div>
+            <i class="bi bi-check-circle-fill fund-check"></i>
+          </div>
+          <div class="fund-item" data-fund="F02-LP" onclick="selectReviewerFund(this)">
+            <div class="fund-dot">F02-LP</div>
+            <div class="fund-name">LP Split — Fund 02</div>
+            <i class="bi bi-check-circle-fill fund-check"></i>
+          </div>
+          <div class="fund-item" data-fund="F02-GOP" onclick="selectReviewerFund(this)">
+            <div class="fund-dot">F02-GOP</div>
+            <div class="fund-name">GOP Split — Fund 02</div>
+            <i class="bi bi-check-circle-fill fund-check"></i>
+          </div>
         </div>
 
         <div class="sidebar-proceed-wrap">
@@ -640,6 +660,10 @@
         <select class="filter-select" id="filter-fund" onchange="filterTable()">
           <option value="">All Funds</option>
           <option value="F01">Fund 01 — Regular</option>
+          <option value="F03">Fund 03 — ARF</option>
+          <option value="F07">Fund 07 — Trust</option>
+          <option value="F02-LP">LP Split — Fund 02</option>
+          <option value="F02-GOP">GOP Split — Fund 02</option>
         </select>
       </div>
 
@@ -1126,6 +1150,10 @@
             <select id="mod-fund" name="fund_type">
               <option value="">— Select Fund —</option>
               <option value="F01">Fund 01 — Regular</option>
+              <option value="F03">Fund 03 — ARF</option>
+              <option value="F07">Fund 07 — Trust</option>
+              <option value="F02-LP">LP Split — Fund 02</option>
+              <option value="F02-GOP">GOP Split — Fund 02</option>
             </select>
           </div>
           <div class="modal-field">
