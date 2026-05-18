@@ -481,6 +481,7 @@
                 <label>Amount : <span class="req">*</span></label>
                 <div class="amount-wrap"><span>₱</span><input name="amount" type="number" min="0" step="0.01" placeholder="0.00" required data-validate="numeric" /></div>
               </div>
+              <div id="cash-bond-formula" style="display:none; font-size:.79rem; color:var(--muted); margin-top:6px;">Formula: Area x Zonal Value x 2.5%</div>
               <div class="field">
                 <label>Name of Payor : <span class="req">*</span></label>
                 <input name="name" type="text" placeholder="Full name of payor" required />
@@ -521,7 +522,7 @@
                 <div class="extra-label">Bidding Document Details</div>
                 <div class="field">
                   <label>Details of the Availed Bid : <span class="req">*</span></label>
-                  <input name="bid_details" type="text" placeholder="e.g. Bid title, project name" />
+                  <input name="bid_details" type="text" placeholder="e.g. Bid title, project name" required data-orig-required="1" />
                 </div>
                 <div class="field">
                   <label>Open-ended Field <small style="color:var(--muted); font-weight:300;">(remarks, comments, and others)</small> :</label>
@@ -535,19 +536,19 @@
                 <div class="extra-label">Cash Bond Details</div>
                 <div class="field">
                   <label>Total Area Applied for Conversion (in hectares) : <span class="req">*</span></label>
-                  <input name="area_hectares" type="number" step="0.0001" min="0" placeholder="e.g. 2.5000" data-validate="numeric" />
+                  <input name="area_hectares" type="number" step="0.0001" min="0" placeholder="e.g. 2.5000" data-validate="numeric" required data-orig-required="1" />
                 </div>
                 <div class="field">
                   <label>Zonal Value : <span class="req">*</span></label>
-                  <div class="amount-wrap"><span>₱</span><input name="zonal_value" type="number" step="0.01" min="0" placeholder="0.00" data-validate="numeric" /></div>
+                  <div class="amount-wrap"><span>₱</span><input name="zonal_value" type="number" step="0.01" min="0" placeholder="0.00" data-validate="numeric" required data-orig-required="1" /></div>
                 </div>
                 <div class="field">
                   <label>Location of Property / Landholding : <span class="req">*</span></label>
-                  <input name="property_location" type="text" placeholder="e.g. Barangay, Municipality, Province" />
+                  <input name="property_location" type="text" placeholder="e.g. Barangay, Municipality, Province" required data-orig-required="1" />
                 </div>
                 <div class="field">
                   <label>Assessment Form : <span class="req">*</span></label>
-                  <input name="assessment_form" type="text" placeholder="Assessment form reference" data-validate="alphanumeric" />
+                  <input name="assessment_form" type="text" placeholder="Assessment form reference" data-validate="alphanumeric" required data-orig-required="1" />
                 </div>
                 <div class="field">
                   <label>Open-ended Field <small style="color:var(--muted); font-weight:300;">(remarks, comments, and others)</small> :</label>
@@ -561,19 +562,24 @@
                 <div class="extra-label">Certification / Copy Fee Details</div>
                 <div class="field">
                   <label>Letter Request : <span class="req">*</span></label>
-                  <input name="letter_request" type="text" placeholder="Reference to the letter request" />
+                  <input name="letter_request" type="text" placeholder="Reference to the letter request" required data-orig-required="1" />
                 </div>
                 <div class="field">
                   <label>Type of Transaction Paid : <span class="req">*</span></label>
-                  <div class="check-group" id="cert-type-checks">
+                  <div class="check-group" id="cert-type-checks" data-require-one="true">
                     <label class="check-item"><input type="checkbox" name="cert_type[]" value="certification" onchange="toggleCheckItem(this)"> Certification</label>
                     <label class="check-item"><input type="checkbox" name="cert_type[]" value="copy_fee" onchange="toggleCheckItem(this)"> Copy Fee</label>
-                    <label class="check-item"><input type="checkbox" name="cert_type[]" value="reproduction_cost" onchange="toggleCheckItem(this)"> Reproduction Cost</label>
+                      <label class="check-item"><input type="checkbox" name="cert_type[]" value="reproduction_cost" onchange="toggleCheckItem(this)"> Reproduction Cost</label>
                   </div>
                 </div>
                 <div class="field">
                   <label>Open-ended Field <small style="color:var(--muted); font-weight:300;">(remarks, comments, and others)</small> :</label>
-                  <textarea name="cert_remarks" placeholder="Enter any relevant remarks, comments, or additional information…" data-validate="text"></textarea>
+                  <textarea name="cert_remarks" placeholder="Enter any relevant remarks, comments, and additional information..." data-validate="text"></textarea>
+                </div>
+                <div class="field">
+                  <label>Number of Copies :</label>
+                  <input name="copy_count" id="copy-count" type="number" min="1" step="1" value="1" style="width:120px;" />
+                  <small id="copy-count-display" style="display:block; color:var(--muted); margin-top:6px;">Copies needed: 1</small>
                 </div>
               </div>
 
@@ -583,11 +589,11 @@
                 <div class="extra-label">Consignment Details</div>
                 <div class="field">
                   <label>Assessment Form No. : <span class="req">*</span></label>
-                  <input name="consignment_assessment_form" type="text" placeholder="Assessment form number" data-validate="alphanumeric" />
+                  <input name="consignment_assessment_form" type="text" placeholder="Assessment form number" data-validate="alphanumeric" required data-orig-required="1" />
                 </div>
                 <div class="field">
                   <label>Case No. : <span class="req">*</span></label>
-                  <input name="consignment_case_no" type="text" placeholder="e.g. DARAB Case No. 001-2025" data-validate="alphanumeric" />
+                  <input name="consignment_case_no" type="text" placeholder="e.g. DARAB Case No. 001-2025" data-validate="alphanumeric" required data-orig-required="1" />
                 </div>
                 <div class="field">
                   <label>Open-ended Field <small style="color:var(--muted); font-weight:300;">(remarks, comments, and others)</small> :</label>
@@ -601,11 +607,11 @@
                 <div class="extra-label">Execution of Judgment Details</div>
                 <div class="field">
                   <label>Assessment Form No. : <span class="req">*</span></label>
-                  <input name="exec_assessment_form" type="text" placeholder="Assessment form number" data-validate="alphanumeric" />
+                  <input name="exec_assessment_form" type="text" placeholder="Assessment form number" data-validate="alphanumeric" required data-orig-required="1" />
                 </div>
                 <div class="field">
                   <label>Type of Transaction Paid : <span class="req">*</span></label>
-                  <input name="exec_txn_type_paid" type="text" placeholder="Brief description of transaction type" />
+                  <input name="exec_txn_type_paid" type="text" placeholder="Brief description of transaction type" required data-orig-required="1" />
                 </div>
                 <div class="field">
                   <label>Open-ended Field <small style="color:var(--muted); font-weight:300;">(remarks, comments, and others)</small> :</label>
@@ -619,7 +625,7 @@
                 <div class="extra-label">Filing Fee / Inspection Details</div>
                 <div class="field">
                   <label>Assessment Form : <span class="req">*</span></label>
-                  <input name="filing_assessment_form" type="text" placeholder="Assessment form reference" data-validate="alphanumeric" />
+                  <input name="filing_assessment_form" type="text" placeholder="Assessment form reference" data-validate="alphanumeric" required data-orig-required="1" />
                 </div>
                 <div class="field">
                   <label>Open-ended Field <small style="color:var(--muted); font-weight:300;">(remarks, comments, and others)</small> :</label>
@@ -633,7 +639,7 @@
                 <div class="extra-label">Unserviceable Property Details</div>
                 <div class="field">
                   <label>RDC Resolution No. : <span class="req">*</span></label>
-                  <input name="rdc_resolution_no" type="text" placeholder="e.g. RDC-2025-001" data-validate="alphanumeric" />
+                  <input name="rdc_resolution_no" type="text" placeholder="e.g. RDC-2025-001" data-validate="alphanumeric" required data-orig-required="1" />
                 </div>
                 <div class="field">
                   <label>Open-ended Field <small style="color:var(--muted); font-weight:300;">(remarks, comments, and others)</small> :</label>
@@ -657,19 +663,19 @@
                 <div class="extra-label">Performance Bond Details</div>
                 <div class="field">
                   <label>Total Area Applied for Conversion (in hectares) : <span class="req">*</span></label>
-                  <input name="pb_area_hectares" type="number" step="0.0001" min="0" placeholder="e.g. 2.5000" data-validate="numeric" />
+                  <input name="pb_area_hectares" type="number" step="0.0001" min="0" placeholder="e.g. 2.5000" data-validate="numeric" required data-orig-required="1" />
                 </div>
                 <div class="field">
                   <label>Zonal Value : <span class="req">*</span></label>
-                  <div class="amount-wrap"><span>₱</span><input name="pb_zonal_value" type="number" step="0.01" min="0" placeholder="0.00" data-validate="numeric" /></div>
+                  <div class="amount-wrap"><span>₱</span><input name="pb_zonal_value" type="number" step="0.01" min="0" placeholder="0.00" data-validate="numeric" required data-orig-required="1" /></div>
                 </div>
                 <div class="field">
                   <label>Location of Property / Landholding : <span class="req">*</span></label>
-                  <input name="pb_property_location" type="text" placeholder="e.g. Barangay, Municipality, Province" />
+                  <input name="pb_property_location" type="text" placeholder="e.g. Barangay, Municipality, Province" required data-orig-required="1" />
                 </div>
                 <div class="field">
                   <label>Assessment Form : <span class="req">*</span></label>
-                  <input name="pb_assessment_form" type="text" placeholder="Assessment form reference" data-validate="alphanumeric" />
+                  <input name="pb_assessment_form" type="text" placeholder="Assessment form reference" data-validate="alphanumeric" required data-orig-required="1" />
                 </div>
                 <div class="field">
                   <label>Open-ended Field <small style="color:var(--muted); font-weight:300;">(remarks, comments, and others)</small> :</label>
@@ -683,15 +689,15 @@
                 <div class="extra-label">Refund of Cash Advances Details</div>
                 <div class="field">
                   <label>Check / LDDAP-ADA Number : <span class="req">*</span></label>
-                  <input name="check_lddap_ada" type="text" placeholder="Check or LDDAP-ADA number" data-validate="alphanumeric" />
+                  <input name="check_lddap_ada" type="text" placeholder="Check or LDDAP-ADA number" data-validate="alphanumeric" required data-orig-required="1" />
                 </div>
                 <div class="field">
                   <label>Date Cash Advance was Granted : <span class="req">*</span></label>
-                  <input name="cash_advance_date" type="date" />
+                  <input name="cash_advance_date" type="date" required data-orig-required="1" />
                 </div>
                 <div class="field">
                   <label>Division / Section of Payor : <span class="req">*</span></label>
-                  <input name="division_section" type="text" placeholder="e.g. Finance Division" />
+                  <input name="division_section" type="text" placeholder="e.g. Finance Division" required data-orig-required="1" />
                 </div>
                 <div class="field">
                   <label>Open-ended Field <small style="color:var(--muted); font-weight:300;">(remarks, comments, and others)</small> :</label>
@@ -705,7 +711,7 @@
                 <div class="extra-label">Refund of Overpayment Details</div>
                 <div class="field">
                   <label>Division / Section of Payor : <span class="req">*</span></label>
-                  <input name="refund_division_section" type="text" placeholder="e.g. Finance Division" />
+                  <input name="refund_division_section" type="text" placeholder="e.g. Finance Division" required data-orig-required="1" />
                 </div>
                 <div class="field">
                   <label>Open-ended Field <small style="color:var(--muted); font-weight:300;">(remarks, comments, and others)</small> :</label>
@@ -719,7 +725,7 @@
                 <div class="extra-label">Notice of Disallowance Details</div>
                 <div class="field">
                   <label>Notice of Disallowances No. : <span class="req">*</span></label>
-                  <input name="disallowance_no" type="text" placeholder="e.g. ND-2025-001" data-validate="alphanumeric" />
+                  <input name="disallowance_no" type="text" placeholder="e.g. ND-2025-001" data-validate="alphanumeric" required data-orig-required="1" />
                 </div>
                 <div class="field">
                   <label>Open-ended Field <small style="color:var(--muted); font-weight:300;">(remarks, comments, and others)</small> :</label>
@@ -733,7 +739,7 @@
                 <div class="extra-label">Unwithheld Remittances Details</div>
                 <div class="field">
                   <label>Type of Remittance : <span class="req">*</span></label>
-                  <div class="remit-check-group">
+                  <div class="remit-check-group" data-require-one="true">
                     <label class="remit-check-item" id="remit-gsis-wrap">
                       <input type="checkbox" name="remit_type[]" value="GSIS" onchange="toggleCheckItem(this)"> GSIS
                     </label>
@@ -761,25 +767,25 @@
               <div class="field" style="margin-top:6px;">
                 <label>Payment Mode :</label>
                 <div class="sel-wrap">
-                  <select name="payment_mode">
+                  <select name="payment_mode" id="payment-mode-sel">
                     <option value="cash">Cash</option>
                   </select>
                 </div>
               </div>
 
+              <div class="field" id="cheque-fields" style="display:none; margin-top:8px;">
+                <label>Cheque / Check Details :</label>
+                <input name="cheque_number" type="text" placeholder="Cheque / Check number" />
+                <small style="display:block; color:var(--muted); margin-top:6px;">If payment by cheque, specify cheque number and bank.</small>
+              </div>
+
               <hr class="form-divider">
 
-              <div class="terms-block">
-                <label>
-                  <input type="checkbox" id="agree_terms" name="agree_terms" />
-                  I certify that I am at least 18 years old and have read, understood and agreed to the
-                  <a href="#" target="_blank">Terms and Conditions</a>.
-                </label>
-              </div>
+              <!-- Terms checkbox removed per request -->
 
               <p class="review-note"><i class="bi bi-exclamation-circle-fill"></i> Please review payment details above before clicking Continue.</p>
 
-              <button type="submit" class="btn-submit" id="submit-btn" disabled>
+              <button type="submit" class="btn-submit" id="submit-btn">
                 <i class="bi bi-arrow-right-circle me-2"></i> Continue
               </button>
 
@@ -892,8 +898,9 @@
     document.getElementById('txn-select').value = '';
     document.getElementById('form-card').classList.remove('visible');
     document.querySelectorAll('.extra-fields').forEach(el => el.classList.remove('show'));
-    document.getElementById('agree_terms').checked = false;
-    document.getElementById('submit-btn').disabled = true;
+    // reset helper displays
+    document.getElementById('cash-bond-formula')?.style && (document.getElementById('cash-bond-formula').style.display = 'none');
+    document.getElementById('cheque-fields')?.style && (document.getElementById('cheque-fields').style.display = 'none');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
@@ -918,16 +925,48 @@
     }
 
     document.getElementById('form-card').classList.add('visible');
-    document.getElementById('agree_terms').checked = false;
-    document.getElementById('submit-btn').disabled = true;
+
+    // show cash bond formula note when cash bond selected
+    document.getElementById('cash-bond-formula').style.display = (val === 'cash_bond') ? 'block' : 'none';
+    // update payment mode options depending on transaction type
+    try { updatePaymentOptions(val); } catch(e) {}
     setTimeout(() => {
       document.getElementById('form-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 80);
   });
 
-  document.getElementById('agree_terms').addEventListener('change', function () {
-    document.getElementById('submit-btn').disabled = !this.checked;
+  // update payment mode options based on selected transaction
+  function updatePaymentOptions(txnVal) {
+    const sel = document.getElementById('payment-mode-sel');
+    const cf  = document.getElementById('cheque-fields');
+    if (!sel) return;
+    if (txnVal === 'performance_bond') {
+      sel.innerHTML = '<option value="cash">Cash</option><option value="cheque">Cheque</option>';
+    } else {
+      sel.innerHTML = '<option value="cash">Cash</option>';
+      if (cf) cf.style.display = 'none';
+    }
+    // ensure cheque fields reflect current selection
+    sel.dispatchEvent(new Event('change'));
+  }
+
+  // show/hide cheque fields when payment mode changes
+  document.getElementById('payment-mode-sel')?.addEventListener('change', function(){
+    const cf = document.getElementById('cheque-fields');
+    if (!cf) return;
+    cf.style.display = (this.value === 'cheque') ? 'block' : 'none';
   });
+
+  // copy count live update
+  const copyCountEl = document.getElementById('copy-count');
+  if (copyCountEl) {
+    copyCountEl.addEventListener('input', function(){
+      const v = Math.max(1, parseInt(this.value || '1', 10));
+      this.value = v;
+      const disp = document.getElementById('copy-count-display');
+      if (disp) disp.textContent = 'Copies needed: ' + v;
+    });
+  }
 
   /* ════════════════════════════════════════
      CHECKBOX STYLING
@@ -1237,14 +1276,179 @@
   const paymentForm = document.getElementById('payment-form');
   if (paymentForm) {
     paymentForm.addEventListener('submit', function (e) {
+      e.preventDefault();
       let firstInvalid = null;
       this.querySelectorAll('[data-validate]').forEach(i => {
         const extra = i.closest('.extra-fields');
         if (extra && !extra.classList.contains('show')) return;
         if (!validateField(i) && !firstInvalid) firstInvalid = i;
       });
-      if (firstInvalid) { e.preventDefault(); firstInvalid.focus(); }
+      if (firstInvalid) { firstInvalid.focus(); return; }
+
+      // validate checkbox groups that require at least one selection
+      const groups = this.querySelectorAll('[data-require-one]');
+      for (const g of groups) {
+        // only validate if visible (inside an shown extra-fields or otherwise displayed)
+        const extra = g.closest('.extra-fields');
+        if (extra && !extra.classList.contains('show')) continue;
+        const anyChecked = Array.from(g.querySelectorAll('input[type="checkbox"]')).some(cb => cb.checked);
+        if (!anyChecked) {
+          const firstCb = g.querySelector('input[type="checkbox"]');
+          if (firstCb) firstCb.focus();
+          alert('Please select at least one option for: ' + (g.closest('.extra-label') ? g.closest('.extra-label').textContent.trim() : 'this field'));
+          return;
+        }
+      }
+
+      // build preview and show modal instead of immediate submit
+      const data = buildPreviewData();
+      openPreviewWithData(data);
     });
+  }
+
+  // Build a JSON object with form values for preview
+  function buildPreviewData() {
+    const form = document.getElementById('payment-form');
+    const obj = {};
+    if (!form) return obj;
+
+    Array.from(form.elements).forEach(el => {
+      if (!el.name) return;
+      // skip framework/internal fields like CSRF
+      if (el.name.startsWith('_')) return;
+
+      // skip elements that are inside hidden extra-fields
+      const extra = el.closest('.extra-fields');
+      if (extra && !extra.classList.contains('show')) return;
+
+      // skip disabled/submit/button fields
+      if (el.disabled) return;
+      if (el.type === 'submit' || el.type === 'button') return;
+
+      const name = el.name;
+
+      // checkboxes
+      if (el.type === 'checkbox') {
+        if (name.endsWith('[]')) {
+          const base = name.replace(/\[\]$/, '');
+          if (!obj[base]) obj[base] = [];
+          if (el.checked) obj[base].push(el.value);
+        } else {
+          // include only if checked
+          if (el.checked) obj[name] = true;
+        }
+        return;
+      }
+
+      // radios
+      if (el.type === 'radio') {
+        if (el.checked) obj[name] = el.value;
+        return;
+      }
+
+      // numbers -> numeric type
+      if (el.type === 'number') {
+        const v = el.value === '' ? null : Number(el.value);
+        if (v !== null && !Number.isNaN(v)) obj[name] = v;
+        return;
+      }
+
+      // for other inputs/selects, include if non-empty
+      if (el.value !== null && String(el.value).trim() !== '') {
+        obj[name] = el.value;
+      }
+    });
+
+    // include selected fund and txn label if present
+    if (selectedFund) obj.fund_type = obj.fund_type || selectedFund.code || selectedFund.dot || selectedFund.name;
+    const txnLabel = document.getElementById('form-txn-name')?.textContent || '';
+    if (txnLabel) obj._txnLabel = txnLabel;
+
+    return obj;
+  }
+
+  // Show preview modal populated with decoded JSON and Base64-encoded payload
+  function openPreviewWithData(data) {
+    let modal = document.getElementById('preview-overlay');
+    if (!modal) return;
+    // build readable summary instead of raw JSON
+    const summaryEl = modal.querySelector('.preview-summary');
+    summaryEl.innerHTML = '';
+
+    const labelMap = {
+      transaction_type: 'Transaction type',
+      _txnLabel: 'Transaction',
+      fund_type: 'Fund type',
+      amount: 'Amount',
+      payment_mode: 'Payment mode',
+      name: 'Name',
+      contact: 'Contact',
+      address: 'Address',
+      email: 'Email',
+      op_number: 'Order of Payment No.'
+    };
+
+    // preferred order for rows
+    const order = ['_txnLabel','transaction_type','fund_type','amount','payment_mode','name','contact','address','email','op_number'];
+
+    function renderRow(label, value) {
+      const row = document.createElement('div');
+      row.style.display = 'flex';
+      row.style.justifyContent = 'space-between';
+      row.style.padding = '10px 6px';
+      row.style.borderBottom = '1px solid rgba(0,0,0,0.06)';
+      const left = document.createElement('div'); left.style.color = 'rgba(0,0,0,0.6)'; left.style.fontSize='0.9rem'; left.textContent = label;
+      const right = document.createElement('div'); right.style.fontWeight = '700'; right.style.fontSize='0.95rem'; right.textContent = value;
+      row.appendChild(left); row.appendChild(right);
+      summaryEl.appendChild(row);
+    }
+
+    // helper to format amount
+    function fmtAmount(v){ try{ return (typeof v === 'number') ? '₱' + v.toFixed(2) : ('₱' + parseFloat(v).toFixed(2)); }catch(e){ return v; } }
+
+    // render rows using order, include other keys afterwards
+    const rendered = new Set();
+    order.forEach(k => {
+      if (data[k] !== undefined && data[k] !== null) {
+        let v = data[k];
+        if (k === 'amount') v = fmtAmount(v);
+        if (Array.isArray(v)) v = v.join(', ');
+        renderRow(labelMap[k] || k, v);
+        rendered.add(k);
+      }
+    });
+
+    // render remaining keys (non-empty)
+    Object.keys(data).forEach(k => {
+      if (rendered.has(k)) return;
+      const v = data[k];
+      if (v === null || v === undefined) return;
+      if (Array.isArray(v) && v.length === 0) return;
+      if (String(v).trim() === '') return;
+      renderRow(labelMap[k] || k, Array.isArray(v) ? v.join(', ') : v);
+    });
+
+    // compute encoded payload (kept hidden)
+    const pretty = JSON.stringify(data, null, 2);
+    const b64 = btoa(unescape(encodeURIComponent(pretty)));
+    const hidden = modal.querySelector('.preview-encoded');
+    if (hidden) hidden.value = b64;
+
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closePreview() {
+    const modal = document.getElementById('preview-overlay');
+    if (!modal) return;
+    modal.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function confirmSubmitFromPreview() {
+    // submit the form for real
+    closePreview();
+    document.getElementById('payment-form')?.submit();
   }
 
   /* spin animation for loading icon */
@@ -1259,7 +1463,6 @@
       const obj = {};
       obj.selectedFund = selectedFund || null;
       obj.txnSelect = document.getElementById('txn-select')?.value || '';
-      obj.agree_terms = !!document.getElementById('agree_terms')?.checked;
 
       const form = document.getElementById('payment-form');
       if (form) {
@@ -1330,10 +1533,7 @@
         });
       }
 
-      if (obj.agree_terms) {
-        const ag = document.getElementById('agree_terms');
-        if (ag) { ag.checked = true; document.getElementById('submit-btn').disabled = !ag.checked; }
-      }
+      // terms checkbox removed; nothing to restore
     }
 
     window.addEventListener('load', restoreDraft);
@@ -1350,6 +1550,31 @@
   spinStyle.textContent = '@keyframes spin { to { transform: rotate(360deg); } }';
   document.head.appendChild(spinStyle);
 </script>
+
+<!-- Preview Modal (decoded JSON + Base64 encoded) -->
+<div class="modal-overlay" id="preview-overlay" onclick="if(event.target===this) closePreview()">
+  <div class="txn-modal" style="max-width:820px; display:flex; flex-direction:column;">
+    <div class="modal-head">
+      <div class="modal-head-left">
+        <div class="modal-head-icon"><i class="bi bi-eye"></i></div>
+        <div>
+          <div class="modal-head-title">Encoded Preview</div>
+          <div class="modal-head-sub">Review encoded submission data before sending</div>
+        </div>
+      </div>
+      <button class="modal-close-btn" onclick="closePreview()"><i class="bi bi-x-lg"></i></button>
+    </div>
+    <div style="padding:14px 18px;">
+      <div style="margin-bottom:8px; font-weight:600;">Transaction Summary</div>
+      <div class="preview-summary" style="max-height:340px; overflow:auto; background:#fbfaf6; border:1px solid var(--border); padding:12px; border-radius:8px;"></div>
+      <input type="hidden" class="preview-encoded" />
+      <div style="display:flex; gap:10px; margin-top:12px; justify-content:flex-end;">
+        <button class="pg-btn" onclick="closePreview()">Back</button>
+        <button class="pg-btn active" onclick="confirmSubmitFromPreview()">Confirm & Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
   @if(session('success'))
   <script>try{ localStorage.removeItem('maker_form_draft_v1'); }catch(e){} </script>
   @endif

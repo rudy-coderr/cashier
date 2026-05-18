@@ -86,15 +86,74 @@ class MakerController extends Controller
             'cookie_header' => $request->headers->get('cookie'),
         ]);
 
-        $data = $request->validate([
+        $rules = [
             'transaction_type' => 'sometimes|string|nullable',
             'amount' => 'required|numeric|min:0',
             'name' => 'required|string|max:191',
             'contact' => 'required|string|max:50',
             'address' => 'required|string|max:255',
             'email' => 'required|email|max:191',
-            'agree_terms' => 'accepted',
-        ]);
+        ];
+
+        // transaction-specific required fields
+        $txn = $request->input('transaction_type');
+        if ($txn === 'bidding_documents') {
+            $rules['bid_details'] = 'required|string';
+        }
+        if ($txn === 'cash_bond') {
+            $rules['area_hectares'] = 'required|numeric|min:0';
+            $rules['zonal_value'] = 'required|numeric|min:0';
+            $rules['property_location'] = 'required|string';
+            $rules['assessment_form'] = 'required|string';
+        }
+        if ($txn === 'certification_copy_fee') {
+            $rules['letter_request'] = 'required|string';
+            $rules['cert_type'] = 'required|array|min:1';
+            $rules['cert_type.*'] = 'string';
+            $rules['copy_count'] = 'nullable|integer|min:1';
+        }
+        if ($txn === 'consignment') {
+            $rules['consignment_assessment_form'] = 'required|string';
+            $rules['consignment_case_no'] = 'required|string';
+        }
+        if ($txn === 'execution_judgment') {
+            $rules['exec_assessment_form'] = 'required|string';
+            $rules['exec_txn_type_paid'] = 'required|string';
+        }
+        if ($txn === 'filing_fee') {
+            $rules['filing_assessment_form'] = 'required|string';
+        }
+        if ($txn === 'income_unserviceable') {
+            $rules['rdc_resolution_no'] = 'required|string';
+        }
+        if ($txn === 'performance_bond') {
+            $rules['pb_area_hectares'] = 'required|numeric|min:0';
+            $rules['pb_zonal_value'] = 'required|numeric|min:0';
+            $rules['pb_property_location'] = 'required|string';
+            $rules['pb_assessment_form'] = 'required|string';
+        }
+        if ($txn === 'refund_cash_advances') {
+            $rules['check_lddap_ada'] = 'required|string';
+            $rules['cash_advance_date'] = 'required|date';
+            $rules['division_section'] = 'required|string';
+        }
+        if ($txn === 'refund_overpayment') {
+            $rules['refund_division_section'] = 'required|string';
+        }
+        if ($txn === 'settlement_disallowances') {
+            $rules['disallowance_no'] = 'required|string';
+        }
+        if ($txn === 'unwithheld_remittances') {
+            $rules['remit_type'] = 'required|array|min:1';
+            $rules['remit_type.*'] = 'string';
+        }
+
+        // cheque requirement when payment_mode == cheque
+        if ($request->input('payment_mode') === 'cheque') {
+            $rules['cheque_number'] = 'required|string';
+        }
+
+        $data = $request->validate($rules);
         $meta = $request->except(['_token', 'transaction_type', 'fund_type', 'amount', 'name', 'contact', 'address', 'email', 'payment_mode', 'agree_terms']);
 
         // Log incoming submission for debugging
