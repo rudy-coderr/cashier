@@ -1286,6 +1286,8 @@
         Array.from(form.elements).forEach(el => {
           if (!el.name) return;
           const name = el.name;
+          // don't persist framework-hidden fields (CSRF token, method, etc.)
+          if (name.startsWith('_')) return;
           if (el.type === 'checkbox') {
             if (name.endsWith('[]')) {
               const base = name.replace(/\[\]$/, '');
@@ -1330,6 +1332,8 @@
         Array.from(form.elements).forEach(el => {
           if (!el.name) return;
           const name = el.name;
+          // skip restoring framework-hidden fields (CSRF token, method, etc.)
+          if (name.startsWith('_')) return;
           if (el.type === 'checkbox') {
             if (obj[name] !== undefined) {
               el.checked = !!obj[name];
@@ -1366,5 +1370,8 @@
   spinStyle.textContent = '@keyframes spin { to { transform: rotate(360deg); } }';
   document.head.appendChild(spinStyle);
 </script>
+  @if(session('success'))
+  <script>try{ localStorage.removeItem('maker_form_draft_v1'); }catch(e){} </script>
+  @endif
 </body>
 </html>
