@@ -1205,6 +1205,16 @@
     if (labelEl) labelEl.textContent = label;
     const btn = document.getElementById('reviewer-proceed');
     if (btn) { btn.disabled = false; btn.classList.add('enabled'); btn.dataset.fund = el.dataset.fund; }
+    // keep hidden input in sync so other scripts/readers see current selection
+    const hf = document.getElementById('hidden-fund-type'); if (hf) hf.value = el.dataset.fund;
+    // also persist selection to draft so restore doesn't revert to an older fund
+    try {
+      const key = 'reviewer_form_draft_v1';
+      const raw = localStorage.getItem(key);
+      const obj = raw ? JSON.parse(raw) : {};
+      obj.hiddenFund = el.dataset.fund;
+      localStorage.setItem(key, JSON.stringify(obj));
+    } catch (e) { /* ignore */ }
   }
 
   document.addEventListener('DOMContentLoaded', function () {
@@ -1415,6 +1425,106 @@
     setInterval(refresh, 8000);
   })();
 </script>
+
+<script>
+  /* Form draft persistence for reviewer (save & restore using localStorage) */
+  (function(){
+    const DRAFT_KEY = 'reviewer_form_draft_v1';
+
+    function saveDraft() {
+      const obj = {};
+      obj.hiddenFund = document.getElementById('hidden-fund-type')?.value || null;
+      obj.txnSelect = document.getElementById('txn-select')?.value || '';
+      obj.agree_terms = !!document.getElementById('agree_terms')?.checked;
+
+      const form = document.getElementById('payment-form');
+      if (form) {
+        Array.from(form.elements).forEach(el => {
+          if (!el.name) return;
+          const name = el.name;
+          // don't persist framework-hidden fields (CSRF token, method, etc.)
+          if (name.startsWith('_')) return;
+          if (el.type === 'checkbox') {
+            if (name.endsWith('[]')) {
+              const base = name.replace(/\[\]$/, '');
+              obj[base] = obj[base] || [];
+              if (el.checked) obj[base].push(el.value);
+            } else {
+              obj[name] = el.checked;
+            }
+          } else if (el.type === 'radio') {
+            if (el.checked) obj[name] = el.value;
+          } else {
+            obj[name] = el.value;
+          }
+        });
+      }
+
+      try { localStorage.setItem(DRAFT_KEY, JSON.stringify(obj)); } catch (e) { /* ignore */ }
+    }
+
+    function restoreDraft() {
+      let raw = null;
+      try { raw = localStorage.getItem(DRAFT_KEY); } catch (e) { return; }
+      if (!raw) return;
+      let obj;
+      try { obj = JSON.parse(raw); } catch (e) { return; }
+
+      if (obj.hiddenFund) {
+        const fund = obj.hiddenFund;
+        const el = document.querySelector('.fund-item[data-fund="' + fund + '"]');
+        if (el && typeof selectReviewerFund === 'function') selectReviewerFund(el);
+        const hf = document.getElementById('hidden-fund-type'); if (hf) hf.value = fund;
+      }
+
+      if (obj.txnSelect) {
+        const sel = document.getElementById('txn-select');
+        if (sel) {
+          sel.value = obj.txnSelect;
+          sel.dispatchEvent(new Event('change'));
+        }
+      }
+
+      const form = document.getElementById('payment-form');
+      if (form) {
+        Array.from(form.elements).forEach(el => {
+          if (!el.name) return;
+          const name = el.name;
+          // skip restoring framework-hidden fields
+          if (name.startsWith('_')) return;
+          if (el.type === 'checkbox') {
+            if (obj[name] !== undefined) {
+              el.checked = !!obj[name];
+            } else if (obj[name.replace(/\[\]$/,'')] && Array.isArray(obj[name.replace(/\[\]$/,'')])) {
+              const arr = obj[name.replace(/\[\]$/,'')];
+              el.checked = arr.includes(el.value);
+            }
+            el.dispatchEvent(new Event('change'));
+          } else if (el.type === 'radio') {
+            if (obj[name] && obj[name] === el.value) el.checked = true;
+          } else {
+            if (obj[name] !== undefined) el.value = obj[name];
+          }
+        });
+      }
+
+      if (obj.agree_terms) {
+        const ag = document.getElementById('agree_terms');
+        if (ag) { ag.checked = true; const sb = document.getElementById('submit-btn'); if (sb) sb.disabled = !ag.checked; }
+      }
+    }
+
+    window.addEventListener('load', restoreDraft);
+    document.addEventListener('input', function(e){ if (!e.target || !e.target.closest) return; if (e.target.closest('#payment-form')) saveDraft(); }, true);
+    document.addEventListener('change', function(e){ if (e.target && e.target.closest && e.target.closest('#payment-form')) saveDraft(); }, true);
+    window.addEventListener('beforeunload', saveDraft);
+    document.getElementById('payment-form')?.addEventListener('submit', function(){ try{ localStorage.removeItem(DRAFT_KEY); }catch(e){} });
+  })();
+</script>
+
+@if(session('success'))
+<script>try{ localStorage.removeItem('reviewer_form_draft_v1'); }catch(e){} </script>
+@endif
 
 </body>
 </html>
