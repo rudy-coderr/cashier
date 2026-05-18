@@ -66,12 +66,9 @@ class Payment extends Model
     {
         $map = [
             'F01' => 'F01',
-            'F03' => 'F03-ARF',
-            'F07' => 'F07-TRUST',
-            'F02-LP' => 'F02-LP',
-            'F02-GOP' => 'F02-GOP',
         ];
 
-        return $map[$fundCode] ?? ($fundCode ?? 'F01');
+        // Default to F01 for any unknown or removed fund codes
+        return $map[$fundCode] ?? 'F01';
     }
 }

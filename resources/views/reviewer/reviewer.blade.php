@@ -554,26 +554,6 @@
             <div class="fund-name">Fund 01 — REGULAR</div>
             <i class="bi bi-check-circle-fill fund-check"></i>
           </div>
-          <div class="fund-item" data-fund="F03" onclick="selectReviewerFund(this)">
-            <div class="fund-dot">F03</div>
-            <div class="fund-name">Fund 03 — ARF</div>
-            <i class="bi bi-check-circle-fill fund-check"></i>
-          </div>
-          <div class="fund-item" data-fund="F07" onclick="selectReviewerFund(this)">
-            <div class="fund-dot">F07</div>
-            <div class="fund-name">Fund 07 — TRUST</div>
-            <i class="bi bi-check-circle-fill fund-check"></i>
-          </div>
-          <div class="fund-item" data-fund="F02-LP" onclick="selectReviewerFund(this)">
-            <div class="fund-dot">F02</div>
-            <div class="fund-name">LP SPLIT — FUND 02</div>
-            <i class="bi bi-check-circle-fill fund-check"></i>
-          </div>
-          <div class="fund-item" data-fund="F02-GOP" onclick="selectReviewerFund(this)">
-            <div class="fund-dot">F02</div>
-            <div class="fund-name">GOP SPLIT — FUND 02</div>
-            <i class="bi bi-check-circle-fill fund-check"></i>
-          </div>
         </div>
 
         <div class="sidebar-proceed-wrap">
@@ -660,10 +640,6 @@
         <select class="filter-select" id="filter-fund" onchange="filterTable()">
           <option value="">All Funds</option>
           <option value="F01">Fund 01 — Regular</option>
-          <option value="F03">Fund 03 — ARF</option>
-          <option value="F07">Fund 07 — Trust</option>
-          <option value="F02-LP">LP Split — Fund 02</option>
-          <option value="F02-GOP">GOP Split — Fund 02</option>
         </select>
       </div>
 
@@ -1150,10 +1126,6 @@
             <select id="mod-fund" name="fund_type">
               <option value="">— Select Fund —</option>
               <option value="F01">Fund 01 — Regular</option>
-              <option value="F03">Fund 03 — ARF</option>
-              <option value="F07">Fund 07 — Trust</option>
-              <option value="F02-LP">LP Split — Fund 02</option>
-              <option value="F02-GOP">GOP Split — Fund 02</option>
             </select>
           </div>
           <div class="modal-field">

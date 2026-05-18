@@ -361,26 +361,6 @@
           <div class="fund-info"><div class="fund-name">Fund 01 — REGULAR</div></div>
           <i class="bi bi-check-circle-fill fund-check"></i>
         </div>
-        <div class="fund-item" data-fund="F03" data-name="Fund 03 - ARF" data-label="Agrarian Reform Fund" onclick="selectFund(this)">
-          <div class="fund-dot">F03</div>
-          <div class="fund-info"><div class="fund-name">Fund 03 — ARF</div></div>
-          <i class="bi bi-check-circle-fill fund-check"></i>
-        </div>
-        <div class="fund-item" data-fund="F07" data-name="Fund 07 - TRUST" data-label="Trust Fund" onclick="selectFund(this)">
-          <div class="fund-dot">F07</div>
-          <div class="fund-info"><div class="fund-name">Fund 07 — TRUST</div></div>
-          <i class="bi bi-check-circle-fill fund-check"></i>
-        </div>
-        <div class="fund-item" data-fund="F02-LP" data-name="LP SPLIT - FUND 02" data-label="Loan Proceeds" onclick="selectFund(this)">
-          <div class="fund-dot">F02</div>
-          <div class="fund-info"><div class="fund-name">LP SPLIT — FUND 02</div></div>
-          <i class="bi bi-check-circle-fill fund-check"></i>
-        </div>
-        <div class="fund-item" data-fund="F02-GOP" data-name="GOP SPLIT - FUND 02" data-label="Government of The Philippines" onclick="selectFund(this)">
-          <div class="fund-dot">F02</div>
-          <div class="fund-info"><div class="fund-name">GOP SPLIT — FUND 02</div></div>
-          <i class="bi bi-check-circle-fill fund-check"></i>
-        </div>
       </div>
     </div>
 
@@ -975,16 +955,16 @@
   /* ── Demo data (used when /payments.json is unavailable) ── */
   const DEMO_DATA = [
     { name:'Juan Dela Cruz',    transaction_type:'Filing Fee and Inspection Cost',                  status:'approved', created_at:'8:14 AM',  op_number:'F01-2026-01-0001', fund_type:'Fund 01', amount:'1,500.00' },
-    { name:'Maria Santos',      transaction_type:'Certification, Copy Fee and Reproduction Cost',   status:'waiting',  created_at:'9:02 AM',  op_number:'F01-2026-01-0002', fund_type:'Fund 03', amount:'250.00' },
+    { name:'Maria Santos',      transaction_type:'Certification, Copy Fee and Reproduction Cost',   status:'waiting',  created_at:'9:02 AM',  op_number:'F01-2026-01-0002', fund_type:'Fund 01', amount:'250.00' },
     { name:'Pedro Reyes',       transaction_type:'Cash Bond',                                       status:'approved', created_at:'9:45 AM',  op_number:'F01-2026-01-0003', fund_type:'Fund 01', amount:'5,000.00' },
-    { name:'Ana Garcia',        transaction_type:'Appeal Fee',                                      status:'waiting',  created_at:'10:18 AM', op_number:'F01-2026-01-0004', fund_type:'Fund 07', amount:'3,200.00' },
+    { name:'Ana Garcia',        transaction_type:'Appeal Fee',                                      status:'waiting',  created_at:'10:18 AM', op_number:'F01-2026-01-0004', fund_type:'Fund 01', amount:'3,200.00' },
     { name:'Roberto Luna',      transaction_type:'Refund of Overpayment',                           status:'approved', created_at:'11:00 AM', op_number:'F01-2026-01-0005', fund_type:'Fund 01', amount:'800.00' },
     { name:'Liza Reyes',        transaction_type:'Legal Research',                                  status:'approved', created_at:'11:22 AM', op_number:'F01-2026-01-0006', fund_type:'Fund 01', amount:'150.00' },
-    { name:'Carlo Mendoza',     transaction_type:'Performance Bond',                                status:'waiting',  created_at:'11:45 AM', op_number:'F01-2026-01-0007', fund_type:'Fund 03', amount:'12,000.00' },
-    { name:'Sofia Torres',      transaction_type:'Settlement of Notice of Disallowances',           status:'approved', created_at:'1:05 PM',  op_number:'F01-2026-01-0008', fund_type:'Fund 07', amount:'4,400.00' },
+    { name:'Carlo Mendoza',     transaction_type:'Performance Bond',                                status:'waiting',  created_at:'11:45 AM', op_number:'F01-2026-01-0007', fund_type:'Fund 01', amount:'12,000.00' },
+    { name:'Sofia Torres',      transaction_type:'Settlement of Notice of Disallowances',           status:'approved', created_at:'1:05 PM',  op_number:'F01-2026-01-0008', fund_type:'Fund 01', amount:'4,400.00' },
     { name:'Renato Flores',     transaction_type:'Consignment',                                     status:'waiting',  created_at:'1:30 PM',  op_number:'F01-2026-01-0009', fund_type:'Fund 01', amount:'900.00' },
     { name:'Grace Villanueva',  transaction_type:'Bidding Documents',                               status:'approved', created_at:'2:00 PM',  op_number:'F01-2026-01-0010', fund_type:'Fund 01', amount:'500.00' },
-    { name:'Marco Bautista',    transaction_type:'Unwithheld Remittances',                          status:'approved', created_at:'2:30 PM',  op_number:'F01-2026-01-0011', fund_type:'Fund 03', amount:'2,100.00' },
+    { name:'Marco Bautista',    transaction_type:'Unwithheld Remittances',                          status:'approved', created_at:'2:30 PM',  op_number:'F01-2026-01-0011', fund_type:'Fund 01', amount:'2,100.00' },
     { name:'Hazel Dela Torre',  transaction_type:'Income from Sale of Unserviceable Property',      status:'rejected', created_at:'3:00 PM',  op_number:'F01-2026-01-0012', fund_type:'Fund 01', amount:'7,800.00' },
   ];
 

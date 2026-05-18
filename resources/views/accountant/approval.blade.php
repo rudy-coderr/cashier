@@ -322,10 +322,6 @@
         <select class="filter-select" id="filter-fund" onchange="filterTable()">
           <option value="">All Funds</option>
           <option value="F01">Fund 01 — Regular</option>
-          <option value="F03">Fund 03 — ARF</option>
-          <option value="F07">Fund 07 — Trust</option>
-          <option value="F02-LP">LP Split — Fund 02</option>
-          <option value="F02-GOP">GOP Split — Fund 02</option>
         </select>
       </div>
 
