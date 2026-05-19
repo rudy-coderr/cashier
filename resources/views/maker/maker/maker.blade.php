@@ -4,7 +4,22 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>New Transaction — DAR Cashier</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <script>
+    (function(){
+      function loadCss(href, onSuccess, onError){
+        var l = document.createElement('link'); l.rel = 'stylesheet'; l.href = href;
+        l.onload = onSuccess; l.onerror = onError; document.head.appendChild(l);
+      }
+      // Try CDN first; if it fails (Tracking Prevention), fall back to locally-hosted copy
+      loadCss('https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css',
+        function(){ console.log('Bootstrap CDN loaded'); },
+        function(){ console.warn('Bootstrap CDN failed — loading local fallback'); loadCss('{{ asset("vendor/bootstrap.min.css") }}'); }
+      );
+    })();
+  </script>
+  <noscript>
+    <link href="{{ asset('vendor/bootstrap.min.css') }}" rel="stylesheet" />
+  </noscript>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
 
@@ -477,6 +492,64 @@
               <div class="section-heading"><i class="bi bi-card-checklist"></i> Payment Details</div>
 
               <!-- COMMON FIELDS -->
+
+              <!-- CART-STYLE SERVICES (Certification / Copy Fee / Reproduction Cost) -->
+              <div class="field">
+                <label>Services :</label>
+                <div id="cert-cart" class="cert-cart" style="display:none;" data-require-one="true">
+                  <style>
+                    .cert-cart{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+                    .cert-cart-row{display:flex;align-items:center;gap:12px;padding:10px;border-radius:8px;background:var(--panel);box-shadow:var(--elev-sm)}
+                    .cert-cart-row .svc-check{width:36px;display:flex;align-items:center;justify-content:center}
+                    .cert-cart-row .svc-check input{margin:0;vertical-align:middle;position:static;opacity:1;width:20px;height:20px;cursor:pointer;accent-color:var(--green-accent);-webkit-appearance:checkbox;appearance:checkbox}
+                    .cert-cart-row .svc-name{flex:1;font-weight:600}
+                    .cert-cart-row .svc-price{width:110px;text-align:right;color:var(--muted)}
+                    .cert-cart-row .svc-qty{display:flex;align-items:center;gap:6px}
+                    .cert-cart-row .svc-qty button{width:28px;height:28px;border-radius:6px;border:1px solid var(--muted);background:transparent}
+                    .cert-cart-row .svc-qty input{width:56px;text-align:center;padding:6px;border:1px solid var(--muted);border-radius:6px}
+                    .cert-cart-row .svc-sub{width:110px;text-align:right;font-weight:700}
+                    .cert-cart-row.checked{border-color:var(--green-accent);background:var(--green-light)}
+                  </style>
+
+                    <div class="cert-cart-row" data-service="certification">
+                    <div class="svc-check"><label class="svc-check-label"><input type="checkbox" class="svc-chk" data-service="certification" name="cert_type[]" value="certification" /> </label></div>
+                    <div class="svc-name">Certification</div>
+                    <div class="svc-price">₱60.00</div>
+                    <div class="svc-qty">
+                      <button type="button" class="qty-decr" data-service="certification">−</button>
+                      <input type="number" min="1" value="1" class="qty-input" name="svc_certification_qty" data-service="certification" />
+                      <button type="button" class="qty-incr" data-service="certification">+</button>
+                    </div>
+                    <div class="svc-sub" data-service="certification">₱60.00</div>
+                  </div>
+
+                    <div class="cert-cart-row" data-service="copy_fee">
+                    <div class="svc-check"><label class="svc-check-label"><input type="checkbox" class="svc-chk" data-service="copy_fee" name="cert_type[]" value="copy_fee" /> </label></div>
+                    <div class="svc-name">Copy Fee</div>
+                    <div class="svc-price">₱12.00</div>
+                    <div class="svc-qty">
+                      <button type="button" class="qty-decr" data-service="copy_fee">−</button>
+                      <input type="number" min="1" value="1" class="qty-input" name="copy_count" data-service="copy_fee" />
+                      <button type="button" class="qty-incr" data-service="copy_fee">+</button>
+                    </div>
+                    <div class="svc-sub" data-service="copy_fee">₱12.00</div>
+                  </div>
+
+                    <div class="cert-cart-row" data-service="reproduction_cost">
+                      <div class="svc-check"><label class="svc-check-label"><input type="checkbox" class="svc-chk" data-service="reproduction_cost" name="cert_type[]" value="reproduction_cost" /> </label></div>
+                    <div class="svc-name">Reproduction Cost</div>
+                    <div class="svc-price">₱28.00</div>
+                    <div class="svc-qty">
+                      <button type="button" class="qty-decr" data-service="reproduction_cost">−</button>
+                      <input type="number" min="1" value="1" class="qty-input" name="svc_reproduction_cost_qty" data-service="reproduction_cost" />
+                      <button type="button" class="qty-incr" data-service="reproduction_cost">+</button>
+                    </div>
+                    <div class="svc-sub" data-service="reproduction_cost">₱28.00</div>
+                  </div>
+
+                </div>
+              </div>
+
               <div class="field">
                 <label>Amount : <span class="req">*</span></label>
                 <div class="amount-wrap"><span>₱</span><input name="amount" type="number" min="0" step="0.01" placeholder="0.00" required data-validate="numeric" /></div>
@@ -565,22 +638,10 @@
                   <input name="letter_request" type="text" placeholder="Reference to the letter request" required data-orig-required="1" />
                 </div>
                 <div class="field">
-                  <label>Type of Transaction Paid : <span class="req">*</span></label>
-                  <div class="check-group" id="cert-type-checks" data-require-one="true">
-                    <label class="check-item"><input type="checkbox" name="cert_type[]" value="certification" onchange="toggleCheckItem(this)"> Certification</label>
-                    <label class="check-item"><input type="checkbox" name="cert_type[]" value="copy_fee" onchange="toggleCheckItem(this)"> Copy Fee</label>
-                      <label class="check-item"><input type="checkbox" name="cert_type[]" value="reproduction_cost" onchange="toggleCheckItem(this)"> Reproduction Cost</label>
-                  </div>
-                </div>
-                <div class="field">
                   <label>Open-ended Field <small style="color:var(--muted); font-weight:300;">(remarks, comments, and others)</small> :</label>
                   <textarea name="cert_remarks" placeholder="Enter any relevant remarks, comments, and additional information..." data-validate="text"></textarea>
                 </div>
-                <div class="field">
-                  <label>Number of Copies :</label>
-                  <input name="copy_count" id="copy-count" type="number" min="1" step="1" value="1" style="width:120px;" />
-                  <small id="copy-count-display" style="display:block; color:var(--muted); margin-top:6px;">Copies needed: 1</small>
-                </div>
+                <!-- services cart moved to top of form to integrate with Amount field -->
               </div>
 
               <!-- 5. CONSIGNMENT -->
@@ -933,6 +994,8 @@
     setTimeout(() => {
       document.getElementById('form-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 80);
+    // initialize or teardown cart-style service section for certification/copy/repro
+    try { initCertCartSection(val); } catch(e) {}
   });
 
   // update payment mode options based on selected transaction
@@ -969,10 +1032,127 @@
   }
 
   /* ════════════════════════════════════════
+     CERT/COPY/REPRO CART LOGIC
+  ════════════════════════════════════════ */
+  (function(){
+    const PRICES = { certification:60.00, copy_fee:12.00, reproduction_cost:28.00 };
+    let cartActive = false;
+
+    function q(sel, ctx){ return (ctx||document).querySelector(sel); }
+    function qAll(sel, ctx){ return Array.from((ctx||document).querySelectorAll(sel)); }
+
+    // format peso with ₱ and two decimals (no thousands separators to preserve number input)
+    function formatPeso(num){ return '₱' + Number(num || 0).toFixed(2); }
+
+    function computeCartTotal(){
+      const rows = qAll('#cert-cart .cert-cart-row');
+      let total = 0;
+      rows.forEach(r => {
+        const svc = r.dataset.service;
+        const chk = q('.svc-chk[data-service="'+svc+'"]', r);
+        const qty = parseInt(q('.qty-input[data-service="'+svc+'"]', r).value || '1', 10);
+        const price = PRICES[svc] || 0;
+        const sub = (chk && chk.checked) ? (qty * price) : 0;
+        q('.svc-sub[data-service="'+svc+'"]', r).textContent = formatPeso(sub);
+        total += sub;
+      });
+
+      // update amount input
+      const amountInput = document.querySelector('input[name="amount"]');
+      if (amountInput) {
+        amountInput.value = total.toFixed(2);
+      }
+    }
+
+    function attachCartEvents(){
+      const cart = document.getElementById('cert-cart');
+      if (!cart) return;
+      // toggles
+      qAll('.svc-chk', cart).forEach(chk => chk.addEventListener('change', function(){
+        const svc = this.dataset.service;
+        const qtyInp = q('.qty-input[data-service="'+svc+'"]', cart);
+        if (qtyInp) qtyInp.disabled = !this.checked;
+        toggleCheckItem(this);
+        computeCartTotal();
+      }));
+      // initialize qty disabled state based on checkbox
+      qAll('.svc-chk', cart).forEach(chk => {
+        const svc = chk.dataset.service; const qtyInp = q('.qty-input[data-service="'+svc+'"]', cart);
+        if (qtyInp) qtyInp.disabled = !chk.checked;
+      });
+      // clicking the whole row toggles its checkbox (except when interacting with controls)
+      qAll('.cert-cart-row', cart).forEach(r => r.addEventListener('click', function(e){
+        const tgt = e.target;
+        if (!tgt) return;
+        // ignore clicks on buttons/inputs (they have their own handlers)
+        if (tgt.closest('.qty-incr') || tgt.closest('.qty-decr') || tgt.closest('.qty-input') || tgt.tagName === 'INPUT' || tgt.tagName === 'BUTTON') return;
+        const svc = r.dataset.service;
+        const chk = q('.svc-chk[data-service="'+svc+'"]', r);
+        if (!chk) return;
+        chk.checked = !chk.checked;
+        toggleCheckItem(chk);
+        computeCartTotal();
+      }));
+      // qty buttons
+      qAll('.qty-incr', cart).forEach(btn => btn.addEventListener('click', function(){
+        const svc = this.dataset.service; const inp = q('.qty-input[data-service="'+svc+'"]', cart);
+        if (!inp) return; inp.value = Math.max(1, parseInt(inp.value||'1',10) + 1); computeCartTotal();
+      }));
+      qAll('.qty-decr', cart).forEach(btn => btn.addEventListener('click', function(){
+        const svc = this.dataset.service; const inp = q('.qty-input[data-service="'+svc+'"]', cart);
+        if (!inp) return; inp.value = Math.max(1, parseInt(inp.value||'1',10) - 1); computeCartTotal();
+      }));
+      qAll('.qty-input', cart).forEach(inp => inp.addEventListener('input', function(){
+        this.value = Math.max(1, parseInt(this.value||'1',10)); computeCartTotal();
+      }));
+    }
+
+    function showCart(enable){
+      const cart = document.getElementById('cert-cart');
+      const amountInput = document.querySelector('input[name="amount"]');
+      if (!cart || !amountInput) return;
+      cart.style.display = enable ? 'flex' : 'none';
+      if (enable){
+        // make amount readonly and compute
+        amountInput.readOnly = true;
+        // ensure qty inputs are disabled unless their service is checked
+        qAll('.svc-chk', cart).forEach(chk => {
+          const svc = chk.dataset.service; const qtyInp = q('.qty-input[data-service="'+svc+'"]', cart);
+          if (qtyInp) qtyInp.disabled = !chk.checked;
+        });
+        computeCartTotal();
+      } else {
+        amountInput.readOnly = false;
+        // clear computed value
+        amountInput.value = '';
+        // reset rows
+        qAll('#cert-cart .cert-cart-row').forEach(r => {
+          q('.svc-chk', r).checked = false;
+          q('.qty-input', r).value = 1;
+          q('.qty-input', r).disabled = true;
+          q('.svc-sub', r).textContent = formatPeso(0);
+        });
+      }
+    }
+
+    // called on txn-select change
+    window.initCertCartSection = function(txnVal){
+      const active = txnVal === 'certification_copy_fee';
+      cartActive = active;
+      showCart(active);
+      if (active) attachCartEvents();
+    };
+
+  })();
+
+  /* ════════════════════════════════════════
      CHECKBOX STYLING
   ════════════════════════════════════════ */
   function toggleCheckItem(el) {
-    el.closest('.check-item, .remit-check-item').classList.toggle('checked', el.checked);
+    const wrap = el.closest('.check-item, .remit-check-item, .svc-check, .svc-check-label');
+    if (wrap && wrap.classList) wrap.classList.toggle('checked', el.checked);
+    const row = el.closest('.cert-cart-row');
+    if (row && row.classList) row.classList.toggle('checked', el.checked);
   }
 
   function toggleRemitOther(el) {
@@ -1288,9 +1468,17 @@
       // validate checkbox groups that require at least one selection
       const groups = this.querySelectorAll('[data-require-one]');
       for (const g of groups) {
-        // only validate if visible (inside an shown extra-fields or otherwise displayed)
+        // decide whether this group is in the currently-visible area
         const extra = g.closest('.extra-fields');
-        if (extra && !extra.classList.contains('show')) continue;
+        if (extra) {
+          if (!extra.classList.contains('show')) continue;
+        } else {
+          // group is outside extra-fields (e.g. the top-level cert-cart). Only validate
+          // when the selected transaction type is the certification/copy/repro type.
+          const txnVal = document.getElementById('txn-select')?.value || '';
+          if (txnVal !== 'certification_copy_fee') continue;
+        }
+
         const anyChecked = Array.from(g.querySelectorAll('input[type="checkbox"]')).some(cb => cb.checked);
         if (!anyChecked) {
           const firstCb = g.querySelector('input[type="checkbox"]');
@@ -1419,13 +1607,50 @@
     });
 
     // render remaining keys (non-empty)
+    function titleCase(s){ return String(s||'').split(/\s+/).map(w=> w ? (w.charAt(0).toUpperCase()+w.slice(1)) : '').join(' ').trim(); }
+
+    // Render selected Certification/Copy/Reproduction services in a fixed order
+    const svcOrder = ['certification','copy_fee','reproduction_cost'];
+    const selected = Array.isArray(data.cert_type) ? data.cert_type : [];
+    svcOrder.forEach(key => {
+      if (!selected.includes(key)) return;
+      let qtyVal = null;
+      if (key === 'copy_fee') qtyVal = data.copy_count !== undefined ? data.copy_count : null;
+      else {
+        const qn = 'svc_' + key + '_qty';
+        qtyVal = data[qn] !== undefined ? data[qn] : null;
+      }
+      if (qtyVal !== null && qtyVal !== undefined && String(qtyVal).trim() !== '') {
+        renderRow(titleCase(key.replace(/_/g,' ')), qtyVal);
+      } else {
+        // even if no qty provided, show 1 as default
+        renderRow(titleCase(key.replace(/_/g,' ')), 1);
+      }
+    });
+    rendered.add('cert_type');
+    rendered.add('copy_count');
+
     Object.keys(data).forEach(k => {
       if (rendered.has(k)) return;
       const v = data[k];
       if (v === null || v === undefined) return;
       if (Array.isArray(v) && v.length === 0) return;
       if (String(v).trim() === '') return;
-      renderRow(labelMap[k] || k, Array.isArray(v) ? v.join(', ') : v);
+
+      // skip raw svc_ boolean flags — we handle services via `cert_type`
+      if (/^svc_[a-z0-9_]+$/.test(k)) return;
+
+      let displayLabel = null;
+      if (labelMap[k]) displayLabel = labelMap[k];
+      else displayLabel = titleCase(k.replace(/_/g,' '));
+
+      // format value: arrays join, booleans as Yes/No
+      let displayValue;
+      if (Array.isArray(v)) displayValue = v.join(', ');
+      else if (typeof v === 'boolean') displayValue = v ? 'Yes' : 'No';
+      else displayValue = v;
+
+      renderRow(displayLabel, displayValue);
     });
 
     // compute encoded payload (kept hidden)
