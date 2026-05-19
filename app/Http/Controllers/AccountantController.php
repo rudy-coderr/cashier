@@ -8,6 +8,10 @@ use App\Models\AuditLog;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use App\Models\User;
+use App\Notifications\NewMessageNotification;
 
 class AccountantController extends Controller
 {
@@ -105,6 +109,17 @@ class AccountantController extends Controller
                 'ip_address' => request()->ip(),
             ]);
         } catch (\Throwable $e) { /* ignore */ }
+        try {
+            $reviewerRoleId = DB::table('roles')->where('name', 'reviewer')->value('id');
+            if ($reviewerRoleId) {
+                $reviewers = User::where('role_id', $reviewerRoleId)->get();
+                foreach ($reviewers as $r) {
+                    $r->notify(new NewMessageNotification($p));
+                }
+            }
+        } catch (\Throwable $e) {
+            Log::warning('Failed to notify reviewers on approve: ' . $e->getMessage());
+        }
 
         return redirect()->route('accountant.approval')->with('success', 'Payment approved.');
     }
@@ -132,6 +147,17 @@ class AccountantController extends Controller
                 'ip_address' => request()->ip(),
             ]);
         } catch (\Throwable $e) { /* ignore */ }
+        try {
+            $reviewerRoleId = DB::table('roles')->where('name', 'reviewer')->value('id');
+            if ($reviewerRoleId) {
+                $reviewers = User::where('role_id', $reviewerRoleId)->get();
+                foreach ($reviewers as $r) {
+                    $r->notify(new NewMessageNotification($p));
+                }
+            }
+        } catch (\Throwable $e) {
+            Log::warning('Failed to notify reviewers on reject: ' . $e->getMessage());
+        }
 
         return redirect()->route('accountant.approval')->with('success', 'Payment rejected and returned to Reviewer.');
     }

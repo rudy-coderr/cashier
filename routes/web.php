@@ -110,6 +110,40 @@ Route::middleware(['auth', \App\Http\Middleware\RequireRole::class . ':reviewer'
 	Route::get('/reviewer/payments/create', [MakerController::class, 'createForReviewer'])->name('reviewer.payments.create');
 	Route::post('/reviewer/payments', [MakerController::class, 'store'])->name('reviewer.payments.store')->middleware(\App\Http\Middleware\LogUserActivity::class);
 	Route::get('/reviewer/payments', [MakerController::class, 'listPayments'])->name('reviewer.payments.index');
+
+	// Notifications for reviewer (JSON)
+	Route::get('/notifications', function (\Illuminate\Http\Request $request) {
+		$user = auth()->user();
+		if (! $user) return response()->json([], 401);
+		$notes = $user->notifications()->orderBy('created_at', 'desc')->take(50)->get()->map(function ($n) {
+			return [
+				'id' => $n->id,
+				'data' => $n->data,
+				'read' => $n->read_at ? true : false,
+				'created_at' => $n->created_at ? $n->created_at->toIso8601String() : null,
+			];
+		});
+		return response()->json($notes);
+	})->name('notifications.list');
+
+	Route::post('/notifications/{id}/read', function ($id) {
+		$user = auth()->user();
+		if (! $user) return response()->json([], 401);
+		$note = $user->notifications()->where('id', $id)->first();
+		if ($note) {
+			$note->markAsRead();
+			return response()->json(['ok' => true]);
+		}
+		return response()->json(['ok' => false], 404);
+	})->name('notifications.read');
+
+	// Page: view all notifications (reviewer)
+	Route::get('/notifications/all', function (\Illuminate\Http\Request $request) {
+		$user = auth()->user();
+		if (! $user) return redirect()->route('login');
+		$notes = $user->notifications()->orderBy('created_at', 'desc')->paginate(25);
+		return view('reviewer.notifications.index', compact('notes'));
+	})->name('notifications.page');
 });
 
 

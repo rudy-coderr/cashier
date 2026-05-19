@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
   <title>Reviewer — DAR Cashier</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
@@ -56,7 +57,49 @@
       color: var(--gold-light); font-size: .66rem; font-weight: 700;
       letter-spacing: 1.2px; text-transform: uppercase;
     }
-    .header-actions { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+    .header-actions { margin-left: auto; display: flex; align-items: center; gap: 8px; position: relative; }
+
+    /* ── NOTIFICATION ICON ── */
+    .notif-btn { position: relative; display: flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 8px; background: rgba(255,255,255,.07); border: none; color: rgba(245,240,232,.55); cursor: pointer; transition: background .15s, color .15s; flex-shrink: 0; }
+    .notif-btn:hover { background: rgba(255,255,255,.14); color: var(--cream); }
+    .notif-badge { position: absolute; top: 5px; right: 5px; width: 8px; height: 8px; border-radius: 50%; background: var(--red); border: 2px solid var(--green-deep); display: none; }
+    .notif-badge.show { display: block; }
+
+    /* Notification dropdown */
+    .notif-dropdown {
+      display: none; position: absolute; top: calc(100% + 10px); right: 0;
+      width: 300px; background: var(--surface); border-radius: 12px;
+      border: 1px solid var(--border); box-shadow: 0 8px 32px rgba(0,0,0,.18);
+      z-index: 400; overflow: hidden;
+    }
+    .notif-dropdown.open { display: block; animation: dropIn .18s cubic-bezier(.16,1,.3,1); }
+    @keyframes dropIn { from { opacity:0; transform: translateY(-6px); } to { opacity:1; transform:none; } }
+    .notif-drop-head { padding: 12px 16px; background: var(--green-deep); display: flex; align-items: center; justify-content: space-between; }
+    .notif-drop-title { font-size: .78rem; font-weight: 600; color: var(--gold-light); letter-spacing: .5px; }
+    .notif-drop-mark { font-size: .68rem; color: rgba(245,240,232,.45); cursor: pointer; background: none; border: none; font-family: 'DM Sans', sans-serif; transition: color .15s; }
+    .notif-drop-mark:hover { color: var(--cream); }
+    .notif-list { max-height: 260px; overflow-y: auto; }
+    .notif-list::-webkit-scrollbar { width: 3px; }
+    .notif-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+    .notif-item { display: flex; align-items: flex-start; gap: 10px; padding: 11px 16px; border-bottom: 1px solid var(--border); transition: background .12s; }
+    .notif-item:last-child { border-bottom: none; }
+    .notif-item.unread { background: #f5fbf7; }
+    .notif-item:hover { background: #f0f7f3; }
+    .notif-item-icon { width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: .8rem; flex-shrink: 0; margin-top: 1px; }
+    .ni-green { background: var(--green-light); color: var(--green-accent); }
+    .ni-gold  { background: #fdf3dc; color: var(--gold); }
+    .ni-red   { background: #fdf0ef; color: var(--red); }
+    .notif-item-body { flex: 1; min-width: 0; }
+    .notif-item-text { font-size: .78rem; color: var(--text-dark); line-height: 1.4; }
+    .notif-item-time { font-size: .67rem; color: var(--muted); margin-top: 3px; }
+    .notif-unread-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green-accent); flex-shrink: 0; margin-top: 6px; }
+    .notif-empty { padding: 30px 16px; text-align: center; }
+    .notif-empty i { font-size: 1.6rem; color: var(--border); display: block; margin-bottom: 8px; }
+    .notif-empty p { font-size: .78rem; color: var(--muted); }
+    .notif-drop-foot { padding: 9px 16px; border-top: 1px solid var(--border); text-align: center; }
+    .notif-drop-foot a { font-size: .72rem; color: var(--green-accent); text-decoration: none; font-weight: 600; }
+    .notif-drop-foot a:hover { text-decoration: underline; }
+
     .btn-logout {
       background: none; border: none; color: var(--cream); font-size: .78rem;
       cursor: pointer; padding: 7px 13px; display: flex; align-items: center; gap: 6px;
@@ -70,7 +113,7 @@
     ════════════════════════════════════════ */
     .app-layout {
       display: flex;
-      min-height: calc(100vh - 66px); /* header height + stripe */
+      min-height: calc(100vh - 66px);
     }
 
     /* ── SIDEBAR ── */
@@ -267,15 +310,9 @@
 
     /* ════════════════════════════════════════
        NEW TRANSACTION — MAKER FORM STYLES
-       (full port from maker.blade.php)
     ════════════════════════════════════════ */
-    .new-txn-wrap {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-    }
+    .new-txn-wrap { flex: 1; display: flex; flex-direction: column; }
 
-    /* Sticky fund banner */
     .fund-banner-sticky-wrap {
       display: none; position: sticky; top: 66px; z-index: 150;
       width: 100%; background: var(--green-deep);
@@ -290,21 +327,17 @@
     .fund-banner-change { font-size: .71rem; color: rgba(245,240,232,.4); cursor: pointer; display: flex; align-items: center; gap: 4px; transition: color .15s; background: none; border: none; font-family: 'DM Sans', sans-serif; }
     .fund-banner-change:hover { color: var(--cream); }
 
-    /* Main content area for form */
     .maker-main { flex: 1; padding: 0 36px 60px; display: flex; flex-direction: column; align-items: center; }
     .maker-inner { width: 100%; max-width: 660px; padding-top: 34px; }
 
-    /* Gate */
     .fund-gate { text-align: center; padding: 80px 20px; }
     .fund-gate-icon { font-size: 2.8rem; color: var(--border); margin-bottom: 14px; }
     .fund-gate-title { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-weight: 700; color: var(--text-mid); margin-bottom: 8px; }
     .fund-gate-sub { font-size: .82rem; color: var(--muted); font-weight: 300; max-width: 320px; margin: 0 auto; line-height: 1.6; }
 
-    /* Page title / sub in form area */
     .maker-page-title { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-weight: 700; color: var(--text-dark); margin-bottom: 4px; }
     .maker-page-sub   { font-size: .82rem; color: var(--muted); font-weight: 300; margin-bottom: 24px; }
 
-    /* Step indicator */
     .step-indicator { display: flex; align-items: center; margin-bottom: 22px; }
     .step-ind-item  { display: flex; align-items: center; gap: 8px; }
     .step-ind-num   { width: 24px; height: 24px; border-radius: 50%; font-size: .69rem; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
@@ -317,7 +350,6 @@
     .step-ind-item.inactive .step-ind-text { color: var(--muted); }
     .step-ind-line { flex: 1; height: 1px; background: var(--border); margin: 0 10px; max-width: 36px; }
 
-    /* Select card */
     .select-card  { background: var(--surface); border: 1.5px solid var(--border); border-radius: 14px; padding: 24px; }
     .step-label   { display: flex; align-items: center; gap: 10px; margin-bottom: 13px; }
     .step-num     { width: 26px; height: 26px; border-radius: 50%; background: var(--green-mid); color: #fff; font-size: .7rem; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
@@ -327,7 +359,6 @@
     .select-wrap select:focus { border-color: var(--green-accent); box-shadow: 0 0 0 3px rgba(45,122,79,.1); background: #fff; }
     .select-wrap::after { content: '\F282'; font-family: 'bootstrap-icons'; position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: var(--muted); pointer-events: none; font-size: .95rem; }
 
-    /* Form card */
     .form-card { background: var(--surface); border: 1.5px solid var(--border); border-radius: 14px; overflow: hidden; margin-top: 18px; max-height: 0; opacity: 0; pointer-events: none; transition: max-height .5s cubic-bezier(.16,1,.3,1), opacity .35s ease; }
     .form-card.visible { max-height: 5000px; opacity: 1; pointer-events: all; }
     .form-header { padding: 16px 24px; background: linear-gradient(90deg, var(--green-mid), var(--green-deep)); display: flex; align-items: center; gap: 12px; }
@@ -339,7 +370,6 @@
     .section-heading { display: flex; align-items: center; gap: 8px; font-size: .67rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-mid); margin-bottom: 17px; }
     .section-heading i { color: var(--green-accent); }
 
-    /* Fields */
     .field { margin-bottom: 14px; }
     .field label { display: flex; align-items: center; gap: 4px; font-size: .8rem; font-weight: 500; color: var(--text-mid); margin-bottom: 5px; }
     .req { color: var(--red); font-size: .83rem; line-height: 1; }
@@ -357,20 +387,13 @@
     .sel-wrap::after { content: '\F282'; font-family: 'bootstrap-icons'; position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: var(--muted); pointer-events: none; }
     .sel-wrap select { padding-right: 34px; }
 
-    /* Extra fields per transaction type */
     .extra-fields { display: none; }
     .extra-fields.show { display: block; }
     .extra-divider { border: none; border-top: 1px solid var(--green-light); margin: 4px 0 13px; }
     .extra-label { font-size: .65rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--green-accent); margin-bottom: 12px; }
 
-    /* Checkboxes */
     .check-group { display: flex; flex-direction: column; gap: 8px; }
-    .check-item {
-      display: flex; align-items: center; gap: 9px; font-size: .84rem; color: var(--text-mid);
-      cursor: pointer; padding: 8px 12px 8px 44px; border: 1.5px solid var(--border);
-      border-radius: 8px; background: #faf8f4; transition: border-color .2s, background .2s;
-      position: relative;
-    }
+    .check-item { display: flex; align-items: center; gap: 9px; font-size: .84rem; color: var(--text-mid); cursor: pointer; padding: 8px 12px 8px 44px; border: 1.5px solid var(--border); border-radius: 8px; background: #faf8f4; transition: border-color .2s, background .2s; position: relative; }
     .check-item:hover { border-color: var(--green-accent); background: #fff; }
     .check-item input[type="checkbox"] { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 20px; height: 20px; opacity: 0; margin: 0; cursor: pointer; }
     .check-item::before { content: ''; position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 20px; height: 20px; border-radius: 6px; border: 2px solid var(--border); background: #faf8f4; }
@@ -380,12 +403,7 @@
     .check-item.checked::after  { opacity: 1; }
 
     .remit-check-group { display: flex; flex-direction: column; gap: 8px; }
-    .remit-check-item {
-      display: flex; align-items: flex-start; gap: 9px; font-size: .84rem; color: var(--text-mid);
-      cursor: pointer; padding: 8px 12px 8px 44px; border: 1.5px solid var(--border);
-      border-radius: 8px; background: #faf8f4; transition: border-color .2s, background .2s;
-      position: relative;
-    }
+    .remit-check-item { display: flex; align-items: flex-start; gap: 9px; font-size: .84rem; color: var(--text-mid); cursor: pointer; padding: 8px 12px 8px 44px; border: 1.5px solid var(--border); border-radius: 8px; background: #faf8f4; transition: border-color .2s, background .2s; position: relative; }
     .remit-check-item:hover { border-color: var(--green-accent); background: #fff; }
     .remit-check-item input[type="checkbox"] { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 20px; height: 20px; opacity: 0; margin: 0; cursor: pointer; }
     .remit-check-item::before { content: ''; position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 20px; height: 20px; border-radius: 6px; border: 2px solid var(--border); background: #faf8f4; }
@@ -470,7 +488,6 @@
     .btn-modal-save { padding: 9px 19px; border: none; border-radius: 9px; background: var(--green-accent); color: #fff; font-family: 'DM Sans', sans-serif; font-size: .81rem; font-weight: 700; cursor: pointer; transition: background .15s; display: flex; align-items: center; gap: 6px; }
     .btn-modal-save:hover { background: var(--green-mid); }
 
-    /* Mod-extra blocks inside modal */
     .mod-extra { display: none; }
 
     /* ════════════════════════════════════════
@@ -491,6 +508,7 @@
       .stat-row { grid-template-columns: repeat(2, 1fr); }
       .detail-drawer { width: 100vw; }
       .modal-grid { grid-template-columns: 1fr; }
+      .notif-dropdown { right: -60px; width: 280px; }
     }
     @media (max-width: 520px) {
       .stat-row { grid-template-columns: 1fr 1fr; }
@@ -514,10 +532,31 @@
     <i class="bi bi-shield-check"></i> Reviewer Access
   </div>
   <div class="header-actions">
-    <form method="POST" action="{{ route('logout') }}" style="display:inline;">
+
+    <!-- Notification Button -->
+    <button class="notif-btn" id="notif-btn" title="Notifications" onclick="toggleNotifDropdown(event)" aria-label="Notifications">
+      <i class="bi bi-bell" style="font-size:1rem;"></i>
+      <span class="notif-badge" id="notif-badge"></span>
+    </button>
+
+    <!-- Notification Dropdown -->
+    <div class="notif-dropdown" id="notif-dropdown">
+      <div class="notif-drop-head">
+        <span class="notif-drop-title">Notifications</span>
+        <button class="notif-drop-mark" onclick="markAllRead()">Mark all as read</button>
+      </div>
+      <div class="notif-list" id="notif-list"></div>
+      <div class="notif-drop-foot">
+        <a href="{{ route('notifications.page') }}">View all notifications</a>
+      </div>
+    </div>
+
+    <!-- Logout -->
+    <form method="POST" action="{{ route('logout') }}" style="display:inline; margin:0;">
       @csrf
       <button type="submit" class="btn-logout"><i class="bi bi-box-arrow-right"></i> Logout</button>
     </form>
+
   </div>
 </header>
 
@@ -529,14 +568,11 @@
     <div class="sidebar-inner">
 
       <nav class="sidebar-nav">
-        {{-- Review Transactions --}}
         <a href="{{ route('reviewer') }}"
            class="app-nav-link {{ request()->routeIs('reviewer') && !($openFunds ?? false) ? 'active' : '' }}">
           <span class="nav-icon"><i class="bi bi-journal-text"></i></span>
           <span class="nav-label">Review Transactions</span>
         </a>
-
-        {{-- New Transaction toggle --}}
         <a href="{{ route('reviewer', ['open_funds' => 1]) }}"
            class="app-nav-link {{ ($openFunds ?? false) ? 'active' : '' }}">
           <span class="nav-icon"><i class="bi bi-plus-circle"></i></span>
@@ -544,7 +580,6 @@
         </a>
       </nav>
 
-      {{-- Fund selector (only when New Transaction is open) --}}
       @if($openFunds ?? false)
       <div class="fund-panel">
         <div class="fund-panel-title">Select a Fund</div>
@@ -600,9 +635,6 @@
   <div class="app-main">
 
     @if(!($openFunds ?? false))
-    {{-- ════════════════════════════════════════
-         REVIEW TRANSACTIONS VIEW
-    ════════════════════════════════════════ --}}
     <div class="page-body">
 
       @if(session('success'))
@@ -846,15 +878,11 @@
           @endif
         </div>
       </div>
-    </div>{{-- /page-body --}}
+    </div>
 
     @else
-    {{-- ════════════════════════════════════════
-         NEW TRANSACTION VIEW (Maker form embedded)
-    ════════════════════════════════════════ --}}
     <div class="new-txn-wrap">
 
-      {{-- Sticky fund banner --}}
       <div class="fund-banner-sticky-wrap" id="fund-banner-wrap">
         <div class="fund-banner">
           <div class="fund-banner-icon" id="fund-banner-dot">—</div>
@@ -869,7 +897,6 @@
       <div class="maker-main">
         <div class="maker-inner">
 
-          {{-- Gate --}}
           <div id="section-gate">
             <div class="fund-gate">
               <div class="fund-gate-icon"><i class="bi bi-bank2"></i></div>
@@ -878,7 +905,6 @@
             </div>
           </div>
 
-          {{-- Form --}}
           <div id="section-form" style="display:none;">
             <h1 class="maker-page-title">Process a Payment</h1>
             <p class="maker-page-sub">Select the transaction type, then fill in the required details.</p>
@@ -914,7 +940,6 @@
               </div>
             </div>
 
-            <!-- FORM CARD -->
             <div class="form-card" id="form-card">
               <div class="form-header">
                 <div class="form-header-seal">🌾</div>
@@ -958,7 +983,7 @@
                     <small style="font-size:.7rem; color:var(--muted); margin-top:4px; display:block;">Format: FUND-YEAR-MONTH-SERIES (e.g. F01-2026-01-0001). Generated automatically; resets monthly & yearly.</small>
                   </div>
 
-                  <!-- ══ EXTRA FIELDS PER TRANSACTION TYPE ══ -->
+                  <!-- EXTRA FIELDS -->
                   <div class="extra-fields" id="extra-appeal_fee">
                     <hr class="extra-divider"><div class="extra-label">Appeal Fee Details</div>
                     <div class="field"><label>Remarks / Comments :</label><textarea name="appeal_remarks" placeholder="Enter any relevant remarks…" data-validate="text"></textarea></div>
@@ -1077,16 +1102,16 @@
                   </button>
                 </form>
               </div>
-            </div>{{-- /form-card --}}
-          </div>{{-- /section-form --}}
+            </div>
+          </div>
 
-        </div>{{-- /maker-inner --}}
-      </div>{{-- /maker-main --}}
-    </div>{{-- /new-txn-wrap --}}
+        </div>
+      </div>
+    </div>
     @endif
 
-  </div>{{-- /app-main --}}
-</div>{{-- /app-layout --}}
+  </div>
+</div>
 
 <!-- ══ DETAIL DRAWER ══ -->
 <div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
@@ -1174,7 +1199,6 @@
             </select>
           </div>
         </div>
-        {{-- Reviewer Remarks --}}
         <div style="margin-top:16px;">
           <div class="modal-field full">
             <label style="display:flex;align-items:center;gap:6px;">
@@ -1196,6 +1220,133 @@
 
 <!-- ══════════════ SCRIPTS ══════════════ -->
 <script>
+  /* ─── NOTIFICATION SYSTEM ─── */
+  let NOTIF_DATA = [];
+
+  function fetchNotifications() {
+    fetch('/notifications', { headers: { 'X-Requested-With': 'XMLHttpRequest' }})
+      .then(r => r.json())
+      .then(items => {
+        NOTIF_DATA = items.map(i => ({
+          id: i.id,
+          icon: i.data.icon || 'bi-hourglass-split',
+          cls: i.data.cls || 'ni-gold',
+          name: i.data.name || i.data.op_number || 'Transaction',
+          status: i.data.status || 'waiting',
+          _created: i.created_at || null,
+          time: '',
+          unread: !(i.read === true),
+        }));
+        // compute humanized times
+        NOTIF_DATA.forEach(n => { n.time = n._created ? timeAgo(n._created) : ''; });
+        renderNotifList();
+      }).catch(e => {
+        console.warn('Failed to load notifications', e);
+      });
+  }
+
+  // Return human-friendly relative time (simple implementation)
+  function timeAgo(dateString) {
+    try {
+      const then = new Date(dateString);
+      const now = new Date();
+      const sec = Math.floor((now - then) / 1000);
+      if (sec < 5) return 'just now';
+      if (sec < 60) return sec + ' seconds ago';
+      const min = Math.floor(sec / 60);
+      if (min < 60) return min + (min === 1 ? ' minute ago' : ' minutes ago');
+      const hr = Math.floor(min / 60);
+      if (hr < 24) return hr + (hr === 1 ? ' hour ago' : ' hours ago');
+      const days = Math.floor(hr / 24);
+      if (days < 30) return days + (days === 1 ? ' day ago' : ' days ago');
+      return then.toLocaleDateString();
+    } catch (e) {
+      return dateString;
+    }
+  }
+
+  // Update visible "time" fields periodically
+  function updateNotifTimes() {
+    NOTIF_DATA.forEach(n => { if (n._created) n.time = timeAgo(n._created); });
+    renderNotifList();
+  }
+  // refresh times every 15 seconds
+  setInterval(updateNotifTimes, 15000);
+
+  let notifOpen = false;
+
+  function renderNotifList() {
+    const list = document.getElementById('notif-list');
+    const unreadCount = NOTIF_DATA.filter(n => n.unread).length;
+    const badge = document.getElementById('notif-badge');
+    if (unreadCount > 0) badge.classList.add('show');
+    else badge.classList.remove('show');
+
+    if (NOTIF_DATA.length === 0) {
+      list.innerHTML = '<div class="notif-empty"><i class="bi bi-bell-slash"></i><p>No notifications yet.</p></div>';
+      return;
+    }
+
+    list.innerHTML = NOTIF_DATA.map(n => {
+      let actionText = '';
+      if (n.status === 'approved') actionText = 'has been approved.';
+      else if (n.status === 'waiting') actionText = 'is awaiting your review.';
+      else if (n.status === 'rejected') actionText = 'was rejected. Please review.';
+      const message = `Transaction for ${n.name} ${actionText}`;
+      return `
+      <div class="notif-item${n.unread ? ' unread' : ''}" onclick="readNotif(${n.id})">
+        <div class="notif-item-icon ${n.cls}"><i class="bi ${n.icon}"></i></div>
+        <div class="notif-item-body">
+          <div class="notif-item-text">${message}</div>
+          <div class="notif-item-time">${n.time}</div>
+        </div>
+        ${n.unread ? '<div class="notif-unread-dot"></div>' : ''}
+      </div>
+      `;
+    }).join('');
+  }
+
+  function readNotif(id) {
+    fetch('/notifications/' + id + '/read', { method: 'POST', headers: { 'X-Requested-With': 'XMLHttpRequest', 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '' }})
+      .then(() => {
+        const n = NOTIF_DATA.find(x => x.id === id);
+        if (n) n.unread = false;
+        renderNotifList();
+      }).catch(() => {
+        // still mark locally
+        const n = NOTIF_DATA.find(x => x.id === id);
+        if (n) n.unread = false;
+        renderNotifList();
+      });
+  }
+
+  function markAllRead() {
+    const unread = NOTIF_DATA.filter(n => n.unread).map(n => n.id);
+    Promise.all(unread.map(id => fetch('/notifications/' + id + '/read', { method: 'POST', headers: { 'X-Requested-With': 'XMLHttpRequest', 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '' }})))
+      .finally(() => { NOTIF_DATA.forEach(n => n.unread = false); renderNotifList(); });
+  }
+
+  function toggleNotifDropdown(e) {
+    e.stopPropagation();
+    const dropdown = document.getElementById('notif-dropdown');
+    notifOpen = !notifOpen;
+    if (notifOpen) { dropdown.classList.add('open'); renderNotifList(); }
+    else dropdown.classList.remove('open');
+  }
+
+  document.addEventListener('click', function(e) {
+    const btn = document.getElementById('notif-btn');
+    const dropdown = document.getElementById('notif-dropdown');
+    if (notifOpen && !btn.contains(e.target) && !dropdown.contains(e.target)) {
+      dropdown.classList.remove('open');
+      notifOpen = false;
+    }
+  });
+
+  window.addEventListener('load', function() {
+    fetchNotifications();
+  });
+
   /* ─── SIDEBAR: Fund Selection & Proceed ─── */
   function selectReviewerFund(el) {
     document.querySelectorAll('.fund-item').forEach(f => f.classList.remove('active'));
@@ -1205,16 +1356,14 @@
     if (labelEl) labelEl.textContent = label;
     const btn = document.getElementById('reviewer-proceed');
     if (btn) { btn.disabled = false; btn.classList.add('enabled'); btn.dataset.fund = el.dataset.fund; }
-    // keep hidden input in sync so other scripts/readers see current selection
     const hf = document.getElementById('hidden-fund-type'); if (hf) hf.value = el.dataset.fund;
-    // also persist selection to draft so restore doesn't revert to an older fund
     try {
       const key = 'reviewer_form_draft_v1';
       const raw = localStorage.getItem(key);
       const obj = raw ? JSON.parse(raw) : {};
       obj.hiddenFund = el.dataset.fund;
       localStorage.setItem(key, JSON.stringify(obj));
-    } catch (e) { /* ignore */ }
+    } catch (e) {}
   }
 
   document.addEventListener('DOMContentLoaded', function () {
@@ -1227,7 +1376,6 @@
       });
     }
 
-    /* Auto-select fund if URL has ?fund= */
     @if($openFunds ?? false)
     (function () {
       const params = new URLSearchParams(window.location.search);
@@ -1235,8 +1383,6 @@
       if (f) {
         const el = document.querySelector('.fund-item[data-fund="' + f + '"]');
         if (el) selectReviewerFund(el);
-
-        /* Also initialize the sticky fund banner & form gate */
         const hf   = document.getElementById('hidden-fund-type'); if (hf)   hf.value = f;
         const dot  = document.getElementById('fund-banner-dot');  if (dot)  dot.textContent = f.split('-')[0] || f;
         const name = document.getElementById('fund-banner-name'); if (name) name.textContent = f;
@@ -1248,10 +1394,7 @@
     @endif
   });
 
-  /* ─── NEW TRANSACTION: Fund banner change ─── */
-  function changeFund() {
-    window.location = '{{ route('reviewer', ['open_funds' => 1]) }}';
-  }
+  function changeFund() { window.location = '{{ route('reviewer', ['open_funds' => 1]) }}'; }
 
   /* ─── TRANSACTION TYPE SELECT ─── */
   document.addEventListener('DOMContentLoaded', function () {
@@ -1404,8 +1547,8 @@
           const sb = tr.querySelector('.status-badge'); if (!sb) return;
           const st = (d.status || 'waiting').toLowerCase();
           let cls = 'sb-default', icon = 'bi-circle';
-          if (st === 'approved')                                              { cls = 'sb-approved'; icon = 'bi-check-circle-fill'; }
-          else if (['rejected','accountant_rejected'].includes(st))          { cls = 'sb-rejected'; icon = 'bi-x-circle-fill'; }
+          if (st === 'approved') { cls = 'sb-approved'; icon = 'bi-check-circle-fill'; }
+          else if (['rejected','accountant_rejected'].includes(st)) { cls = 'sb-rejected'; icon = 'bi-x-circle-fill'; }
           else if (['waiting','submitted','under_review','forwarded'].includes(st)) { cls = 'sb-waiting'; icon = 'bi-hourglass-split'; }
           sb.className = 'status-badge ' + cls;
           sb.innerHTML = `<i class="bi ${icon}"></i> ` + (st.charAt(0).toUpperCase() + st.slice(1));
@@ -1416,10 +1559,10 @@
         const approved = list.filter(it => (it.status || '') === 'approved').length;
         const elTotal  = document.getElementById('stat-total-count');   if (elTotal)  elTotal.textContent  = total;
         const elAmt    = document.getElementById('stat-total-amount');  if (elAmt)    elAmt.textContent    = '₱' + sum.toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-        const elAwait  = document.getElementById('stat-awaiting-count'); if (elAwait)  elAwait.textContent = awaiting;
-        const elApp    = document.getElementById('stat-approved-count'); if (elApp)    elApp.textContent   = approved;
+        const elAwait  = document.getElementById('stat-awaiting-count'); if (elAwait) elAwait.textContent  = awaiting;
+        const elApp    = document.getElementById('stat-approved-count'); if (elApp)   elApp.textContent    = approved;
         const rc       = document.getElementById('record-count'); if (rc) rc.textContent = total + ' record' + (total !== 1 ? 's' : '');
-      } catch (e) { /* ignore */ }
+      } catch (e) {}
     }
     refresh();
     setInterval(refresh, 8000);
@@ -1427,77 +1570,59 @@
 </script>
 
 <script>
-  /* Form draft persistence for reviewer (save & restore using localStorage) */
+  /* Form draft persistence for reviewer */
   (function(){
     const DRAFT_KEY = 'reviewer_form_draft_v1';
-
     function saveDraft() {
       const obj = {};
       obj.hiddenFund = document.getElementById('hidden-fund-type')?.value || null;
       obj.txnSelect = document.getElementById('txn-select')?.value || '';
       obj.agree_terms = !!document.getElementById('agree_terms')?.checked;
-
       const form = document.getElementById('payment-form');
       if (form) {
         Array.from(form.elements).forEach(el => {
           if (!el.name) return;
           const name = el.name;
-          // don't persist framework-hidden fields (CSRF token, method, etc.)
           if (name.startsWith('_')) return;
           if (el.type === 'checkbox') {
             if (name.endsWith('[]')) {
               const base = name.replace(/\[\]$/, '');
               obj[base] = obj[base] || [];
               if (el.checked) obj[base].push(el.value);
-            } else {
-              obj[name] = el.checked;
-            }
+            } else { obj[name] = el.checked; }
           } else if (el.type === 'radio') {
             if (el.checked) obj[name] = el.value;
-          } else {
-            obj[name] = el.value;
-          }
+          } else { obj[name] = el.value; }
         });
       }
-
-      try { localStorage.setItem(DRAFT_KEY, JSON.stringify(obj)); } catch (e) { /* ignore */ }
+      try { localStorage.setItem(DRAFT_KEY, JSON.stringify(obj)); } catch (e) {}
     }
-
     function restoreDraft() {
       let raw = null;
       try { raw = localStorage.getItem(DRAFT_KEY); } catch (e) { return; }
       if (!raw) return;
       let obj;
       try { obj = JSON.parse(raw); } catch (e) { return; }
-
       if (obj.hiddenFund) {
         const fund = obj.hiddenFund;
         const el = document.querySelector('.fund-item[data-fund="' + fund + '"]');
         if (el && typeof selectReviewerFund === 'function') selectReviewerFund(el);
         const hf = document.getElementById('hidden-fund-type'); if (hf) hf.value = fund;
       }
-
       if (obj.txnSelect) {
         const sel = document.getElementById('txn-select');
-        if (sel) {
-          sel.value = obj.txnSelect;
-          sel.dispatchEvent(new Event('change'));
-        }
+        if (sel) { sel.value = obj.txnSelect; sel.dispatchEvent(new Event('change')); }
       }
-
       const form = document.getElementById('payment-form');
       if (form) {
         Array.from(form.elements).forEach(el => {
           if (!el.name) return;
           const name = el.name;
-          // skip restoring framework-hidden fields
           if (name.startsWith('_')) return;
           if (el.type === 'checkbox') {
-            if (obj[name] !== undefined) {
-              el.checked = !!obj[name];
-            } else if (obj[name.replace(/\[\]$/,'')] && Array.isArray(obj[name.replace(/\[\]$/,'')])) {
-              const arr = obj[name.replace(/\[\]$/,'')];
-              el.checked = arr.includes(el.value);
+            if (obj[name] !== undefined) { el.checked = !!obj[name]; }
+            else if (obj[name.replace(/\[\]$/,'')] && Array.isArray(obj[name.replace(/\[\]$/,'')])) {
+              el.checked = obj[name.replace(/\[\]$/,'')].includes(el.value);
             }
             el.dispatchEvent(new Event('change'));
           } else if (el.type === 'radio') {
@@ -1507,13 +1632,11 @@
           }
         });
       }
-
       if (obj.agree_terms) {
         const ag = document.getElementById('agree_terms');
         if (ag) { ag.checked = true; const sb = document.getElementById('submit-btn'); if (sb) sb.disabled = !ag.checked; }
       }
     }
-
     window.addEventListener('load', restoreDraft);
     document.addEventListener('input', function(e){ if (!e.target || !e.target.closest) return; if (e.target.closest('#payment-form')) saveDraft(); }, true);
     document.addEventListener('change', function(e){ if (e.target && e.target.closest && e.target.closest('#payment-form')) saveDraft(); }, true);

@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Payment;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
+use App\Models\User;
+use App\Notifications\NewMessageNotification;
 
 class MakerController extends Controller
 {
@@ -173,6 +176,18 @@ class MakerController extends Controller
                 'status' => 'submitted',
             ]);
             Log::info('Payment created', ['id' => $payment->id]);
+            // Notify reviewer(s) about the new payment
+            try {
+                $reviewerRoleId = DB::table('roles')->where('name', 'reviewer')->value('id');
+                if ($reviewerRoleId) {
+                    $reviewers = User::where('role_id', $reviewerRoleId)->get();
+                    foreach ($reviewers as $r) {
+                        $r->notify(new NewMessageNotification($payment));
+                    }
+                }
+            } catch (\Throwable $e) {
+                Log::warning('Failed to notify reviewers: ' . $e->getMessage());
+            }
         } catch (\Exception $e) {
             Log::error('Payment create failed', ['error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
             return back()->withInput()->with('error', 'Failed to save payment: ' . $e->getMessage());
