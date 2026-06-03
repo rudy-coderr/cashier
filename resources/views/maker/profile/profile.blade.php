@@ -7,7 +7,7 @@
   <title>My Profile — DAR Maker</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
-  <link rel="icon" href="{{ asset('img/dar_logo.png') }}" />
+  <link rel="icon" href="{{ asset('img/dar_logo_square.jpg') }}" />
   <style>
     :root {
       --green-deep:   #0e2a1a;
@@ -436,7 +436,7 @@
 
 <header class="page-header">
   <div class="header-seal">
-    <img src="{{ asset('img/dar_logo.png') }}" alt="DAR logo" />
+    <img src="{{ asset('img/dar_logo_square.jpg') }}" alt="DAR logo" />
   </div>
   <div class="header-text">
     <div class="t1">Republic of the Philippines</div>

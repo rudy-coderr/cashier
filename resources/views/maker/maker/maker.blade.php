@@ -23,7 +23,7 @@
   </noscript>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
-  <link rel="icon" href="{{ asset('img/dar_logo.png') }}" />
+  <link rel="icon" href="{{ asset('img/dar_logo_square.jpg') }}" />
   <style>
     :root {
       --green-deep:   #0e2a1a;
@@ -418,7 +418,7 @@
 @endphp
 
 <header class="page-header">
-  <div class="header-seal"><img src="{{ asset('img/dar_logo.png') }}" alt="DAR logo"  /></div>
+  <div class="header-seal"><img src="{{ asset('img/dar_logo_square.jpg') }}" alt="DAR logo"  /></div>
   <div class="header-text">
     <div class="t1">Republic of the Philippines</div>
     <div class="t2">Department of Agrarian Reform</div>
@@ -641,7 +641,7 @@
         <!-- ════ FORM CARD ════ -->
         <div class="form-card" id="form-card">
           <div class="form-header">
-            <div class="form-header-seal"><img src="{{ asset('img/dar_logo.png') }}" alt="DAR logo" style="width:42px;height:42px;object-fit:cover;border-radius:50%;display:block;" /></div>
+            <div class="form-header-seal"><img src="{{ asset('img/dar_logo_square.jpg') }}" alt="DAR logo" style="width:42px;height:42px;object-fit:contain;display:block;" /></div>
             <div class="form-header-info">
               <div class="org">Department of Agrarian Reform — Regional Office V</div>
               <div class="txn-name" id="form-txn-name">—</div>

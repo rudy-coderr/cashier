@@ -12,7 +12,7 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet" />
     <!-- Favicon -->
-    <link rel="icon" href="{{ asset('img/dar_logo.png') }}" />
+    <link rel="icon" href="{{ asset('img/dar_logo_square.jpg') }}" />
 
     <style>
         :root {
@@ -383,7 +383,7 @@
 
         <!-- TOP BAR -->
         <header class="top-bar">
-            <img src="{{ asset('img/dar_logo.png') }}" alt="DAR Logo" class="gov-seal" />
+            <img src="{{ asset('img/dar_logo_square.jpg') }}" alt="DAR Logo" class="gov-seal" />
             <div class="gov-label">
                 <div class="republic">Republic of the Philippines</div>
                 <div class="agency">Department of Agrarian Reform</div>
