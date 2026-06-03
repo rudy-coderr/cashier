@@ -452,8 +452,7 @@
       </div>
 
       <div class="sys-title">
-        <div class="sys-eyebrow">DAR — Official System</div>
-        <div class="sys-name">Cashier<br><em>Transaction</em><br>Management</div>
+<div class="sys-name">Cashier<br><em>Transaction</em><br>Management</div>
         <div class="sys-divider"></div>
         <div class="sys-desc">Secure access portal for authorized Department of Agrarian Reform personnel.</div>
       </div>
