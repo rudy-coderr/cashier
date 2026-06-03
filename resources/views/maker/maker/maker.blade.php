@@ -203,7 +203,7 @@
     .fund-gate-sub { font-size: .82rem; color: var(--muted); font-weight: 300; max-width: 320px; margin: 0 auto; line-height: 1.6; }
 
     /* Page title */
-    .page-title { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-weight: 700; color: var(--text-dark); margin-bottom: 4px; }
+    .page-title { font-family: 'Cormorant Garamond', serif; font-size: 1.7rem; font-weight: 700; color: var(--text-dark); margin-bottom: 4px; }
     .page-sub { font-size: .82rem; color: var(--muted); font-weight: 300; margin-bottom: 24px; }
 
     /* Step indicator */

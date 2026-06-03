@@ -44,7 +44,7 @@
     .header-text .t1 { font-size: .56rem; letter-spacing: 2.5px; text-transform: uppercase; color: rgba(245,240,232,.35); font-weight: 300; }
     .header-text .t2 { font-size: .83rem; font-weight: 600; color: var(--cream); }
     .header-sep { width: 1px; height: 28px; background: rgba(245,240,232,.15); margin: 0 4px; }
-    .header-page { font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; font-weight: 700; color: var(--gold-light); }
+    .header-page { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-weight: 700; color: var(--gold-light); }
     .reviewer-badge {
       display: inline-flex; align-items: center; gap: 6px;
       padding: 4px 11px; border-radius: 20px;
@@ -115,7 +115,7 @@
     /* ── PAGE BODY ── */
     .page-body { max-width: 1100px; margin: 0 auto; padding: 32px 28px 60px; width: 100%; }
 
-    .page-title { font-family: 'Cormorant Garamond', serif; font-size: 1.65rem; font-weight: 700; color: var(--text-dark); margin-bottom: 3px; }
+    .page-title { font-family: 'Cormorant Garamond', serif; font-size: 1.7rem; font-weight: 700; color: var(--text-dark); margin-bottom: 3px; }
     .page-sub { font-size: .8rem; color: var(--muted); font-weight: 300; }
 
     /* ── TOOLBAR ── */

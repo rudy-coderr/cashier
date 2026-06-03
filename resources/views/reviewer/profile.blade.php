@@ -50,7 +50,7 @@
     .header-text .t1 { font-size: .56rem; letter-spacing: 2.5px; text-transform: uppercase; color: rgba(245,240,232,.35); font-weight: 300; }
     .header-text .t2 { font-size: .83rem; font-weight: 600; color: var(--cream); }
     .header-sep { width: 1px; height: 28px; background: rgba(245,240,232,.15); margin: 0 4px; }
-    .header-page { font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; font-weight: 700; color: var(--gold-light); }
+    .header-page { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-weight: 700; color: var(--gold-light); }
     .reviewer-badge {
       display: inline-flex; align-items: center; gap: 6px;
       padding: 4px 11px; border-radius: 20px;

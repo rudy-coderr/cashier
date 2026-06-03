@@ -50,7 +50,7 @@
     .header-text .t1 { font-size: .56rem; letter-spacing: 2.5px; text-transform: uppercase; color: rgba(245,240,232,.35); font-weight: 300; }
     .header-text .t2 { font-size: .83rem; font-weight: 600; color: var(--cream); }
     .header-sep { width: 1px; height: 28px; background: rgba(245,240,232,.15); margin: 0 4px; }
-    .header-page { font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; font-weight: 700; color: var(--gold-light); }
+    .header-page { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-weight: 700; color: var(--gold-light); }
     .reviewer-badge {
       display: inline-flex; align-items: center; gap: 6px;
       padding: 4px 11px; border-radius: 20px;
@@ -209,7 +209,7 @@
     ════════════════════════════════════════ */
     .page-body { max-width: 1500px; margin: 0 auto; padding: 32px 28px 60px; width: 100%; }
 
-    .page-title { font-family: 'Cormorant Garamond', serif; font-size: 1.65rem; font-weight: 700; color: var(--text-dark); margin-bottom: 3px; }
+    .page-title { font-family: 'Cormorant Garamond', serif; font-size: 1.7rem; font-weight: 700; color: var(--text-dark); margin-bottom: 3px; }
     .page-sub { font-size: .8rem; color: var(--muted); font-weight: 300; }
 
     .reviewer-notice {
@@ -338,7 +338,7 @@
     .fund-gate-title { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-weight: 700; color: var(--text-mid); margin-bottom: 8px; }
     .fund-gate-sub { font-size: .82rem; color: var(--muted); font-weight: 300; max-width: 320px; margin: 0 auto; line-height: 1.6; }
 
-    .maker-page-title { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-weight: 700; color: var(--text-dark); margin-bottom: 4px; }
+    .maker-page-title { font-family: 'Cormorant Garamond', serif; font-size: 1.7rem; font-weight: 700; color: var(--text-dark); margin-bottom: 4px; }
     .maker-page-sub   { font-size: .82rem; color: var(--muted); font-weight: 300; margin-bottom: 24px; }
 
     .step-indicator { display: flex; align-items: center; margin-bottom: 22px; }
