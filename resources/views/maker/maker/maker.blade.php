@@ -2202,7 +2202,17 @@
   </div>
 </div>
   @if(session('success'))
-  <script>try{ localStorage.removeItem('maker_form_draft_v1'); }catch(e){} </script>
+  <script>
+    try{ localStorage.removeItem('maker_form_draft_v1'); }catch(e){}
+    document.addEventListener('DOMContentLoaded', function() {
+      Swal.fire({
+        title: 'Success!',
+        text: '{{ session('success') }}',
+        icon: 'success',
+        confirmButtonText: 'OK'
+      });
+    });
+  </script>
   @endif
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
