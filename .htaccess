@@ -1,0 +1,10 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Serve existing static files from public/ directly
+    RewriteCond %{DOCUMENT_ROOT}/public%{REQUEST_URI} -f
+    RewriteRule ^ public%{REQUEST_URI} [L]
+
+    # Route everything else through Laravel's front controller
+    RewriteRule ^ public/index.php [L]
+</IfModule>
