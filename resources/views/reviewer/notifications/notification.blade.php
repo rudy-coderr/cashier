@@ -367,10 +367,7 @@
           <span class="nav-icon"><i class="bi bi-plus-circle"></i></span>
           <span class="nav-label">New Transaction</span>
         </a>
-        <a href="{{ route('notifications.page') }}" class="app-nav-link active">
-          <span class="nav-icon"><i class="bi bi-bell"></i></span>
-          <span class="nav-label">All Notifications</span>
-        </a>
+      
       </nav>
       <div class="sidebar-footer">
         <form method="POST" action="{{ route('logout') }}">
@@ -692,7 +689,8 @@
 
   function readAndView(id) {
     markOneRead(id);
-    // Optionally navigate to the transaction — extend as needed
+    // Redirect reviewer to dashboard showing only this notification
+    window.location = '/reviewer?notif_id=' + encodeURIComponent(id);
   }
 
   /* ── CLEAR MODAL ── */

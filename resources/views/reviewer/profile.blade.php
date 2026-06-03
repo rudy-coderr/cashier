@@ -81,6 +81,7 @@
     .notif-item:last-child { border-bottom: none; }
     .notif-item.unread { background: #f5fbf7; }
     .notif-item:hover { background: #f0f7f3; }
+    .notif-item, .notif-item a { text-decoration: none; color: inherit; }
     .notif-item-icon { width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: .8rem; flex-shrink: 0; }
     .ni-green { background: var(--green-light); color: var(--green-accent); }
     .ni-gold  { background: #fdf3dc; color: var(--gold); }
@@ -924,14 +925,14 @@
       else if (n.status === 'rejected') actionText = 'was rejected. Please review.';
       const message = `Transaction for ${n.name} ${actionText}`;
       return `
-      <div class="notif-item${n.unread ? ' unread' : ''}" onclick="readNotif(${n.id})">
+      <a href="/reviewer?notif_id=${n.id}" class="notif-item${n.unread ? ' unread' : ''}" onclick="readNotif(${n.id})">
         <div class="notif-item-icon ${n.cls}"><i class="bi ${n.icon}"></i></div>
         <div class="notif-item-body">
           <div class="notif-item-text">${message}</div>
           <div class="notif-item-time">${n.time}</div>
         </div>
         ${n.unread ? '<div class="notif-unread-dot"></div>' : ''}
-      </div>
+      </a>
       `;
     }).join('');
   }

@@ -21,7 +21,7 @@ class AccountantController extends Controller
      */
     public function approval()
     {
-        // Base filter: forwarded to accountant or previously rejected by accountant
+        // Base filter: forwarded to approver or previously rejected by approver
         $statusParam = request()->query('status', '');
         $fundParam   = request()->query('fund', '');
         $q           = request()->query('search', '');

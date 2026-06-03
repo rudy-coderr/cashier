@@ -292,6 +292,33 @@
 .dropdown-item.danger:hover { background: #fdf0ef; }
 .dropdown-divider { border: none; border-top: 1px solid var(--border); margin: 4px 0; }
 
+    /* ── DRAWER ── */
+    .drawer-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 500; }
+    .drawer-overlay.open { display: block; }
+    .detail-drawer { position: fixed; top: 0; right: 0; width: 440px; max-width: 100vw; height: 100vh; background: var(--surface); box-shadow: -8px 0 40px rgba(0,0,0,.18); display: flex; flex-direction: column; transform: translateX(100%); transition: transform .28s cubic-bezier(.16,1,.3,1); z-index: 501; }
+    .detail-drawer.open { transform: translateX(0); }
+    .drawer-head { padding: 16px 22px; background: var(--green-deep); display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+    .drawer-head-title { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 700; color: var(--gold-light); }
+    .drawer-close-btn { width: 32px; height: 32px; border-radius: 8px; background: rgba(255,255,255,.07); border: none; color: rgba(245,240,232,.5); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1rem; transition: background .15s, color .15s; }
+    .drawer-close-btn:hover { background: rgba(255,255,255,.14); color: var(--cream); }
+    .drawer-body { flex: 1; overflow-y: auto; padding: 20px 22px; }
+    .drawer-body::-webkit-scrollbar { width: 3px; }
+    .drawer-body::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+    .drawer-actions { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+    .drawer-action-approve { display: inline-flex; align-items: center; gap: 5px; padding: 8px 16px; border: none; border-radius: 8px; background: var(--green-accent); color: #fff; font-family: 'DM Sans', sans-serif; font-size: .72rem; font-weight: 700; cursor: pointer; transition: background .15s; }
+    .drawer-action-approve:hover { background: var(--green-mid); }
+    .drawer-action-modify { display: inline-flex; align-items: center; gap: 5px; padding: 8px 16px; border: 1.5px solid var(--border); border-radius: 8px; background: #f5fbf7; color: var(--green-accent); font-family: 'DM Sans', sans-serif; font-size: .72rem; font-weight: 700; cursor: pointer; transition: background .15s; }
+    .drawer-action-modify:hover { background: var(--green-light); }
+    .drawer-divider { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
+    .drawer-section-title { font-size: .76rem; font-weight: 700; color: var(--green-accent); letter-spacing: 1px; text-transform: uppercase; display: flex; align-items: center; gap: 8px; margin-bottom: 12px; margin-top: 8px; }
+    .drawer-section-title i { font-size: .9rem; }
+    .drawer-field { margin-bottom: 12px; }
+    .drawer-field-label { font-size: .68rem; color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: .8px; margin-bottom: 4px; }
+    .drawer-field-value { font-size: .84rem; color: var(--text-dark); font-weight: 500; line-height: 1.5; }
+    .action-btn { width: 29px; height: 29px; border-radius: 7px; border: 1.5px solid var(--border); background: #faf8f4; color: var(--text-mid); display: inline-flex; align-items: center; justify-content: center; font-size: .83rem; cursor: pointer; transition: background .15s, border-color .15s, color .15s; text-decoration: none; flex-shrink: 0; }
+    .action-btn:hover { background: var(--green-light); border-color: var(--green-accent); color: var(--green-accent); }
+    @media (max-width: 768px) { .detail-drawer { width: 100vw; } }
+
   </style>
 </head>
 <body>
@@ -580,6 +607,32 @@
                   };
                   $nameParts = explode(' ', trim($p->name));
                   $initials  = strtoupper(substr($nameParts[0], 0, 1)) . (isset($nameParts[1]) ? strtoupper(substr($nameParts[1], 0, 1)) : '');
+                  
+                  // Drawer data
+                  $txnNames  = [
+                    'appeal_fee'=>'Appeal Fee','bidding_documents'=>'Bidding Documents','cash_bond'=>'Cash Bond',
+                    'certification_copy_fee'=>'Certification, Copy Fee and Reproduction Cost','consignment'=>'Consignment',
+                    'execution_judgment'=>'Execution of Judgment Involving Money','filing_fee'=>'Filing Fee and Inspection Cost',
+                    'income_unserviceable'=>'Income from Sale of Unserviceable Property','legal_research'=>'Legal Research',
+                    'performance_bond'=>'Performance Bond','refund_cash_advances'=>'Refund of Cash Advances',
+                    'refund_overpayment'=>'Refund of Overpayment','settlement_disallowances'=>'Settlement of Notice of Disallowances',
+                    'unwithheld_remittances'=>'Unwithheld Remittances',
+                  ];
+                  $rawTxn    = $p->transaction_type ?? '';
+                  $txnLabel  = $txnNames[$rawTxn] ?? ucwords(str_replace('_',' ', $rawTxn));
+                  $fundLabel = $p->fund_type ?? '—';
+                  $meta      = $p->meta ?? [];
+                  $details   = [];
+                  if (!empty($p->contact))      $details['Contact']      = $p->contact;
+                  if (!empty($p->address))      $details['Address']      = $p->address;
+                  if (!empty($p->email))        $details['Email']        = $p->email;
+                  if (!empty($p->payment_mode)) $details['Payment Mode'] = ucfirst(str_replace('_',' ',$p->payment_mode));
+                  if (is_array($meta)) {
+                    foreach ($meta as $k => $v) {
+                      if ($v === null || $v === '') continue;
+                      $details[$k] = is_array($v) ? implode(', ', $v) : $v;
+                    }
+                  }
                 @endphp
                 <tr
                   data-search="{{ strtolower($p->name . ' ' . ($p->op_number ?? '')) }}"
@@ -609,6 +662,7 @@
                   </td>
                   <td>
                     <div class="actions-cell">
+                      <a href="#" class="action-btn" title="View" onclick="openDrawer({{ $p->id }});return false;"><i class="bi bi-eye"></i></a>
                       @if($status !== 'approved')
                         <form method="POST" action="{{ route('accountant.approve', $p->id) }}"
                           onsubmit="return confirm('Approve payment from {{ addslashes($p->name) }} (₱{{ number_format($p->amount, 2) }})?')">
@@ -627,6 +681,22 @@
                     </div>
                   </td>
                 </tr>
+
+              <script>
+                window.__drawers = window.__drawers || {};
+                window.__drawers[{{ $p->id }}] = {
+                  id: {{ $p->id }}, name: @json($p->name), email: @json($p->email ?? '—'),
+                  contact: @json($p->contact ?? '—'), address: @json($p->address ?? '—'),
+                  amount: @json('₱'.number_format($p->amount,2)), amountRaw: @json(number_format($p->amount,2)),
+                  amountNum: @json((float)$p->amount), txn: @json($txnLabel ?: '—'), rawTxn: @json($rawTxn),
+                  fund: @json($fundLabel), op: @json($p->op_number ?? '—'),
+                  mode: @json(ucfirst(str_replace('_',' ',$p->payment_mode ?? 'cash'))),
+                  rawMode: @json($p->payment_mode ?? 'cash'), status: @json(ucfirst($status)),
+                  rawStatus: @json($status), statusCls: @json($statusCls), statusIcon: @json($statusIcon),
+                  date: @json($p->created_at->format('F d, Y — h:i A')), meta: @json($p->meta ?? []),
+                  dateShort: @json($p->created_at->format('m/d/Y')), details: @json($details)
+                };
+              </script>
               @empty
                 <tr class="empty-row">
                   <td colspan="7">
@@ -807,6 +877,9 @@
   function filterTable() {
     const form = document.getElementById('filter-form'); if (form) form.submit();
   }
+
+  /* ─── ESCAPE KEY TO CLOSE DRAWER ─── */
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDrawer(); });
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -827,6 +900,43 @@
       }));
     } catch (e) {}
   })();
+</script>
+
+<!-- ══ DETAIL DRAWER ══ -->
+<div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
+<div class="detail-drawer" id="detail-drawer">
+  <div class="drawer-head">
+    <div>
+      <div class="drawer-head-title" id="drawer-payor-name">Payment Details</div>
+    </div>
+    <button type="button" class="drawer-close-btn" onclick="closeDrawer()"><i class="bi bi-x"></i></button>
+  </div>
+  <div class="drawer-body" id="drawer-body"></div>
+</div>
+
+<script>
+  /* ─── DRAWER ─── */
+  let __active = null;
+  function openDrawer(id) {
+    const d = window.__drawers?.[id]; if (!d) return;
+    __active = d;
+    document.getElementById('drawer-payor-name').textContent = d.name;
+    let h = `<div class="status-badge ${d.statusCls}" style="margin-bottom:16px;font-size:.74rem;padding:5px 13px;"><i class="bi ${d.statusIcon}"></i> ${d.status}</div>`;
+    h += `<div class="drawer-section-title"><i class="bi bi-person-lines-fill"></i> Payor Information</div>`;
+    h += df('Full Name', d.name) + df('Email', d.email) + df('Contact Number', d.contact) + df('Address', d.address);
+    h += `<hr class="drawer-divider"><div class="drawer-section-title"><i class="bi bi-card-checklist"></i> Transaction Details</div>`;
+    h += df('Transaction Type', d.txn) + df('Fund', d.fund) + df('Amount', d.amount) + df('O.P. No.', d.op) + df('Payment Mode', d.mode) + df('Date Processed', d.date);
+    if (d.details && Object.keys(d.details).length) {
+      h += `<hr class="drawer-divider"><div class="drawer-section-title"><i class="bi bi-info-circle"></i> Additional Information</div>`;
+      for (const [k, v] of Object.entries(d.details)) h += df(k.replace(/_/g,' ').replace(/\b\w/g,c=>c.toUpperCase()), v);
+    }
+    document.getElementById('drawer-body').innerHTML = h;
+    document.getElementById('drawer-overlay').classList.add('open');
+    document.getElementById('detail-drawer').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function df(label, value) { return `<div class="drawer-field"><div class="drawer-field-label">${label}</div><div class="drawer-field-value">${value||'—'}</div></div>`; }
+  function closeDrawer() { document.getElementById('drawer-overlay').classList.remove('open'); document.getElementById('detail-drawer').classList.remove('open'); document.body.style.overflow = ''; }
 </script>
 
 </body>

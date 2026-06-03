@@ -862,69 +862,6 @@
           </div>
         </div>
 
-        <!-- Filters -->
-        <div class="filter-card">
-          <div class="filter-card-title">
-            <i class="bi bi-funnel-fill"></i> Filter Transactions
-          </div>
-          <form method="GET" action="{{ route('admin.history') }}">
-            <div class="filter-grid">
-
-              <div class="filter-group">
-                <label class="filter-label">Search</label>
-                <input
-                  type="text"
-                  name="search"
-                  class="filter-input"
-                  placeholder="Name, OP #…"
-                  value="{{ request('search') }}"
-                />
-              </div>
-
-              <div class="filter-group">
-                <label class="filter-label">Status</label>
-                <select name="status" class="filter-input">
-                  <option value="">All Statuses</option>
-                  <option value="pending"  {{ request('status') === 'pending'  ? 'selected' : '' }}>Pending</option>
-                  <option value="approved" {{ request('status') === 'approved' ? 'selected' : '' }}>Approved</option>
-                  <option value="rejected" {{ request('status') === 'rejected' ? 'selected' : '' }}>Rejected</option>
-                </select>
-              </div>
-
-              <div class="filter-group">
-                <label class="filter-label">Fund Type</label>
-                <select name="fund_type" class="filter-input">
-                  <option value="">All Funds</option>
-                  <option value="Fund 01" {{ request('fund_type') === 'Fund 01' ? 'selected' : '' }}>Fund 01 — Regular</option>
-                  <option value="Fund 02" {{ request('fund_type') === 'Fund 02' ? 'selected' : '' }}>Fund 02 (LP/GOP)</option>
-                  <option value="Fund 03" {{ request('fund_type') === 'Fund 03' ? 'selected' : '' }}>Fund 03 — ARF</option>
-                  <option value="Fund 07" {{ request('fund_type') === 'Fund 07' ? 'selected' : '' }}>Fund 07 — Trust</option>
-                </select>
-              </div>
-
-              <div class="filter-group">
-                <label class="filter-label">Date From</label>
-                <input type="date" name="date_from" class="filter-input" value="{{ request('date_from') }}" />
-              </div>
-
-              <div class="filter-group">
-                <label class="filter-label">Date To</label>
-                <input type="date" name="date_to" class="filter-input" value="{{ request('date_to') }}" />
-              </div>
-
-              <div class="filter-actions">
-                <button type="submit" class="btn-action btn-primary">
-                  <i class="bi bi-search"></i> Search
-                </button>
-                <a href="{{ route('admin.history') }}" class="btn-action">
-                  <i class="bi bi-x-circle"></i> Reset
-                </a>
-              </div>
-
-            </div>
-          </form>
-        </div>
-
         <!-- Transactions Table -->
         <div class="dash-card">
           <div class="dash-card-head">
@@ -942,6 +879,7 @@
                 <th>Type</th>
                 <th>Fund</th>
                 <th>Payer</th>
+                <th>OP Number</th>
                 <th>Amount</th>
                 <th>Mode</th>
                 <th>Status</th>
@@ -954,6 +892,7 @@
                   <td>{{ $t->transaction_type ?? '—' }}</td>
                   <td><span class="fund-tag">{{ $t->fund_type ?? '—' }}</span></td>
                   <td>{{ $t->name ?? ($t->email ?? '—') }}</td>
+                  <td>{{ $t->op_number ?? '—' }}</td>
                   <td class="amount-cell">₱{{ number_format($t->amount, 2) }}</td>
                   <td>{{ $t->payment_mode ?? '—' }}</td>
                   <td>
@@ -975,7 +914,7 @@
                 </tr>
               @empty
                 <tr class="empty-row">
-                  <td colspan="7">
+                  <td colspan="8">
                     <i class="bi bi-inbox" style="font-size:1.5rem;display:block;margin-bottom:8px;opacity:.4;"></i>
                     No transactions found.
                   </td>
@@ -983,6 +922,44 @@
               @endforelse
             </tbody>
           </table>
+
+          <!-- Pagination -->
+          @if($transactions->total() > 0)
+            <div class="pagination-row">
+              <div class="pagination-info">
+                Showing {{ $transactions->firstItem() ?? 0 }} to {{ $transactions->lastItem() ?? 0 }} of {{ $transactions->total() }} transactions
+              </div>
+              <div class="pagination-controls">
+                @if($transactions->onFirstPage())
+                  <span class="page-btn disabled">
+                    <i class="bi bi-chevron-left"></i>
+                  </span>
+                @else
+                  <a href="{{ $transactions->previousPageUrl() }}" class="page-btn">
+                    <i class="bi bi-chevron-left"></i>
+                  </a>
+                @endif
+
+                @foreach($transactions->getUrlRange(1, $transactions->lastPage()) as $page => $url)
+                  @if($page == $transactions->currentPage())
+                    <span class="page-number active">{{ $page }}</span>
+                  @else
+                    <a href="{{ $url }}" class="page-number">{{ $page }}</a>
+                  @endif
+                @endforeach
+
+                @if($transactions->hasMorePages())
+                  <a href="{{ $transactions->nextPageUrl() }}" class="page-btn">
+                    <i class="bi bi-chevron-right"></i>
+                  </a>
+                @else
+                  <span class="page-btn disabled">
+                    <i class="bi bi-chevron-right"></i>
+                  </span>
+                @endif
+              </div>
+            </div>
+          @endif
 
         </div><!-- /.dash-card -->
 

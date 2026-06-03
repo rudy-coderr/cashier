@@ -155,7 +155,7 @@
     .sidebar-footer-value { font-size: .73rem; color: rgba(245,240,232,.5); font-weight: 300; }
 
     .main-content { flex: 1; min-width: 0; }
-    .page-body { max-width: 1100px; margin: 0 auto; padding: 36px 28px 60px; }
+    .page-body { max-width: 1400px; margin: 0 auto; padding: 36px 28px 60px; }
 
     .page-title-row { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 24px; gap: 16px; flex-wrap: wrap; }
     .page-title { font-family: 'Cormorant Garamond', serif; font-size: 1.7rem; font-weight: 700; color: var(--text-dark); margin-bottom: 3px; }
@@ -189,28 +189,28 @@
 
     .approvals-table { width: 100%; border-collapse: collapse; }
     .approvals-table thead tr { background: #faf8f4; border-bottom: 1.5px solid var(--border); }
-    .approvals-table thead th { padding: 11px 16px; font-size: .68rem; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--text-mid); white-space: nowrap; }
+    .approvals-table thead th { padding: 14px 18px; font-size: .76rem; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--text-mid); white-space: nowrap; }
     .approvals-table thead th:first-child { padding-left: 22px; }
     .approvals-table thead th:last-child  { padding-right: 22px; }
     .approvals-table tbody tr { border-bottom: 1px solid var(--border); transition: background .13s; }
     .approvals-table tbody tr:last-child { border-bottom: none; }
     .approvals-table tbody tr:hover { background: #f2faf5; }
-    .approvals-table tbody td { padding: 13px 16px; font-size: .85rem; color: var(--text-dark); vertical-align: middle; }
+    .approvals-table tbody td { padding: 16px 18px; font-size: .91rem; color: var(--text-dark); vertical-align: middle; }
     .approvals-table tbody td:first-child { padding-left: 22px; }
     .approvals-table tbody td:last-child  { padding-right: 22px; }
 
     .payor-cell { display: flex; align-items: center; gap: 10px; }
-    .payor-avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--green-accent); color: #fff; font-size: .75rem; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .payor-name { font-weight: 600; font-size: .87rem; color: var(--text-dark); }
-    .payor-contact { font-size: .72rem; color: var(--muted); margin-top: 1px; }
-    .amount-cell { font-weight: 700; font-size: .92rem; color: var(--green-mid); }
-    .fund-badge { display: inline-block; padding: 3px 9px; border-radius: 20px; background: #fdf3dc; color: var(--gold); font-size: .68rem; font-weight: 700; white-space: nowrap; }
-    .op-number { font-size: .78rem; color: var(--text-mid); font-weight: 500; }
-    .date-main { font-size: .82rem; color: var(--text-dark); font-weight: 500; }
-    .date-time  { font-size: .7rem; color: var(--muted); margin-top: 2px; }
-    .approved-on-main { font-size: .82rem; color: var(--green-accent); font-weight: 600; }
-    .approved-on-time { font-size: .7rem; color: var(--muted); margin-top: 2px; }
-    .approved-stamp { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 20px; background: var(--green-light); color: var(--green-accent); font-size: .72rem; font-weight: 700; letter-spacing: .4px; text-transform: uppercase; border: 1px solid rgba(45,122,79,.2); }
+    .payor-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--green-accent); color: #fff; font-size: .78rem; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .payor-name { font-weight: 600; font-size: .95rem; color: var(--text-dark); }
+    .payor-contact { font-size: .78rem; color: var(--muted); margin-top: 2px; }
+    .amount-cell { font-weight: 700; font-size: 1rem; color: var(--green-mid); }
+    .fund-badge { display: inline-block; padding: 4px 11px; border-radius: 20px; background: #fdf3dc; color: var(--gold); font-size: .72rem; font-weight: 700; white-space: nowrap; }
+    .op-number { font-size: .84rem; color: var(--text-mid); font-weight: 500; }
+    .date-main { font-size: .89rem; color: var(--text-dark); font-weight: 500; }
+    .date-time  { font-size: .77rem; color: var(--muted); margin-top: 3px; }
+    .approved-on-main { font-size: .89rem; color: var(--green-accent); font-weight: 600; }
+    .approved-on-time { font-size: .77rem; color: var(--muted); margin-top: 3px; }
+    .approved-stamp { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 20px; background: var(--green-light); color: var(--green-accent); font-size: .76rem; font-weight: 700; letter-spacing: .4px; text-transform: uppercase; border: 1px solid rgba(45,122,79,.2); }
 
     .table-footer { padding: 12px 22px; background: #faf8f4; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
     .table-footer-info { font-size: .75rem; color: var(--muted); }
@@ -264,6 +264,28 @@
 .dropdown-item.danger { color: var(--red); }
 .dropdown-item.danger:hover { background: #fdf0ef; }
 .dropdown-divider { border: none; border-top: 1px solid var(--border); margin: 4px 0; }
+
+    /* ── DRAWER ── */
+    .drawer-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 500; }
+    .drawer-overlay.open { display: block; }
+    .detail-drawer { position: fixed; top: 0; right: 0; width: 440px; max-width: 100vw; height: 100vh; background: var(--surface); box-shadow: -8px 0 40px rgba(0,0,0,.18); display: flex; flex-direction: column; transform: translateX(100%); transition: transform .28s cubic-bezier(.16,1,.3,1); z-index: 501; }
+    .detail-drawer.open { transform: translateX(0); }
+    .drawer-head { padding: 16px 22px; background: var(--green-deep); display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+    .drawer-head-title { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 700; color: var(--gold-light); }
+    .drawer-close-btn { width: 32px; height: 32px; border-radius: 8px; background: rgba(255,255,255,.07); border: none; color: rgba(245,240,232,.5); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1rem; transition: background .15s, color .15s; }
+    .drawer-close-btn:hover { background: rgba(255,255,255,.14); color: var(--cream); }
+    .drawer-body { flex: 1; overflow-y: auto; padding: 20px 22px; }
+    .drawer-body::-webkit-scrollbar { width: 3px; }
+    .drawer-body::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+    .drawer-divider { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
+    .drawer-section-title { font-size: .76rem; font-weight: 700; color: var(--green-accent); letter-spacing: 1px; text-transform: uppercase; display: flex; align-items: center; gap: 8px; margin-bottom: 12px; margin-top: 8px; }
+    .drawer-section-title i { font-size: .9rem; }
+    .drawer-field { margin-bottom: 12px; }
+    .drawer-field-label { font-size: .68rem; color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: .8px; margin-bottom: 4px; }
+    .drawer-field-value { font-size: .84rem; color: var(--text-dark); font-weight: 500; line-height: 1.5; }
+    .action-btn { width: 32px; height: 32px; border-radius: 7px; border: 1.5px solid var(--border); background: #faf8f4; color: var(--text-mid); display: inline-flex; align-items: center; justify-content: center; font-size: .9rem; cursor: pointer; transition: background .15s, border-color .15s, color .15s; text-decoration: none; }
+    .action-btn:hover { background: var(--green-light); border-color: var(--green-accent); color: var(--green-accent); }
+    @media (max-width: 768px) { .detail-drawer { width: 100vw; } }
 
   </style>
 </head>
@@ -499,6 +521,7 @@
               <th>Date Submitted</th>
               <th>Approved On</th>
               <th>Status</th>
+              <th style="width: 50px; text-align: center;">Actions</th>
             </tr>
           </thead>
           <tbody id="approved-body">
@@ -506,6 +529,32 @@
               @php
                 $apNameParts = explode(' ', trim($ap->name));
                 $apInitials  = strtoupper(substr($apNameParts[0], 0, 1)) . (isset($apNameParts[1]) ? strtoupper(substr($apNameParts[1], 0, 1)) : '');
+                
+                // Drawer data
+                $txnNames  = [
+                  'appeal_fee'=>'Appeal Fee','bidding_documents'=>'Bidding Documents','cash_bond'=>'Cash Bond',
+                  'certification_copy_fee'=>'Certification, Copy Fee and Reproduction Cost','consignment'=>'Consignment',
+                  'execution_judgment'=>'Execution of Judgment Involving Money','filing_fee'=>'Filing Fee and Inspection Cost',
+                  'income_unserviceable'=>'Income from Sale of Unserviceable Property','legal_research'=>'Legal Research',
+                  'performance_bond'=>'Performance Bond','refund_cash_advances'=>'Refund of Cash Advances',
+                  'refund_overpayment'=>'Refund of Overpayment','settlement_disallowances'=>'Settlement of Notice of Disallowances',
+                  'unwithheld_remittances'=>'Unwithheld Remittances',
+                ];
+                $rawTxn    = $ap->transaction_type ?? '';
+                $txnLabel  = $txnNames[$rawTxn] ?? ucwords(str_replace('_',' ', $rawTxn));
+                $fundLabel = $ap->fund_type ?? '—';
+                $meta      = $ap->meta ?? [];
+                $details   = [];
+                if (!empty($ap->contact))      $details['Contact']      = $ap->contact;
+                if (!empty($ap->address))      $details['Address']      = $ap->address;
+                if (!empty($ap->email))        $details['Email']        = $ap->email;
+                if (!empty($ap->payment_mode)) $details['Payment Mode'] = ucfirst(str_replace('_',' ',$ap->payment_mode));
+                if (is_array($meta)) {
+                  foreach ($meta as $k => $v) {
+                    if ($v === null || $v === '') continue;
+                    $details[$k] = is_array($v) ? implode(', ', $v) : $v;
+                  }
+                }
               @endphp
               <tr
                 data-search="{{ strtolower($ap->name . ' ' . ($ap->op_number ?? '')) }}"
@@ -536,7 +585,26 @@
                     <i class="bi bi-check-circle-fill"></i> Approved
                   </span>
                 </td>
+                <td style="text-align: center;">
+                  <a href="#" class="action-btn" title="View" onclick="openDrawer({{ $ap->id }});return false;"><i class="bi bi-eye"></i></a>
+                </td>
               </tr>
+
+              <script>
+                window.__drawers = window.__drawers || {};
+                window.__drawers[{{ $ap->id }}] = {
+                  id: {{ $ap->id }}, name: @json($ap->name), email: @json($ap->email ?? '—'),
+                  contact: @json($ap->contact ?? '—'), address: @json($ap->address ?? '—'),
+                  amount: @json('₱'.number_format($ap->amount,2)), amountRaw: @json(number_format($ap->amount,2)),
+                  amountNum: @json((float)$ap->amount), txn: @json($txnLabel ?: '—'), rawTxn: @json($rawTxn),
+                  fund: @json($fundLabel), op: @json($ap->op_number ?? '—'),
+                  mode: @json(ucfirst(str_replace('_',' ',$ap->payment_mode ?? 'cash'))),
+                  rawMode: @json($ap->payment_mode ?? 'cash'), status: 'Approved',
+                  rawStatus: 'approved', statusCls: 'sb-approved', statusIcon: 'bi-check-circle-fill',
+                  date: @json($ap->created_at->format('F d, Y — h:i A')), meta: @json($ap->meta ?? []),
+                  dateShort: @json($ap->created_at->format('m/d/Y')), details: @json($details)
+                };
+              </script>
             @empty
               <tr class="empty-row">
                 <td colspan="7">
@@ -686,6 +754,32 @@
     else { badge.classList.remove('show'); }
   });
 
+  /* ─── DRAWER ─── */
+  let __active = null;
+  function openDrawer(id) {
+    const d = window.__drawers?.[id]; if (!d) return;
+    __active = d;
+    document.getElementById('drawer-payor-name').textContent = d.name;
+    let h = `<div class="status-badge ${d.statusCls}" style="margin-bottom:16px;font-size:.74rem;padding:5px 13px;"><i class="bi ${d.statusIcon}"></i> ${d.status}</div>`;
+    h += `<div class="drawer-section-title"><i class="bi bi-person-lines-fill"></i> Payor Information</div>`;
+    h += df('Full Name', d.name) + df('Email', d.email) + df('Contact Number', d.contact) + df('Address', d.address);
+    h += `<hr class="drawer-divider"><div class="drawer-section-title"><i class="bi bi-card-checklist"></i> Transaction Details</div>`;
+    h += df('Transaction Type', d.txn) + df('Fund', d.fund) + df('Amount', d.amount) + df('O.P. No.', d.op) + df('Payment Mode', d.mode) + df('Date Processed', d.date);
+    if (d.details && Object.keys(d.details).length) {
+      h += `<hr class="drawer-divider"><div class="drawer-section-title"><i class="bi bi-info-circle"></i> Additional Information</div>`;
+      for (const [k, v] of Object.entries(d.details)) h += df(k.replace(/_/g,' ').replace(/\b\w/g,c=>c.toUpperCase()), v);
+    }
+    document.getElementById('drawer-body').innerHTML = h;
+    document.getElementById('drawer-overlay').classList.add('open');
+    document.getElementById('detail-drawer').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function df(label, value) { return `<div class="drawer-field"><div class="drawer-field-label">${label}</div><div class="drawer-field-value">${value||'—'}</div></div>`; }
+  function closeDrawer() { document.getElementById('drawer-overlay').classList.remove('open'); document.getElementById('detail-drawer').classList.remove('open'); document.body.style.overflow = ''; }
+
+  /* ─── ESCAPE KEY TO CLOSE DRAWER ─── */
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDrawer(); });
+
   // Client-side filtering removed; form submits to apply server-side filters.
 </script>
 
@@ -708,6 +802,18 @@
     } catch (e) {}
   })();
 </script>
+
+<!-- ── DETAIL DRAWER ── -->
+<div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
+<div class="detail-drawer" id="detail-drawer">
+  <div class="drawer-head">
+    <div>
+      <div class="drawer-head-title" id="drawer-payor-name">Payment Details</div>
+    </div>
+    <button type="button" class="drawer-close-btn" onclick="closeDrawer()"><i class="bi bi-x"></i></button>
+  </div>
+  <div class="drawer-body" id="drawer-body"></div>
+</div>
 
 </body>
 </html>

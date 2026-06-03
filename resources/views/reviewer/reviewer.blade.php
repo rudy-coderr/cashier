@@ -84,6 +84,7 @@
     .notif-list::-webkit-scrollbar { width: 3px; }
     .notif-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
     .notif-item { display: flex; align-items: flex-start; gap: 10px; padding: 11px 16px; border-bottom: 1px solid var(--border); transition: background .12s; }
+    .notif-item { text-decoration: none; color: inherit; }
     .notif-item:last-child { border-bottom: none; }
     .notif-item.unread { background: #f5fbf7; }
     .notif-item:hover { background: #f0f7f3; }
@@ -438,8 +439,8 @@
     .drawer-head-title { font-family: 'Cormorant Garamond', serif; font-size: 1.02rem; font-weight: 700; color: var(--gold-light); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .drawer-head-sub { font-size: .57rem; letter-spacing: 1.4px; text-transform: uppercase; color: rgba(245,240,232,.35); margin-top: 2px; }
     .drawer-head-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
-    .drawer-print-btn { display: inline-flex; align-items: center; gap: 5px; padding: 6px 12px; background: var(--gold); border: none; border-radius: 7px; color: var(--green-deep); font-family: 'DM Sans', sans-serif; font-size: .69rem; font-weight: 700; letter-spacing: .8px; text-transform: uppercase; cursor: pointer; transition: background .15s; }
-    .drawer-print-btn:hover { background: var(--gold-light); }
+    .drawer-print-btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 18px; background: #ffffff; border: 1.5px solid var(--green-accent); border-radius: 9px; color: var(--green-deep); font-family: 'DM Sans', sans-serif; font-size: .75rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: all .2s ease; box-shadow: 0 2px 8px rgba(45,122,79,.15); }
+    .drawer-print-btn:hover { background: var(--green-light); border-color: var(--green-deep); box-shadow: 0 4px 14px rgba(45,122,79,.25); transform: translateY(-1px); }
     .drawer-close { width: 29px; height: 29px; border-radius: 7px; background: rgba(255,255,255,.08); border: none; color: rgba(245,240,232,.55); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: .92rem; transition: background .15s, color .15s; }
     .drawer-close:hover { background: rgba(255,255,255,.15); color: var(--cream); }
     .drawer-body { flex: 1; overflow-y: auto; padding: 20px; }
@@ -737,6 +738,42 @@
 
     </div>
   </aside>
+
+    <script>
+      // If the URL contains ?notif_id=..., fetch that specific notification and show it only
+      (function(){
+        try {
+          const params = new URLSearchParams(window.location.search);
+          const nid = params.get('notif_id');
+          if (!nid) return;
+          const listEl = document.getElementById('notif-list');
+          const dropdown = document.getElementById('notif-dropdown');
+          if (!listEl || !dropdown) return;
+          fetch('/notifications', { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+            .then(r => r.ok ? r.json() : Promise.reject('fetch failed'))
+            .then(arr => {
+              const n = arr.find(x => x.id === nid);
+              if (!n) return;
+              const d = n.data || {};
+              const icon = d.icon || 'bi-bell';
+              const cls  = d.cls || 'ni-gold';
+              const text = d.message || d.text || (d.name ? ('Transaction for ' + d.name) : 'Notification');
+              const time = n.created_at ? new Date(n.created_at).toLocaleString() : '';
+              const unreadCls = n.read ? '' : 'unread';
+              const html = `<div class="notif-item ${unreadCls}" data-id="${n.id}">
+                  <div class="notif-item-icon ${cls}"><i class="bi ${icon}"></i></div>
+                  <div class="notif-item-body">
+                    <div class="notif-item-text">${escapeHtml(text)}</div>
+                    <div class="notif-item-time">${escapeHtml(time)}</div>
+                  </div>
+                </div>`;
+              // don't modify or open the dropdown — keep the notification icon unchanged
+              dropdown.classList.remove('open');
+            }).catch(()=>{});
+        } catch(e) {}
+        function escapeHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+      })();
+    </script>
 
   <!-- ══ MAIN AREA ══ -->
   <div class="app-main">
@@ -1527,14 +1564,14 @@
       else if (n.status === 'rejected') actionText = 'was rejected. Please review.';
       const message = `Transaction for ${n.name} ${actionText}`;
       return `
-      <div class="notif-item${n.unread ? ' unread' : ''}" onclick="readNotif(${n.id})">
+      <a href="/reviewer?notif_id=${n.id}" class="notif-item${n.unread ? ' unread' : ''}" onclick="readNotif(${n.id})">
         <div class="notif-item-icon ${n.cls}"><i class="bi ${n.icon}"></i></div>
         <div class="notif-item-body">
           <div class="notif-item-text">${message}</div>
           <div class="notif-item-time">${n.time}</div>
         </div>
         ${n.unread ? '<div class="notif-unread-dot"></div>' : ''}
-      </div>
+      </a>
       `;
     }).join('');
   }

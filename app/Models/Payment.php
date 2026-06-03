@@ -36,7 +36,9 @@ class Payment extends Model
                 $year = $now->format('Y');
                 $month = $now->format('m');
 
-                $like = $prefix . '-' . $year . '-' . $month . '-%';
+                // Use year-only pattern when searching for the last sequence so
+                // the 4-digit sequence increments across months and only resets annually.
+                $like = $prefix . '-' . $year . '-%';
 
                 $last = self::where('op_number', 'like', $like)
                     ->orderBy('op_number', 'desc')

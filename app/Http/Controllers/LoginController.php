@@ -6,13 +6,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\DB;
-use App\Models\Payment;
-use App\Models\AuditLog;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Mail;
-use App\Mail\OneTimePassword;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
+use App\Models\AuditLog;
 
 class LoginController extends Controller
 {
@@ -48,30 +44,40 @@ class LoginController extends Controller
         }
 
         if (Auth::attempt($credentials, $request->filled('remember'))) {
-            // Credentials correct — create OTP, email it, and ask user to verify.
+            $request->session()->regenerate();
+
             $user = Auth::user();
 
-            // generate 6-digit numeric OTP
-            $otp = str_pad((string) random_int(0, 999999), 6, '0', STR_PAD_LEFT);
-
-            // store OTP in cache keyed by user id for 5 minutes
-            Cache::put('login_otp_'.$user->id, $otp, now()->addMinutes(5));
-
-            // store pending user id and remember flag in session
-            session(['pending_login_user' => $user->id, 'pending_login_remember' => $request->filled('remember')]);
-
             try {
-                Log::info('Attempting to send OTP email', ['email' => $user->email, 'user_id' => $user->id]);
-                Mail::to($user->email)->send(new OneTimePassword($otp, $user));
-                Log::info('OTP email sent', ['email' => $user->email, 'user_id' => $user->id]);
-            } catch (\Throwable $e) {
-                Log::error('Failed to send OTP email: '.$e->getMessage(), ['user_id' => $user->id]);
+                AuditLog::create([
+                    'user_id' => $user->id,
+                    'action' => 'login',
+                    'description' => 'User logged in',
+                    'ip_address' => $request->ip(),
+                ]);
+            } catch (\Throwable $e) { /* silent */ }
+
+            $roleName = null;
+            if (! empty($user->role_id)) {
+                $roleName = DB::table('roles')->where('id', $user->role_id)->value('name');
+            }
+            $role = strtolower($roleName ?? '');
+            $position = strtolower($user->position ?? '');
+
+            if ($role === 'accountant' || $position === 'accountant') {
+                return redirect()->intended(route('accountant.approval'));
+            }
+            if ($role === 'maker' || $position === 'maker') {
+                return redirect()->intended(route('dashboard'));
+            }
+            if ($role === 'admin' || $position === 'admin') {
+                return redirect()->intended(route('admin.dashboard'));
+            }
+            if ($role === 'reviewer' || $position === 'reviewer') {
+                return redirect()->intended(route('reviewer'));
             }
 
-            // logout temporary authentication so full login waits for OTP
-            Auth::logout();
-
-            return redirect()->route('auth.otp.show');
+            return redirect()->intended(route('dashboard'));
         }
 
         // increment attempts
