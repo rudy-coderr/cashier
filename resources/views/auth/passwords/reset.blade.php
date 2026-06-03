@@ -120,15 +120,16 @@
     }
 
     .visual-seal {
-      width: 52px; height: 52px;
-      border-radius: 50%;
+      width: 64px; height: 64px;
+      border-radius: 14px;
+      background: #fff;
+      padding: 5px;
       overflow: hidden;
       display: block;
-      box-shadow: 0 0 0 4px rgba(201,153,42,.25);
-      animation: pulse-seal 3s ease-in-out infinite;
+      box-shadow: 0 2px 12px rgba(0,0,0,.18);
     }
 
-    .visual-seal img { width: 100%; height: 100%; display: block; object-fit: cover; }
+    .visual-seal img { width: 100%; height: 100%; display: block; object-fit: contain; }
 
     @keyframes pulse-seal {
       0%,100% { box-shadow: 0 0 0 4px rgba(201,153,42,.25); }
