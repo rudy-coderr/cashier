@@ -226,39 +226,6 @@
       max-width: 210px;
     }
 
-    /* ── Feature chips ── */
-    .chips {
-      position: relative;
-      z-index: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 7px;
-      margin-top: 28px;
-    }
-
-    .chip {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 10px;
-      color: rgba(255,255,255,.55);
-      letter-spacing: .01em;
-    }
-
-    .chip-icon {
-      width: 18px;
-      height: 18px;
-      border-radius: 5px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      font-size: 9px;
-    }
-
-    .chip-icon.green  { background: #dcfce7; color: #15803d; }
-    .chip-icon.amber  { background: #fef3c7; color: #d97706; }
-    .chip-icon.blue   { background: #dbeafe; color: #1d4ed8; }
 
     /* ── RIGHT PANEL ── */
     .panel-right {
@@ -475,7 +442,7 @@
         </div>
         <div class="brand-text">
           <div class="t1">Republic of the Philippines</div>
-          <div class="t2">Dept. of Agrarian Reform<br>Bicol Region · RO V</div>
+          <div class="t2">Department of Agrarian Reform<br>Regional Office V</div>
         </div>
       </div>
 
@@ -491,20 +458,6 @@
         <div class="sys-desc">Secure access portal for authorized Department of Agrarian Reform personnel.</div>
       </div>
 
-      <div class="chips">
-        <div class="chip">
-          <span class="chip-icon green"><i class="bi bi-shield-check"></i></span>
-          End-to-end secured sessions
-        </div>
-        <div class="chip">
-          <span class="chip-icon amber"><i class="bi bi-clock-history"></i></span>
-          Full audit trail on all actions
-        </div>
-        <div class="chip">
-          <span class="chip-icon blue"><i class="bi bi-person-check"></i></span>
-          Authorized personnel only
-        </div>
-      </div>
 
     </div>
 
