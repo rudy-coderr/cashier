@@ -45,8 +45,8 @@
       position: sticky; top: 0; z-index: 300;
       height: 62px;
     }
-    .header-seal { width: 36px; height: 36px; border-radius: 50%; overflow: hidden; flex-shrink: 0; }
-    .header-seal img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; display: block; }
+    .header-seal { width: 44px; height: 44px; border-radius: 10px; background: #fff; padding: 3px; overflow: hidden; flex-shrink: 0; box-shadow: 0 1px 6px rgba(0,0,0,.2); }
+    .header-seal img { width: 100%; height: 100%; object-fit: contain; display: block; }
     .header-text .t1 { font-size: .56rem; letter-spacing: 2.5px; text-transform: uppercase; color: rgba(245,240,232,.35); font-weight: 300; }
     .header-text .t2 { font-size: .83rem; font-weight: 600; color: var(--cream); }
     .header-sep { width: 1px; height: 28px; background: rgba(245,240,232,.15); margin: 0 4px; }
@@ -365,7 +365,7 @@
     .form-card { background: var(--surface); border: 1.5px solid var(--border); border-radius: 14px; overflow: hidden; margin-top: 18px; max-height: 0; opacity: 0; pointer-events: none; transition: max-height .5s cubic-bezier(.16,1,.3,1), opacity .35s ease; }
     .form-card.visible { max-height: 5000px; opacity: 1; pointer-events: all; }
     .form-header { padding: 16px 24px; background: linear-gradient(90deg, var(--green-mid), var(--green-deep)); display: flex; align-items: center; gap: 12px; }
-    .form-header-seal { width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,.1); display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0; }
+    .form-header-seal { width: 44px; height: 44px; border-radius: 10px; background: #fff; padding: 3px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden; box-shadow: 0 1px 6px rgba(0,0,0,.2); }
     .form-header-info .org      { font-size: .57rem; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(245,240,232,.4); font-weight: 300; }
     .form-header-info .txn-name { font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-weight: 700; color: var(--gold-light); }
     .required-note  { padding: 8px 24px; font-size: .72rem; color: var(--red); background: #fff9f8; border-bottom: 1px solid #f5e0de; display: flex; align-items: center; gap: 5px; }

@@ -42,8 +42,8 @@
       top: 0;
       z-index: 200;
     }
-    .header-seal { width: 38px; height: 38px; border-radius: 50%; overflow: hidden; flex-shrink: 0; }
-    .header-seal img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; display: block; }
+    .header-seal { width: 44px; height: 44px; border-radius: 10px; background: #fff; padding: 3px; overflow: hidden; flex-shrink: 0; box-shadow: 0 1px 6px rgba(0,0,0,.2); }
+    .header-seal img { width: 100%; height: 100%; object-fit: contain; display: block; }
     .header-text .t1 { font-size: .58rem; letter-spacing: 2.5px; text-transform: uppercase; color: rgba(245,240,232,.35); font-weight: 300; }
     .header-text .t2 { font-size: .85rem; font-weight: 600; color: var(--cream); }
     .header-sep { width: 1px; height: 30px; background: rgba(245,240,232,.15); margin: 0 4px; }

@@ -130,13 +130,7 @@
     }
 
     .visual-seal {
-      width: 52px; height: 52px;
-      border-radius: 50%;
-      overflow: hidden;
-      display: block;
-      box-shadow: 0 0 0 4px rgba(201,153,42,.25);
-      animation: pulse-seal 3s ease-in-out infinite;
-      background: transparent;
+      width: 64px; height: 64px; border-radius: 14px; background: #fff; padding: 5px; overflow: hidden; display: block; box-shadow: 0 2px 12px rgba(0,0,0,.18);
     }
 
     .visual-seal img {
