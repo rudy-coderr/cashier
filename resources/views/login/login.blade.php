@@ -4,6 +4,22 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Sign In — DAR Cashier</title>
+
+  <!-- Open Graph / Link Preview -->
+  <meta property="og:type"        content="website" />
+  <meta property="og:url"         content="{{ url('/login') }}" />
+  <meta property="og:site_name"   content="DAR Cashier" />
+  <meta property="og:title"       content="DAR Cashier — Transaction Management System" />
+  <meta property="og:description" content="Secure access portal for the Department of Agrarian Reform Regional Office V Cashier Transaction Management System." />
+  <meta property="og:image"       content="{{ asset('img/og-preview.jpg') }}" />
+  <meta property="og:image:width"  content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card"        content="summary_large_image" />
+  <meta name="twitter:title"       content="DAR Cashier — Transaction Management System" />
+  <meta name="twitter:description" content="Secure access portal for the Department of Agrarian Reform Regional Office V." />
+  <meta name="twitter:image"       content="{{ asset('img/og-preview.jpg') }}" />
+  <meta name="description"         content="Secure access portal for the Department of Agrarian Reform Regional Office V Cashier Transaction Management System." />
+
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="icon" href="{{ asset('img/dar_logo_square.jpg') }}" />
